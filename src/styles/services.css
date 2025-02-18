@@ -222,3 +222,7 @@ aside {
 .venueText {
   margin: 0 20px;
 }
+
+.venuePrice {
+  font-size: 1.9rem;
+}

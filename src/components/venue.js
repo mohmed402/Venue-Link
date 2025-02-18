@@ -72,7 +72,7 @@ export default function Venue() {
                 onToggle={(status) => console.log("Favorite:", status)}
               />
 
-              <h3 className="venueText">{venue.price}</h3>
+              <h3 className="venuePrice">{venue.price}</h3>
               <Button
                 title={"Select"}
                 width={100}
