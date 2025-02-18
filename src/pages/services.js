@@ -69,18 +69,19 @@ export default function Services() {
           </div>
         </section>
         <hr className="hr-line-one"></hr>
-
-        <aside className="filter">
-          <div className="filter-header">
-            <h4>Filter</h4>
-            <p className="highlight">Clear All</p>
-          </div>
-        </aside>
-        <div class="vl"></div>
-        <FiliterObj />
-        <Venue />
+        <section className="main-main-contanior">
+          <aside className="filter">
+            <div className="filter-header">
+              <h4>Filter</h4>
+              <p className="highlight">Clear All</p>
+            </div>
+            <FiliterObj />
+          </aside>
+          <div class="vl"></div>
+          <Venue />
+        </section>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

@@ -91,15 +91,22 @@ main {
   width: 75%;
 }
 
+.main-main-contanior {
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+}
+
 aside {
-  width: 18%;
   margin-top: 45px;
+  width: 20%;
 }
 
 .filter-header {
   display: flex;
-  display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  margin: 0 8%;
 }
 
 .highlight {
@@ -109,18 +116,12 @@ aside {
 
 .vl {
   border-left: 1px solid #aeaeae;
-  height: 500px;
-  position: relative;
-  left: 17%;
-  top: 0;
+  height: 700px;
   width: fit-content;
 }
 
 .filter-container {
-  width: 16%;
   margin-left: 8px;
-  position: relative;
-  bottom: 470px;
 }
 
 .filter-section {
@@ -174,35 +175,50 @@ aside {
 
 /* venue here */
 .venue-section {
-  position: relative;
-  bottom: 606px;
-  left: 30px;
   max-height: 1000px;
-  width: 97%;
+  width: 100%;
 }
 
 .venue {
-  border: 1px solid black;
+  background-color: #e1e1e1;
+  border: 1px solid #000;
   width: 61%;
   margin: 12px auto;
   display: flex;
-  align-items: center;
   border-radius: 4px;
+  /* flex-wrap: wrap; */
+  justify-content: flex-start;
+  min-width: 282px;
+  align-items: center;
 }
 
 .venue-info {
   display: inline-flex;
+  align-items: center;
+  width: 100%;
+}
+
+.venue-info-one,
+.venue-info-two {
+  width: 50%;
+  height: 200px;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+.venue-info-two {
+  display: grid;
+  justify-content: flex-end;
+  align-items: end;
+  justify-items: end;
+  padding: 0px 6px;
 }
 
 .venueType {
-  position: relative;
-  bottom: 45px;
   margin: 0px 20px;
   color: red;
 }
 
 .venueText {
-  position: relative;
-  bottom: 30px;
   margin: 0 20px;
 }

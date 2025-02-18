@@ -103,6 +103,34 @@
   z-index: initial;
 }
 
+/* Stars JS */
+
+.Stars {
+  display: inline-block;
+  font-size: 24px; /* Adjust size */
+  font-family: Times, serif;
+  line-height: 1;
+  margin: 0 5%;
+  /* --star-background: gold; */
+  /* --star-color: lightgray; */
+  --star-background: #000000;
+  --star-color: #ffffff;
+
+  position: relative;
+}
+
+.Stars::before {
+  content: "★★★★★";
+  letter-spacing: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--star-background) var(--percent),
+    var(--star-color) var(--percent)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 @media only screen and (max-width: 770px) {
   .hide {
     display: none;
