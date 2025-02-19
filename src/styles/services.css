@@ -136,7 +136,7 @@ aside {
   margin-top: 5px;
   border: 1px solid black;
   padding: 3px;
-  border-radius: 10px;
+  border-radius: 5px;
   animation: enter 200ms ease-in 0s 1 normal none;
   font-size: 0.9rem;
 }
@@ -225,4 +225,68 @@ aside {
 
 .venuePrice {
   font-size: 1.9rem;
+  font-family: math;
+  margin-right: 14px;
+}
+
+@media only screen and (max-width: 1355px) {
+  .filter,
+  .vl {
+    display: none;
+  }
+  .venue {
+    width: 60%;
+  }
+  .venue-info p {
+    font-size: 0.8rem;
+  }
+}
+
+@media only screen and (max-width: 1035px) {
+  .venue {
+    width: 95%;
+  }
+  .venue-info p {
+    font-size: 0.7rem;
+  }
+}
+@media only screen and (max-width: 602px) {
+  .venue {
+    min-width: 365px;
+    background-color: #f8fbf8;
+    border-radius: 0;
+    border: 0;
+    border-top: 1px solid black;
+  }
+  .venue-image {
+    width: 30%;
+    object-fit: cover;
+    margin: 10px;
+    margin-right: -8px;
+    border-radius: 10px;
+  }
+  .venue-info {
+    display: grid;
+    width: 100%;
+    justify-items: center;
+    justify-content: center;
+  }
+  .venue-info-one,
+  .venue-info-two {
+    width: auto;
+    height: auto;
+  }
+  .venue-info-two {
+    display: inline-flex;
+    flex-direction: row;
+  }
+
+  .heart-container .svg-container {
+    bottom: 150px !important;
+    right: 0;
+    left: 210px !important;
+  }
+  .favorite-list {
+    display: none;
+  }
 }
