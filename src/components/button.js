@@ -1,9 +1,21 @@
 import "../styles/components.css";
 
-export default function Button({ title, width, height, colour, hide, margin }) {
+export default function Button({
+  classN,
+  title,
+  width,
+  height,
+  colour,
+  hide,
+  margin,
+}) {
   return (
     <button
-      className={`custom-button ${hide ? "hide" : ""}`}
+      className={
+        classN
+          ? `custom-button ${classN}`
+          : `custom-button ${hide ? "hide" : ""}`
+      }
       style={{
         width: width,
         height: height,

@@ -2,7 +2,6 @@ import Image from "next/image";
 import Hart from "./hart";
 import Stars from "@/components/Stars";
 import Button from "./button";
-
 // import "../styles/services.css";
 
 const venues = [
@@ -22,11 +21,11 @@ const venues = [
     altText: "venue 2",
     venueType: "Conference Room",
     venueName: "Central Conference Hall",
-    rating: 3.6,
+    rating: 1,
     venueDetails: "200 Chairs | 3 parking | AV Equipment",
     venueDescription: "Perfect for corporate meetings",
     price: "£1200",
-    isHart: false,
+    isHart: true,
   },
   {
     imageSrc: "/assets/venue-3.png",
@@ -148,7 +147,7 @@ export default function Venue() {
           <Image
             className="venue-image"
             aria-hidden
-            src="/assets/mainBackground-home.png"
+            src={venue.imageSrc}
             alt="venue background"
             width={280}
             height={200}
@@ -157,7 +156,7 @@ export default function Venue() {
             <div className="venue-info-one">
               <p className="venueType">{venue.venueType}</p>
               <div>
-                <h3 className="venueText">{venue.venueName}</h3>
+                <h3 className="venueText t-header">{venue.venueName}</h3>
                 <Stars rating={venue.rating} />
               </div>
               <div>
@@ -173,6 +172,7 @@ export default function Venue() {
 
               <h3 className="venuePrice">{venue.price}</h3>
               <Button
+                classN={"btn-mobile"}
                 title={"Select"}
                 width={100}
                 height={40}

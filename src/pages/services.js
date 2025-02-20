@@ -3,6 +3,7 @@ import Button from "../components/button";
 
 import { useNavHandler } from "@/context/NavContext";
 import "../styles/services.css";
+import Input from "../components/input";
 
 import Navigation from "@/components/navigation";
 import Venue from "@/components/venue";
@@ -11,6 +12,7 @@ import NavIcon from "@/components/navIcon";
 import Footer from "@/components/footer";
 import Checkbox from "@/components/checkBox";
 import FiliterObj from "@/joint/filiterObj";
+import ToolBar from "@/components/toolBar";
 export default function Services() {
   return (
     <>
@@ -48,17 +50,20 @@ export default function Services() {
             <option>500</option>
             <option>1000</option>
           </select>
-          <input type="date" name="date" className="date" value="Date" />
+          <input type="date" name="date" className="date" />
           <input type="number" name="price" placeholder="price" />
           <a className="favorite-list" href="">
             Favorite List
           </a>
         </section>
+        <ToolBar />
         <section className="main-header">
-          <h1>Venue</h1>
+          <h1>Venues in Manchester</h1>
           <div className="search-info">
-            <p> Shown 267 venues in this area</p>
-            <select name="people" placeholder="People">
+            <p className="found-text"> Shown 267 venues in this area</p>
+
+            {/* <i class="uit uit-sort-amount-down"></i> */}
+            <select className="sort" name="sort">
               <option>People</option>
               <option>100</option>
               <option>200</option>
@@ -77,7 +82,7 @@ export default function Services() {
             </div>
             <FiliterObj />
           </aside>
-          <div class="vl"></div>
+          <div className="vl"></div>
           <Venue />
         </section>
       </main>
