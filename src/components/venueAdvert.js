@@ -27,7 +27,7 @@ const venues = [
   },
 ];
 
-export default function VenueAdd({ children }) {
+export default function venueAdvert({ children }) {
   return (
     <>
       {children}

@@ -52,7 +52,14 @@ export default function Services() {
           </select>
           <input type="date" name="date" className="date" />
           <input type="number" name="price" placeholder="price" />
-          <a className="favorite-list" href="">
+          <Button
+            title={"Search"}
+            width={"13%"}
+            height={40}
+            colour={"main"}
+            hide={false}
+          />
+          <a className="favorite-list" href="#">
             Favorite List
           </a>
         </section>
@@ -64,12 +71,11 @@ export default function Services() {
 
             {/* <i class="uit uit-sort-amount-down"></i> */}
             <select className="sort" name="sort">
-              <option>People</option>
-              <option>100</option>
-              <option>200</option>
-              <option>300</option>
-              <option>500</option>
-              <option>1000</option>
+              <option>Sort by</option>
+              <option>Best</option>
+              <option>Cheapest</option>
+              <option>Most Reviewd</option>
+              <option>Recommended</option>
             </select>
           </div>
         </section>

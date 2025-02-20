@@ -6,7 +6,7 @@ import Navigation from "@/components/navigation";
 import { useNavHandler } from "@/context/NavContext";
 
 import "./page.css";
-import VenueAdd from "@/components/venueAdd";
+import venueAdvert from "@/components/venueAdvert";
 import SideNav from "@/components/sideNav";
 import NavIcon from "@/components/navIcon";
 import Footer from "@/components/footer";
@@ -72,12 +72,12 @@ export default function Home() {
         </div>
       </header>
       <main>
-        <VenueAdd>
+        <venueAdvert>
           <section className="main-title">
             <h2>Venues</h2>
             <h3>Most Viewed</h3>
           </section>
-        </VenueAdd>
+        </venueAdvert>
         <section className="catering-service">
           <div className="shadow">
             <div className="catering-content">

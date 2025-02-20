@@ -189,7 +189,6 @@ aside {
   margin: 12px auto;
   display: flex;
   border-radius: 4px;
-  /* flex-wrap: wrap; */
   justify-content: flex-start;
   min-width: 282px;
   align-items: center;
@@ -242,7 +241,7 @@ aside {
   margin-right: 14px;
   font-family: tt-commons-pro, sans-serif;
   font-style: normal;
-  font-weight: 200;
+  font-weight: 400;
 }
 
 .mobile-bar {
@@ -256,19 +255,16 @@ aside {
 }
 
 .dropdown-header {
-  background-color: white;
-  background-color: white;
-  background-color: #f1f0e9;
+  /* background-color: #f1f0e9; */
+  background-color: #f1f1f1;
   padding: 0.5rem 1rem;
-  /* border-radius: 0.375rem; */
-  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* gap: 0.3rem; */
   transition: transform 0.3s ease-out;
   height: 60px;
+  gap: 2px;
 }
 
 .dropdown-icon {
@@ -283,6 +279,9 @@ aside {
   font-weight: 500;
   color: #4a4a4a;
   transition: color 0.2s;
+  font-family: tt-commons-pro, sans-serif;
+  font-style: normal;
+  font-weight: 200;
 }
 
 .dropdown-header:hover .dropdown-text {
@@ -304,7 +303,6 @@ aside {
   z-index: 10;
 }
 
-/* we need a state here instead of having a hover */
 .dropdown-container:hover .dropdown-menu {
   opacity: 1;
   transform: scale(1);
@@ -337,30 +335,20 @@ aside {
   }
 }
 @media only screen and (max-width: 602px) {
-  /* body {
-    background: #363636;
-    color: #ffffff;
-  } */
   .venue {
     min-width: 365px;
     background-color: #f8fbf8;
     border-radius: 0;
     border: 0;
     border-top: 1px solid black;
-    /* background: #363636; */
-    /* color: #ffffff; */
-    /* border-top: 1px solid rgb(255, 255, 255); */
   }
   .Stars:before {
-    content: "★★★★★";
-    letter-spacing: 3px;
     background: linear-gradient(
       90deg,
       #e4004d var(--percent),
       #ffdada var(--percent)
     );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .hr-line-one {

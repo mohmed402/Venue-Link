@@ -10,7 +10,9 @@ export default function Navigation() {
         <li>
           <a href="./services">Services</a>
         </li>
-        <li>About Us</li>
+        <li>
+          <a href="./Venue">Venue</a>
+        </li>
         <li>Contact Us</li>
       </ul>
     </nav>
