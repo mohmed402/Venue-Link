@@ -11,8 +11,8 @@ export default function SideNav() {
       <a href="#" className="closebtn" onClick={toggleNav}>
         &times;
       </a>
-      <a href="#">About</a>
-      <a href="#">Services</a>
+      <a href="./services">Services</a>
+      <a href="./venue">Venue</a>
       <a href="#">Clients</a>
       <a href="#">Contact</a>
     </section>

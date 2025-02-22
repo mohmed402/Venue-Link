@@ -6,10 +6,12 @@ import Navigation from "@/components/navigation";
 import { useNavHandler } from "@/context/NavContext";
 
 import "./page.css";
-import VenueAdd from "@/components/venueAdd";
+import VenueAdvert from "@/components/venueAdvert";
 import SideNav from "@/components/sideNav";
 import NavIcon from "@/components/navIcon";
 import Footer from "@/components/footer";
+import Logo from "@/components/logo";
+import SearchSec from "@/components/searchSec";
 
 export default function Home() {
   return (
@@ -17,15 +19,8 @@ export default function Home() {
       <SideNav />
       <header>
         <section className="header-bar">
-          <Image
-            className="company-logo"
-            aria-hidden
-            src="/assets/noBackLogo.png"
-            alt="Globe icon"
-            width={120}
-            height={120}
-          />
-          <Navigation />
+          <Logo />
+          <Navigation selcted={0} />
           <NavIcon />
         </section>
         <Image
@@ -45,39 +40,16 @@ export default function Home() {
             colour={"main"}
             hide={true}
           />
-          <section className="search-bar">
-            <Input
-              type={"text"}
-              value={"City"}
-              id={"city"}
-              width={160}
-              height={45}
-            />
-            <Input
-              type={"text"}
-              value={"Purpose"}
-              id={"Purpose"}
-              width={160}
-              height={45}
-            />
-            <Input
-              type={"date"}
-              value={"Date"}
-              id={"date"}
-              width={160}
-              height={45}
-            />
-            <Button title={"Search"} width={160} height={45} colour={"main"} />
-          </section>
+          <SearchSec />
         </div>
       </header>
       <main>
-        <VenueAdd>
+        <VenueAdvert>
           <section className="main-title">
             <h2>Venues</h2>
             <h3>Most Viewed</h3>
           </section>
-        </VenueAdd>
+        </VenueAdvert>
         <section className="catering-service">
           <div className="shadow">
             <div className="catering-content">
@@ -144,14 +116,6 @@ export default function Home() {
               width={200}
               height={98}
             />
-            {/* <Image
-              className=""
-              aria-hidden
-              src="/assets/list-venue-frame.png"
-              alt="venue background"
-              width={2200}
-              height={200}
-            /> */}
           </section>
         </section>
       </main>

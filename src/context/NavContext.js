@@ -18,5 +18,6 @@ export function NavProvider({ children }) {
 }
 
 export function useNavHandler() {
+  // console.log("this ", NavContext);
   return useContext(NavContext);
 }
