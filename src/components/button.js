@@ -1,3 +1,7 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
 import "../styles/components.css";
 
 export default function Button({
@@ -8,7 +12,20 @@ export default function Button({
   colour,
   hide,
   margin,
+  page,
 }) {
+  const router = useRouter();
+
+  const navigateToPage = (page) => {
+    if (page) {
+      router.push(`/${page}`);
+    }
+  };
+
+  const test = (page) => {
+    console.log(`/${page}`);
+  };
+
   return (
     <button
       className={
@@ -16,11 +33,12 @@ export default function Button({
           ? `custom-button ${classN}`
           : `custom-button ${hide ? "hide" : ""}`
       }
+      onClick={() => (page ? navigateToPage(page) : test(page))}
       style={{
         width: width,
         height: height,
         backgroundColor: colour === "main" ? "#800020" : colour,
-        margin: margin ? margin : "10px",
+        margin: margin || "10px",
       }}
     >
       {title}

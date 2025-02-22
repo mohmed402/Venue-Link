@@ -1,79 +1,46 @@
-/* From Uiverse.io by barisdogansutcu */
-label {
-  background-color: white;
+.container {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 10px 15px 10px 10px;
+  gap: 8px;
   cursor: pointer;
   user-select: none;
+  background-color: white;
+  gap: 14px;
+  padding: 10px 15px 10px 10px;
   border-radius: 10px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   color: black;
+  position: relative;
+  top: 40px;
+  margin-left: 4.9%;
+  width: 190px;
 }
 
-input {
+/* Hide the checkbox */
+input[type="checkbox"] {
   display: none;
 }
 
-input:checked + label svg {
-  fill: hsl(0deg 100% 50%);
-  stroke: hsl(0deg 100% 50%);
-  animation: heartButton 1s;
+/* Heart icon */
+.feather-heart {
+  transition: fill 0.3s ease, stroke 0.3s ease; /* Smooth transition */
+  stroke: #222; /* Default stroke color */
 }
 
-@keyframes heartButton {
-  0% {
-    transform: scale(1);
-  }
-
-  25% {
-    transform: scale(1.3);
-  }
-
-  50% {
-    transform: scale(1);
-  }
-
-  75% {
-    transform: scale(1.3);
-  }
-
-  100% {
-    transform: scale(1);
-  }
+/* Fill heart when checked */
+input:checked + .feather-heart {
+  fill: #cf244f; /* Filled heart */
+  stroke: #cf244f; /* Stroke matches fill */
 }
 
-input + label .action {
-  position: relative;
-  overflow: hidden;
-  display: grid;
+/* Text styling */
+.action {
+  font-size: 14px;
+  color: #333;
+  transition: color 0.3s ease;
 }
 
-input + label .action span {
-  grid-column-start: 1;
-  grid-column-end: 1;
-  grid-row-start: 1;
-  grid-row-end: 1;
-  transition: all 0.5s;
-}
-
-input + label .action span.option-1 {
-  transform: translate(0px, 0%);
-  opacity: 1;
-}
-
-input:checked + label .action span.option-1 {
-  transform: translate(0px, -100%);
-  opacity: 0;
-}
-
-input + label .action span.option-2 {
-  transform: translate(0px, 100%);
-  opacity: 0;
-}
-
-input:checked + label .action span.option-2 {
-  transform: translate(0px, 0%);
-  opacity: 1;
+/* Change text color when active */
+input:checked ~ .action {
+  color: black;
 }

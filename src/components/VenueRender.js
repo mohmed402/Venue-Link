@@ -40,7 +40,7 @@ const venues = [
   },
 ];
 
-export default function Venue() {
+export default function VenueRender() {
   return (
     <section className="venue-section">
       {venues.map((venue, index) => (

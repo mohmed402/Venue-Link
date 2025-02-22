@@ -3,30 +3,24 @@ import Button from "../components/button";
 
 import { useNavHandler } from "@/context/NavContext";
 import "../styles/services.css";
-import Input from "../components/input";
 
 import Navigation from "@/components/navigation";
-import Venue from "@/components/venue";
+import VenueRender from "@/components/VenueRender";
 import SideNav from "@/components/sideNav";
 import NavIcon from "@/components/navIcon";
 import Footer from "@/components/footer";
-import Checkbox from "@/components/checkBox";
 import FiliterObj from "@/joint/filiterObj";
 import ToolBar from "@/components/toolBar";
+import Logo from "@/components/logo";
+
 export default function Services() {
   return (
     <>
+      {/* <SideNav /> */}
       <header>
         <section className="header-bar">
-          <Image
-            className="company-logo"
-            aria-hidden
-            src="/assets/noBackLogo.png"
-            alt="Globe icon"
-            width={120}
-            height={120}
-          />
-          <Navigation />
+          <Logo />
+          <Navigation selcted={1} />
           {/* <NavIcon /> */}
         </section>
         <Image
@@ -89,10 +83,10 @@ export default function Services() {
             <FiliterObj />
           </aside>
           <div className="vl"></div>
-          <Venue />
+          <VenueRender />
         </section>
       </main>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }

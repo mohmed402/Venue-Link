@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@iconscout/react-unicons": "^2.2.4",
+    "framer-motion": "^12.4.7",
     "next": "15.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

@@ -12,7 +12,7 @@ export default function SideNav() {
         &times;
       </a>
       <a href="./services">Services</a>
-      <a href="./Venue">Venue</a>
+      <a href="./venue">Venue</a>
       <a href="#">Clients</a>
       <a href="#">Contact</a>
     </section>
