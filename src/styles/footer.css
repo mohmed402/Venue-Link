@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap");
-* {
+.footer * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -13,7 +13,8 @@
   max-width: 1280px; */
   width: 100%;
   background: #000000;
-  border-radius: 6px;
+  margin-top: 80px;
+  /* border-radius: 6px; */
 }
 .footer .footer-row {
   display: flex;

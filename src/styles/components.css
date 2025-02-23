@@ -68,6 +68,7 @@
   font-family: tt-commons-pro, sans-serif;
   font-style: normal;
   font-weight: 300;
+  z-index: 100;
 }
 
 .custom-button:hover {

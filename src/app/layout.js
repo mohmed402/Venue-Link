@@ -1,11 +1,6 @@
-import { Geist, Geist_Mono, Glory } from "next/font/google";
+import { Geist_Mono, Glory, Montserrat } from "next/font/google";
 import "./globals.css";
 import { NavProvider } from "@/context/NavContext";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -13,8 +8,14 @@ const geistMono = Geist_Mono({
 });
 
 const glory = Glory({
-  variable: "--font-glory-sans",
-  subsets: ["sans-serif"],
+  variable: "--font-glory",
+  subsets: ["latin"], // FIXED
+  weight: "400",
+});
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat", // FIXED
+  subsets: ["latin"], // FIXED
   weight: "400",
 });
 
@@ -31,7 +32,7 @@ export default function RootLayout({ children }) {
       </head>
 
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${glory.variable}`}
+        className={`${geistMono.variable} ${glory.variable} ${montserrat.variable}`}
       >
         <NavProvider>{children}</NavProvider>
       </body>
