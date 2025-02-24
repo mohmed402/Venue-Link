@@ -31,7 +31,7 @@ export default function Venue() {
     <>
       {/* <SideNav /> */}
       <header>
-        <section className="header-bar">
+        <section className="header-bar xzx">
           <Logo />
           <Navigation selcted={2} />
           {/* <NavIcon /> */}
@@ -60,6 +60,7 @@ export default function Venue() {
             width={120}
             height={40}
             colour={"main"}
+            page={"book"}
             hide={false}
           />
         </section>

@@ -28,7 +28,7 @@ export default function BookingForm() {
               value={"Date"}
               id={"date"}
               width={120}
-              height={40}
+              height={20}
             />
           </label>
           <label>
@@ -38,28 +38,31 @@ export default function BookingForm() {
               value={"People"}
               id={"date"}
               width={120}
-              height={40}
+              height={20}
             />
           </label>
         </div>
         <div>
           <label>
-            Time
+            Time from
             <Input
               type={"time"}
               value={"Time"}
               id={"time-from"}
               width={120}
-              height={40}
+              height={20}
             />
           </label>
-          <Input
-            type={"time"}
-            value={"time"}
-            id={"time-to"}
-            width={120}
-            height={40}
-          />
+          <label>
+            To
+            <Input
+              type={"time"}
+              value={"time"}
+              id={"time-to"}
+              width={120}
+              height={20}
+            />
+          </label>
         </div>
         <Button
           title={"Check availability"}

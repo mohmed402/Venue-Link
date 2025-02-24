@@ -18,7 +18,11 @@ export default function VenueInfo() {
           width={20}
           height={20}
         />
-        <span>BRUNTWOOD PARK, CHEADLE, Manchester, SK8 1HX</span>
+        <span>
+          <a target="_blank" href="https://maps.app.goo.gl/yofbda3Y1h1ukYEt8">
+            BRUNTWOOD PARK, CHEADLE, Manchester, SK8 1HX
+          </a>
+        </span>
       </div>
     </section>
   );

@@ -1,0 +1,220 @@
+main {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+}
+
+.payment-section {
+  width: 55%;
+}
+
+.venue-info-section {
+  width: 45%;
+  width: 45%;
+  display: flex;
+  justify-content: center;
+}
+
+.venue-details {
+  display: grid;
+}
+
+.venue-details-one,
+.venue-details-two {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.payway-sec > section > div {
+  border: 1px solid rgba(0, 0, 0, 0.618);
+  border-radius: 20px;
+  padding: 12px;
+  margin: 10px;
+  width: 95%;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payway-op {
+  margin: 20px;
+  width: 25px !important;
+  height: 25px !important;
+  z-index: 88;
+}
+
+.selected {
+  outline: 4px solid #69252a;
+  outline-offset: 3px;
+}
+
+.account-sec {
+  display: grid;
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.account-sec select {
+  width: 100%;
+  height: 50px;
+
+  padding: 15px;
+  font-size: 1rem;
+  border: 1px solid #635d5d;
+  border-radius: 10px 10px 0 0;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  max-width: 100%;
+  border: 1px solid black;
+  margin: 0;
+  border-radius: 0 0 10px 10px;
+  padding-top: 4px;
+}
+
+/* Country Code Prefix */
+.country-code {
+  width: 10%;
+  position: absolute;
+  inset-block: 0;
+  left: 0.75rem; /* left-3 */
+  display: flex;
+  align-items: center;
+  height: 1.5rem; /* h-6 */
+  padding-right: 0.5rem; /* pr-2 */
+  margin-block: auto; /* my-auto */
+}
+
+/* Input Field */
+.input-field {
+  display: block;
+  width: 90%;
+  font-size: 17px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  outline: none;
+  background-color: #0000;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px #0000001a;
+  padding: 18px 58px;
+}
+
+.input-field:focus {
+  border-color: rgb(71 85 105); /* focus:border-slate-600 */
+}
+
+/* Input Label */
+.input-label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 13px;
+  color: #ccc0;
+  pointer-events: none;
+  transition: all 0.4s;
+}
+
+.input-field:focus + .input-label {
+  top: -0px;
+  left: 10px;
+  font-size: 13px;
+  color: #434343;
+  margin-top: 4px;
+}
+.input-field:focus::placeholder {
+  color: transparent;
+}
+
+.input-field:focus {
+  border-color: rgb(71 85 105);
+}
+
+.btn-book {
+  margin: 10px 0 !important;
+  margin-bottom: 3px !important;
+  border-radius: 9px;
+}
+
+@media only screen and (max-width: 612px) {
+  .payment-section {
+    width: 100%;
+  }
+  .payway-sec > section > div {
+    width: 89%;
+    font-size: 0.8rem;
+    padding: 5px;
+  }
+  .account-sec {
+    margin-bottom: 40px;
+  }
+  .input-field {
+    padding: 10px 52px;
+  }
+  .input-field:focus + .input-label {
+    top: -1px;
+    left: 10px;
+    font-size: 10px;
+    color: #434343;
+    margin-top: 4px;
+  }
+}
+
+/* .cbc {
+  width: 100%;
+  height: 100%;
+
+  background: #260505;
+  --gap: 5em;
+  --line: 1px;
+  --color: rgba(255, 255, 255, 0.2);
+
+  background-image: linear-gradient(
+      -90deg,
+      transparent calc(var(--gap) - var(--line)),
+      var(--color) calc(var(--gap) - var(--line) + 1px),
+      var(--color) var(--gap)
+    ),
+    linear-gradient(
+      0deg,
+      transparent calc(var(--gap) - var(--line)),
+      var(--color) calc(var(--gap) - var(--line) + 1px),
+      var(--color) var(--gap)
+    );
+  background-size: var(--gap) var(--gap);
+} */
+
+/* From Uiverse.io by elijahgummer */
+.cbc {
+  color: white;
+
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    #7f1d1d,
+    #4a111a
+  ); /* Gradient background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  border-radius: 10px; /* Rounded corners */
+  position: relative;
+  overflow: hidden;
+}
+
+.cbc::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.1) 1px,
+      transparent 1px
+    ),
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none; /* Allow clicking through the pattern layer */
+}
