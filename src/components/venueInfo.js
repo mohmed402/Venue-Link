@@ -9,7 +9,7 @@ export default function VenueInfo() {
       <div>
         <Stars rating={3} /> <span>10 reviews – Read all</span>
       </div>
-      <div>
+      <div className="spann">
         <Image
           className=""
           aria-hidden

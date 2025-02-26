@@ -1,6 +1,10 @@
-export default function CountriesPhoneCodes() {
+export default function CountriesPhoneCodes({ countryCodeSeter }) {
   return (
-    <select name="countryCode" id="">
+    <select
+      name="countryCode"
+      id=""
+      onChange={(e) => countryCodeSeter(e.target.value)}
+    >
       <option data-countryCode="GB" value="44" Selected>
         UK (+44)
       </option>

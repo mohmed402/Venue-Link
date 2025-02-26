@@ -1,6 +1,6 @@
 import "../styles/components.css";
 
-export default function input({
+export default function Input({
   classN,
   value,
   id,
@@ -8,18 +8,22 @@ export default function input({
   name,
   width,
   height,
+  isChecked,
 }) {
   return (
     <input
-      className={classN ? `custom-input ${classN}` : `custom-input`}
+      className={classN ? `custom-input ${classN}` : "custom-input"}
       type={type}
-      placeholder={value}
+      placeholder={type !== "radio" ? value : undefined} // ✅ Only show placeholder for non-radio inputs
       id={id}
       name={name}
+      value={type !== "radio" ? value : undefined} // ✅ Avoid setting value on radio inputs
+      checked={isChecked}
       style={{
         width: width,
         height: height,
       }}
-    ></input>
+      {...(isChecked ? { readOnly: true } : {})} // ✅ Correct conditional readOnly
+    />
   );
 }

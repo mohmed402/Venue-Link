@@ -13,6 +13,8 @@ export default function Button({
   hide,
   margin,
   page,
+  action,
+  actionState,
 }) {
   const router = useRouter();
 
@@ -22,8 +24,9 @@ export default function Button({
     }
   };
 
-  const test = (page) => {
-    console.log(`/${page}`);
+  const reaction = () => {
+    action(!actionState);
+    console.log(!actionState);
   };
 
   return (
@@ -33,7 +36,7 @@ export default function Button({
           ? `custom-button ${classN}`
           : `custom-button ${hide ? "hide" : ""}`
       }
-      onClick={() => (page ? navigateToPage(page) : test(page))}
+      onClick={() => (page ? navigateToPage(page) : action ? reaction() : "")}
       style={{
         width: width,
         height: height,
