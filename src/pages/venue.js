@@ -39,7 +39,7 @@ export default function Venue() {
         <AddToFavorites />
         <VenueDisplayImg />
       </header>
-      <main>
+      <main className="venue-main">
         <section className="venue-info-container">
           <VenueInfo />
           <section>

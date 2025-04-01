@@ -1,0 +1,138 @@
+.venue-image-container {
+  margin: 100px auto;
+  height: fit-content;
+  width: 90%;
+}
+
+.venue-image-container section {
+  background-color: #e8e9e8;
+  border-radius: 5px;
+  padding: 15px 9px;
+  margin: 40px;
+  margin-bottom: 10px;
+  height: 346px;
+  width: 95%;
+  max-width: 90vw;
+  overflow-x: scroll;
+  overflow-y: clip;
+}
+
+.sec-main {
+  height: 400px !important;
+  display: flex;
+  align-items: center;
+}
+.main-image-preview {
+  width: 100%;
+}
+
+.gallery-preview {
+  display: flex;
+  justify-content: flex-start;
+  margin: 10px auto;
+}
+
+.venue-image-uploader {
+  background-color: #fff;
+  width: 30%;
+  margin: 10px auto;
+  padding: 10px;
+  height: fit-content;
+  border-radius: 45px;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+.venue-image-uploader h2 {
+  border: none !important;
+  width: 100% !important;
+  margin-top: 10px !important;
+}
+
+.addMore-images {
+  background-color: #fff;
+  font-size: 11px;
+  padding: 10px;
+  border-radius: 12px;
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  margin-right: -33px;
+  width: 11%;
+  float: right;
+}
+
+.gallery-item {
+  width: fit-content;
+
+  width: min-content;
+}
+
+.gallery {
+  float: left;
+  height: 260px;
+  margin: 30px 18px;
+  max-width: 460px;
+}
+.gal {
+  width: 9%;
+  height: 59px;
+}
+
+.image-traker {
+  background-color: rgb(167, 25, 25);
+  color: #ffffff;
+  padding: 7px;
+  width: 65px;
+  height: 40px;
+  font-weight: 500;
+  font-size: large;
+  border-radius: 5px;
+  float: right;
+  position: relative;
+  bottom: 65px;
+  right: 40px;
+}
+
+.input-image {
+  opacity: 0;
+  width: 50%;
+  margin: auto;
+  text-align: center;
+  height: 220px;
+  position: absolute;
+  cursor: pointer;
+}
+
+.input-image-gal {
+  width: 8%;
+  height: 90px;
+  opacity: 0;
+}
+
+.main-image-upload {
+  width: 96%;
+  height: 370px;
+  object-fit: cover;
+}
+
+.delete-img-btn {
+  background-color: #fff;
+  padding: 8px 6px;
+  width: 55px;
+  position: relative;
+  top: -10%;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  filter: opacity(0.4);
+}
+
+.delete-img-btn:hover {
+  filter: opacity(1);
+}
+
+.gallery-image {
+  width: fit-content;
+  margin: 0px 10px;
+}

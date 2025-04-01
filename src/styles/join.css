@@ -1,0 +1,162 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap");
+
+.join-header {
+  height: 980px;
+}
+
+.header-img-join {
+  display: block;
+  width: 61%;
+  float: right;
+  object-fit: cover;
+  object-position: left center;
+}
+
+.overlay {
+  position: absolute;
+  top: 118px;
+  left: 0;
+  width: 80%;
+  height: 90%;
+  background-color: #f8fbf8;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  z-index: 10;
+}
+
+.header-title {
+  position: relative;
+  top: 350px;
+  max-width: 90%;
+}
+.header-title h1,
+.header-title p {
+  margin: auto;
+  color: #6e0f2d;
+  font-weight: 400;
+  font-size: 5rem;
+  margin-left: 13%;
+  text-align: start;
+  position: none;
+  /* font-family: "Montserrat"; */
+}
+.header-title h1 {
+  font-size: 5rem;
+}
+
+.header-title p {
+  font-size: 2rem;
+  color: #000000;
+  position: relative;
+  bottom: 140px;
+  font-family: "Montserrat";
+  font-weight: 300;
+}
+
+.join-btn {
+  width: 400px;
+  height: 80px;
+  background-color: #800020;
+  margin: 10px;
+  position: relative;
+  bottom: 117px;
+  margin-left: 13% !important;
+  font-size: 1.6rem !important;
+}
+
+.typing-effect {
+  font-size: 24px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.cursor {
+  font-weight: bold;
+  color: black;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.join-main {
+  height: fit-content;
+  z-index: 20;
+  position: relative;
+  background-color: #f8fbf8;
+}
+
+.main-join-title {
+  margin-left: 7%;
+  position: relative;
+  top: 35px;
+  font-size: 3.2rem;
+  font-family: "Montserrat";
+}
+
+.benifits-list {
+  display: flex;
+  margin: 120px auto;
+  margin-bottom: 0;
+  padding-bottom: 100px;
+
+  font-family: Montserrat;
+  width: 100%;
+  align-items: center;
+  height: fit-content;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+.benifits-list div {
+  border: 2px solid #6e0f2d;
+  border-radius: 20px;
+  width: 40%;
+  height: fit-content;
+  display: grid;
+  justify-items: center;
+  padding: 23px;
+  max-width: 400px;
+  min-width: 315px;
+  margin: 20px;
+  min-height: 451px;
+}
+
+.benifits-list div h3 {
+  font-size: 1.5rem;
+  text-align: center;
+  color: #800020;
+}
+
+.benifits-list div p {
+  font-size: 1.2rem;
+  text-align: center;
+  color: #cb3b09;
+}
+
+.footer {
+  margin-top: 0 !important;
+}
+
+@media only screen and (max-width: 831px) {
+  .main {
+    margin-top: 307px;
+  }
+
+  .overlay {
+    width: 100%;
+    border-radius: 0;
+  }
+  .header-img-join {
+    display: none;
+  }
+  /* .typing-effect {
+    font-size: 16px;
+  } */
+  .header-title h1 {
+    font-size: 3rem;
+  }
+}

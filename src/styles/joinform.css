@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap");
+
+@import url("leaflet/dist/leaflet.css");
+
+header {
+  height: fit-content;
+  background-color: black;
+}
+
+.joinform-main {
+  text-align: center;
+  /* padding-top: 10px; */
+  /* height: 45px; */
+  min-height: 68vh;
+  display: grid;
+  align-items: center;
+  align-content: center;
+  font-family: "Montserrat";
+  background-color: #f9f9f9;
+}
+
+.list-q {
+  /* margin-top: 200px; */
+}
+
+.list-q div h2,
+.select-op {
+  border: 1px solid black;
+  width: 50%;
+  margin: 50px auto;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 15px;
+  /* height: 100px; */
+}
+.list-q div h2 {
+  /* height: 70px; */
+}
+
+/* .list-q div:hover {
+  background-color: rgba(106, 92, 92, 0.143);
+
+  transition: 0.1s;
+} */
+.list-q-selected {
+  background-color: #e6e6e6;
+  color: rgb(0, 0, 0);
+  border: 1.8px solid rgb(70, 70, 70) !important;
+  /* transition: 0.2s; */
+}
+
+.joinform-footer {
+  /* margin-top: 20px; */
+  /* position: absolute; */
+  z-index: 100;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  /* position: fixed; */
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 40px;
+}
+
+.back-btn,
+.next-btn {
+  font-size: 1.7rem;
+}
+.back-btn {
+  background-color: #eceada !important;
+  color: black;
+}

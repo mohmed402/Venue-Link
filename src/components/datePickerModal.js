@@ -13,7 +13,7 @@ export default function DatePickerModal({ isDateState, dateOpenSeter }) {
   };
 
   return (
-    <section class="card">
+    <section className="card">
       <div className="date-picker-container ">
         <h2 className="date-picker-title ">Select a Date</h2>
         <div className="date-picker-calendar">

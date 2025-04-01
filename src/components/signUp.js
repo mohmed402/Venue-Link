@@ -5,7 +5,7 @@ import verifyUser from "@/context/verifyUser";
 import Input from "@/components/input";
 import Button from "@/components/button";
 
-export default function EmailInput({ setIsToken, setIsLoading }) {
+export default function SignUp({}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [messageReceived, setMessageReceived] = useState("hello");
@@ -16,26 +16,27 @@ export default function EmailInput({ setIsToken, setIsLoading }) {
 
   // ✅ Check if user is already logged in
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     const storedEmail = localStorage.getItem("user_email");
     if (storedEmail) {
       setUserEmail(storedEmail);
-      setIsToken(true);
+      setMessageReceived("Already Loged-in");
+      //   setIsToken(true);
     }
-    setIsLoading(false);
-  }, [setIsLoading, setIsToken]);
+    // setIsLoading(false);
+  }, []);
 
-  useEffect(() => {
-    console.log("Updated message:", messageReceived); // Logs the correct value
-  }, [messageReceived]);
+  //   useEffect(() => {
+  //     console.log("Updated message:", messageReceived); // Logs the correct value
+  //   }, [messageReceived]);
 
-  useEffect(() => {
-    console.log("Updated test:", serverResText); // Logs the correct value
-  }, [serverResText]);
+  //   useEffect(() => {
+  //     console.log("Updated test:", serverResText); // Logs the correct value
+  //   }, [serverResText]);
 
   async function handleAuth(e) {
     e.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
 
     try {
       let result = await authenticateUser(email, password, setServerResText);
@@ -58,22 +59,22 @@ export default function EmailInput({ setIsToken, setIsLoading }) {
       console.error("Authentication error:", error);
       setServerResText("An error occurred. Please try again.");
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }
 
   async function signOut() {
-    setIsLoading(true);
+    // setIsLoading(true);
     const result = await signOutUser();
     // setMessageReceived(result);
     setUserEmail(null);
     setIsToken(false);
     setIsVerified(false); // Reset verification status
-    setIsLoading(false);
+    // setIsLoading(false);
   }
 
   const handleVerify = async () => {
-    setIsLoading(true);
+    // // setIsLoading(true);
     const response = await verifyUser(); // Removed setIsLoading as an argument
 
     setIsVerified(response.success);
@@ -83,13 +84,11 @@ export default function EmailInput({ setIsToken, setIsLoading }) {
     //   setMessageReceived("");
     // }, 1000);
 
-    setIsLoading(false);
+    // setIsLoading(false);
   };
 
   return (
     <>
-      {console.log(messageReceived)}
-      <p>{messageReceived}</p>
       {formSent || userEmail ? (
         <>
           <h3>Welcome, {userEmail}</h3>
@@ -128,7 +127,7 @@ export default function EmailInput({ setIsToken, setIsLoading }) {
           </div>
           <Button
             title={"Continue"}
-            width={"100%"}
+            width={"20%"}
             height={40}
             colour={"main"}
             classN={"btn-book"}

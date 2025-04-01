@@ -6,7 +6,7 @@ export default function PaymentOptions() {
 
   const handleOptionClick = (value) => {
     setSelectedOption(value);
-    console.log(value);
+    // console.log(value);
   };
 
   return (

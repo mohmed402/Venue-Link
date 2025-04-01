@@ -15,18 +15,22 @@ export default function Button({
   page,
   action,
   actionState,
+  submit,
+  click,
+  disable,
 }) {
   const router = useRouter();
 
   const navigateToPage = (page) => {
-    if (page) {
+    if (page === "home") {
+      router.push(`/`);
+    } else if (page) {
       router.push(`/${page}`);
     }
   };
 
   const reaction = () => {
     action(!actionState);
-    console.log(!actionState);
   };
 
   return (
@@ -36,7 +40,11 @@ export default function Button({
           ? `custom-button ${classN}`
           : `custom-button ${hide ? "hide" : ""}`
       }
-      onClick={() => (page ? navigateToPage(page) : action ? reaction() : "")}
+      onClick={() =>
+        page ? navigateToPage(page) : action ? reaction() : click ? click() : ""
+      }
+      onSubmit={() => (submit ? submit() : "")}
+      disabled={!disable ? false : true}
       style={{
         width: width,
         height: height,

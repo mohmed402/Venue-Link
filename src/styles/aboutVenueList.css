@@ -1,0 +1,21 @@
+.check-list-container {
+  padding: 1rem;
+  display: grid;
+  justify-items: start;
+  gap: 5px;
+  margin: 30px auto;
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 50%;
+  font-size: 1.3rem;
+}
+
+.check-list-container div {
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.check-list-container label {
+  margin-left: 10px;
+  text-transform: capitalize;
+}

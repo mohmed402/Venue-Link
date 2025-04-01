@@ -104,6 +104,7 @@ export default function Home() {
                 height={"fit-content"}
                 colour={"main"}
                 margin={"10px auto"}
+                page={"join"}
               />
             </div>
           </section>

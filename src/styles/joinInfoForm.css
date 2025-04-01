@@ -1,0 +1,15 @@
+.venue-info-contaner {
+  width: 80%;
+  margin: 10px auto;
+  display: grid;
+  align-items: stretch;
+}
+
+.venue-info-contaner form {
+  text-align: left;
+  gap: 10px;
+  display: grid;
+}
+.venue-info-contaner form input {
+  border-radius: 5px;
+}

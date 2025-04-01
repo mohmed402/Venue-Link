@@ -2,7 +2,7 @@ import Image from "next/image";
 import Button from "../components/button";
 
 import { useNavHandler } from "@/context/NavContext";
-import "../styles/services.css";
+import "@/styles/services.css";
 
 import Navigation from "@/components/navigation";
 import VenueRender from "@/components/VenueRender";
@@ -30,10 +30,11 @@ export default function Services() {
           alt="venue background"
           width={1920}
           height={680}
+          priority
         />
         <h1>Halls</h1>
       </header>
-      <main>
+      <main className="services-main">
         <section className="modifcation-bar">
           {/* <label for="people">Choose a car:</label> */}
           <select name="people" placeholder="People">

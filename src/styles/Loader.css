@@ -1,0 +1,22 @@
+.loaderWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  box-sizing: border-box;
+  border-top: 8px solid #69252a;
+  border-left: 8px solid #69252a;
+  border-right: 8px solid transparent;
+  animation: loader 0.7s infinite linear;
+}
+
+@keyframes loader {
+  to {
+    transform: rotate(360deg);
+  }
+}

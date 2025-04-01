@@ -1,0 +1,56 @@
+/* .header-tile-container {
+    .header-tile-container {
+        display: inline-flex
+    ;
+        align-items: center;
+    }
+} */
+.header-title {
+  font-family: Montserrat;
+  font-size: 2rem;
+}
+.header-tile-container p {
+  font-family: Montserrat;
+}
+
+.confirm-sec,
+.contact-info {
+  background: #f0f0f0;
+  width: 75%;
+  display: flex;
+  justify-content: space-between;
+  padding: 25px;
+  margin: 30px auto;
+  font-family: "Montserrat";
+}
+
+.booked-venue-img {
+  margin: auto;
+  display: block;
+  object-fit: cover;
+  height: 500px;
+  width: 75%;
+}
+
+.booking-info-container {
+  margin: 30px auto;
+  display: flex;
+  width: 75%;
+  justify-content: space-between;
+}
+.booking-info-container div {
+  background: #f0f0f0;
+  width: 230px;
+  padding: 10px;
+  font-family: "Montserrat";
+}
+
+.booking-info-container div h3 {
+  font-size: 1.8rem;
+  margin: 0 auto;
+}
+.booking-info-container div p {
+  font-size: 1.3rem;
+  margin: 0;
+  margin-bottom: 5px;
+}

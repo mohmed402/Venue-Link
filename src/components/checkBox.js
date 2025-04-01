@@ -1,7 +1,14 @@
 import "../styles/checkBox.css";
 
-const Checkbox = () => {
-  return <input type="checkbox" className="ui-checkbox" />;
+const Checkbox = ({ onChange, isChecked }) => {
+  return (
+    <input
+      type="checkbox"
+      className="ui-checkbox"
+      onChange={onChange}
+      checked={isChecked}
+    />
+  );
 };
 
 export default Checkbox;

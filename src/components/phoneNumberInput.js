@@ -1,6 +1,8 @@
 import Input from "@/components/input";
 import CountriesPhoneCodes from "@/components/countriesPhoneCodes";
 import { useState } from "react";
+import Button from "@/components/button";
+
 export default function PhoneNumberInput() {
   const [countryCode, setCountryCode] = useState(44);
   return (
@@ -11,14 +13,22 @@ export default function PhoneNumberInput() {
         <div className="country-code">+{countryCode}</div>
         <Input
           type={"number"}
-          value={"Phone Number"}
+          // value={"Phone Number"}
           id={"phone-number"}
           classN={"phone-input input-field"}
         />
-        <label for="input-field" className="input-label">
+        <label htmlFor="input-field" className="input-label">
           Phone Number
         </label>
       </div>
+      <Button
+        title={"Continue"}
+        width={"100%"}
+        height={40}
+        colour={"main"}
+        classN={"btn-book"}
+        hide={false}
+      />
     </div>
   );
 }
