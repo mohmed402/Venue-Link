@@ -13,3 +13,22 @@
 .venue-info-contaner form input {
   border-radius: 5px;
 }
+
+.form-input-sec-one {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  gap: 10px;
+}
+
+.input-container-join {
+  display: grid;
+  width: 50%;
+  border: 0;
+  padding: 0;
+}
+
+.about-space-text {
+  font-family: "Montserrat";
+}

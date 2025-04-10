@@ -11,7 +11,7 @@ const CitiesList = ({ selectedCountry, selectedCity, setSelectedCity }) => {
     if (cities && cities.length > 0) {
       setSelectedCity(cities[0]); // Set default city to the first city in the list
     }
-  }, [cities, setSelectedCity]); // Trigger when cities change
+  }, [cities]); // Trigger when cities change
 
   const handleCityChange = (e) => {
     setSelectedCity(e.target.value); // Update selected city when user selects a different city

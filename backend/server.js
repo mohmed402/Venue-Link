@@ -11,6 +11,7 @@ const corsOptions = {
   origin: "http://localhost:3000", // Allow requests only from this origin
   methods: "GET,POST", // Allowed request methods
   allowedHeaders: "Content-Type,Authorization", // Allowed headers
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -23,6 +24,8 @@ const userTable = require("./routes/userTable");
 const authRoutes = require("./routes/authRoutes");
 const geoNames = require("./routes/geoNames");
 const geoLocationRoute = require("./routes/geoLocation");
+const uploadData = require("./routes/uploadData");
+const getData = require("./routes/getData");
 // Sample Route
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
@@ -40,6 +43,10 @@ app.use("/auth", authRoutes);
 app.use("/api", geoNames);
 
 app.use("/api/geolocation", geoLocationRoute);
+
+app.use("/api/upload", uploadData);
+
+app.use("/api/data", getData);
 
 // Start Server
 app.listen(PORT, () => {

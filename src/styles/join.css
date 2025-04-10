@@ -16,8 +16,8 @@
   position: absolute;
   top: 118px;
   left: 0;
-  width: 80%;
-  height: 90%;
+  width: 68%;
+  height: inherit;
   background-color: #f8fbf8;
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;

@@ -2,17 +2,19 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "@/components/button";
+import getToReview from "@/context/getToReview";
 
 import "../styles/ImageGallery.css";
 
-const images = [
-  "/assets/image(1).png",
-  "/assets/image(2).png",
-  "/assets/image(3).png",
-  "/assets/image(4).png",
-];
+// const images = [
+//   "/assets/image(1).png",
+//   "/assets/image(2).png",
+//   "/assets/image(3).png",
+//   "/assets/image(4).png",
+// ];
 
 export default function ImageGallery() {
+  const [images, setImages] = useState();
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [imageSize, setImageSize] = useState({ width: 1000, height: 600 });
 
@@ -20,6 +22,27 @@ export default function ImageGallery() {
   const touchEndX = useRef(0);
   const direction = useRef(0); // 1 = next, -1 = prev
   const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const storedId = localStorage.getItem("venid");
+        if (storedId) {
+          const getImgRes = await getToReview("imageById", storedId);
+
+          if (getImgRes?.data) {
+            setImages(getImgRes.data);
+          } else {
+            console.error("No data received from getToReview");
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err.message);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   // Close lightbox when scrolling down
   useEffect(() => {
@@ -90,17 +113,17 @@ export default function ImageGallery() {
       />
       {/* Image Grid */}
       <div className="grid">
-        {images.map((src, index) => (
+        {images?.map((src, index) => (
           <motion.div
             key={index}
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
           >
             <Image
-              src={src}
+              src={src.image_url}
               alt={`Gallery Image ${index + 1}`}
-              width={300}
-              height={200}
+              width={600}
+              height={300}
               className="image"
               onClick={() => setSelectedIndex(index)}
             />
@@ -135,7 +158,7 @@ export default function ImageGallery() {
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
             >
               <Image
-                src={images[selectedIndex]}
+                src={images[selectedIndex].image_url}
                 alt="Selected"
                 width={imageSize.width}
                 height={imageSize.height}

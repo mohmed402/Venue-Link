@@ -113,7 +113,7 @@ main {
 
 .venue-card {
   flex: 0 0 auto;
-  width: 320px;
+  width: fit-content;
   scroll-snap-align: start;
   border-radius: 10px;
   background: #fff;
@@ -203,6 +203,7 @@ main {
   height: 290px;
   width: 100px;
   bottom: 96px;
+  display: none;
 }
 
 @media only screen and (max-width: 910px) {
@@ -216,7 +217,7 @@ main {
 
 @media only screen and (max-width: 770px) {
   .search-bar {
-    top: 200%;
+    top: 144%;
   }
   .header-content h1 {
     font-size: 45px;

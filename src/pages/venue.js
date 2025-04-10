@@ -1,6 +1,7 @@
 import SideNav from "@/components/sideNav";
 import NavIcon from "@/components/navIcon";
 import { useNavHandler } from "@/context/NavContext";
+import React, { useEffect, useState } from "react";
 
 import Button from "../components/button";
 
@@ -10,7 +11,7 @@ import BookingForm from "@/components/bookingForm";
 import VenueDisplayImg from "@/components/venueDisplayImg";
 import VenueInfo from "@/components/venueInfo";
 import Logo from "@/components/logo";
-import ImageGallery from "@/pages/ImageGallery";
+
 // import Footer from "@/components/footer";
 
 import "../styles/venue.css";
@@ -21,12 +22,31 @@ import VenueAboutSpace from "@/components/venueAboutSpace";
 const Map = dynamic(() => import("@/components/map"), { ssr: false });
 
 import dynamic from "next/dynamic";
+import Loader from "@/components/loader";
 export default function Venue() {
+  const [venueId, setVenueId] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const venueData = {
     venueProvidesDrinks: true,
     externalCateringNotAllowed: true,
     inHouseCatering: true,
   };
+
+  useEffect(() => {
+    const storedId = localStorage.getItem("venid");
+    if (storedId) {
+      setVenueId(storedId);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    }
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <>
       {/* <SideNav /> */}
@@ -37,7 +57,7 @@ export default function Venue() {
           {/* <NavIcon /> */}
         </section>
         <AddToFavorites />
-        <VenueDisplayImg />
+        <VenueDisplayImg venueId={venueId} />
       </header>
       <main className="venue-main">
         <section className="venue-info-container">

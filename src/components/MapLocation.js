@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import useFetchGeolocation from "../hooks/useFetchGeolocation";
 import MapUpdater from "./MapUpdater";
-import L from "leaflet";
+if (typeof window === "undefined") return null;
 
 // Dynamically import Leaflet components (client-only)
 const MapContainer = dynamic(
@@ -28,15 +28,24 @@ const MapLocation = ({ country, city, handleClick }) => {
   const [loading, setLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const { location, error } = useFetchGeolocation(`${country} ${city}`);
+  const [leaflet, setLeaflet] = useState(null);
 
   const mapTilerAPIKey = "cHKqnd6KwKh3g5Fs36zK";
 
-  const customIcon = L.icon({
-    iconUrl: "/assets/markLocation.png", // path to image in /public
-    iconSize: [42, 48], // size of the icon
-    iconAnchor: [16, 48], // point of the icon which will correspond to marker's location
-    popupAnchor: [0, -48], // where popup opens relative to iconAnchor
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      import("leaflet").then((L) => {
+        setLeaflet(L);
+      });
+    }
+  }, []);
+  const customIcon = leaflet?.icon({
+    iconUrl: "/assets/markLocation.png",
+    iconSize: [42, 48],
+    iconAnchor: [16, 48],
+    popupAnchor: [0, -48],
   });
+
   // Client-side only
   useEffect(() => {
     setIsClient(true);
@@ -86,7 +95,7 @@ const MapLocation = ({ country, city, handleClick }) => {
     ]);
   };
 
-  if (!isClient) return <p>Loading map...</p>;
+  if (!isClient || !leaflet) return <p>Loading map...</p>;
 
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>

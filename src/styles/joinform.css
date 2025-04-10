@@ -2,7 +2,7 @@
 
 @import url("leaflet/dist/leaflet.css");
 
-header {
+.joinfrom-header {
   height: fit-content;
   background-color: black;
 }
@@ -68,5 +68,18 @@ header {
 }
 .back-btn {
   background-color: #eceada !important;
-  color: black;
+  color: black !important;
+}
+button {
+  cursor: pointer;
+}
+.under-review-container {
+  width: 90%;
+  margin: auto;
+}
+
+.under-review-container h1 {
+  font-weight: 500;
+  font-family: "Montserrat";
+  margin: 20px;
 }

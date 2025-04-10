@@ -29,38 +29,6 @@ export default function Book() {
   const [width, setWidth] = useState(0);
   const [paymentType, setPaymentType] = useState("");
 
-  // function submitAccount() {}
-
-  // useEffect(() => {
-  //   fetch("http://localhost:5001/signup")
-  //     .then((res) => res.json())
-  //     .then((data) => console.log(data));
-  // }, []);
-
-  // useEffect(() => {
-  //   fetch("http://localhost:5001/auth/signin", {
-  //     method: "POST", // Must be POST since we're sending data
-  //     headers: {
-  //       "Content-Type": "application/json", // Tells server it's JSON data
-  //     },
-  //     body: JSON.stringify({
-  //       email: "benoun204@gmail.com",
-  //       password: "Asdfghjkl123",
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => console.log(data))
-  //     .catch((error) => console.error("Error:", error));
-  //   fetch("http://localhost:5001/auth/user", {
-  //     method: "get", // Must be POST since we're sending data
-  //     headers: {
-  //       "Content-Type": "application/json", // Tells server it's JSON data
-  //     },
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => console.log(data))
-  //     .catch((error) => console.error("Error:", error));
-  // }, []);
   useEffect(() => {
     const storedEmail = localStorage.getItem("user_email");
     const storedPhone = localStorage.getItem("user_phone");

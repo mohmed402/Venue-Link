@@ -47,8 +47,6 @@ router.get("/user", async (req, res) => {
   res.json({ user: data.user });
 });
 
-module.exports = router;
-
 // 📌 **Sign Out User**
 router.post("/signout", async (req, res) => {
   const { error } = await supabase.auth.signOut();
@@ -57,3 +55,4 @@ router.post("/signout", async (req, res) => {
 });
 
 // return { redirect: { destination: "/signin", permanent: false } };
+module.exports = router;

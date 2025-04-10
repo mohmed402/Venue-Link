@@ -1,16 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import "@/styles/venueImagesUploader.css";
 
-export default function VenueImagesUploader() {
+export default function VenueImagesUploader({ handleStepData }) {
   const [mainImage, setMainImage] = useState(null);
   const [galleryImages, setGalleryImages] = useState([]);
 
+  useEffect(() => {
+    if (!mainImage && galleryImages.length === 0) return;
+
+    handleStepData({
+      mainImage: mainImage?.file || null,
+      galleryImages: galleryImages.map((img) => img.file),
+    });
+  }, [mainImage, galleryImages]);
+
   const handleMainImageChange = (e) => {
     const file = e.target.files[0];
-
     if (file) {
-      setMainImage(URL.createObjectURL(file));
+      const preview = URL.createObjectURL(file);
+      setMainImage({ file, preview });
     }
   };
 
@@ -33,6 +42,14 @@ export default function VenueImagesUploader() {
     setGalleryImages(updated);
   };
 
+  // 🔥 Call handleStepData whenever images change
+  useEffect(() => {
+    handleStepData("images", {
+      mainImage,
+      galleryImages,
+    });
+  }, [mainImage, galleryImages]);
+
   return (
     <section className="venue-image-container">
       <section className="sec-main">
@@ -40,7 +57,7 @@ export default function VenueImagesUploader() {
           <>
             <div className="main-image-preview">
               <Image
-                src={mainImage}
+                src={mainImage.preview}
                 alt="Main venue"
                 width={500}
                 height={300}
@@ -77,8 +94,9 @@ export default function VenueImagesUploader() {
           </div>
         )}
       </section>
+
       <section>
-        {galleryImages && galleryImages.length > 0 ? (
+        {galleryImages.length > 0 ? (
           <div className="gallery-preview">
             {galleryImages.map((img, index) => (
               <div className="gallery-item" key={index}>
@@ -95,7 +113,7 @@ export default function VenueImagesUploader() {
                 >
                   <Image
                     src="/assets/bin.png"
-                    alt="main upload"
+                    alt="delete"
                     width={25}
                     height={25}
                   />
@@ -124,6 +142,7 @@ export default function VenueImagesUploader() {
       </section>
 
       <div className="image-traker">{galleryImages.length}/18</div>
+
       {galleryImages.length > 0 && (
         <div className="addMore-images">
           <Image
@@ -144,28 +163,4 @@ export default function VenueImagesUploader() {
       )}
     </section>
   );
-}
-
-{
-  /* <h3>Gallery Images</h3>
-      <input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleGalleryChange}
-      />
-      <div className="gallery-preview">
-        {galleryImages.map((img, index) => (
-          <div className="gallery-item" key={index}>
-            <Image
-              src={img.preview}
-              alt={`Gallery ${index}`}
-              width={200}
-              height={100}
-            />
-
-            <button onClick={() => removeGalleryImage(index)}>×</button>
-          </div>
-        ))}
-      </div>  */
 }

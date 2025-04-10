@@ -89,7 +89,7 @@ function join() {
             />
             <p>
               Get guaranteed payouts and fraud protection through Payments by
-              Booking.com.
+              venuelink.com.
             </p>
           </div>
           <div>

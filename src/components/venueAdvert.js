@@ -36,7 +36,6 @@ export default function VenueAdvert({ children }) {
           {venues.map((venue, index) => (
             <div key={index} className="venue-card">
               <Image
-                className=""
                 aria-hidden
                 src={venue.imageSrc}
                 alt={venue.altText}

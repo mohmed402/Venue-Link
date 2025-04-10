@@ -105,7 +105,7 @@ export default function EmailInput({ setIsToken, setIsLoading }) {
               type="text"
               value={email}
               id="Email"
-              classN="email-input input-field"
+              className="email-input input-field"
               onChange={(value) => setEmail(value)}
               required={true}
             />

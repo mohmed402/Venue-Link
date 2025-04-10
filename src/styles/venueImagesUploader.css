@@ -2,6 +2,7 @@
   margin: 100px auto;
   height: fit-content;
   width: 90%;
+  display: grid;
 }
 
 .venue-image-container section {
@@ -11,7 +12,7 @@
   margin: 40px;
   margin-bottom: 10px;
   height: 346px;
-  width: 95%;
+  /* width: 95%; */
   max-width: 90vw;
   overflow-x: scroll;
   overflow-y: clip;
@@ -34,8 +35,9 @@
 
 .venue-image-uploader {
   background-color: #fff;
-  width: 30%;
+  font-size: 0.8rem;
   margin: 10px auto;
+  text-align: center;
   padding: 10px;
   height: fit-content;
   border-radius: 45px;
@@ -47,19 +49,24 @@
   border: none !important;
   width: 100% !important;
   margin-top: 10px !important;
+  padding: 0 !important;
 }
 
 .addMore-images {
   background-color: #fff;
-  font-size: 11px;
+  font-size: 12px;
   padding: 10px;
   border-radius: 12px;
-  display: grid;
-  justify-content: center;
-  justify-items: center;
-  margin-right: -33px;
-  width: 11%;
+  display: flex;
+  width: 29%;
   float: right;
+  margin-left: 40px;
+  justify-items: center;
+  align-items: center;
+  gap: 0.9rem;
+  filter: invert(1);
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .gallery-item {
@@ -71,6 +78,7 @@
 .gallery {
   float: left;
   height: 260px;
+  width: fit-content;
   margin: 30px 18px;
   max-width: 460px;
 }
@@ -82,16 +90,16 @@
 .image-traker {
   background-color: rgb(167, 25, 25);
   color: #ffffff;
-  padding: 7px;
+  padding: 5px;
   width: 65px;
-  height: 40px;
   font-weight: 500;
-  font-size: large;
+  font-size: 1rem;
   border-radius: 5px;
   float: right;
   position: relative;
-  bottom: 65px;
-  right: 40px;
+  bottom: 50px;
+  left: 58px;
+  display: block;
 }
 
 .input-image {
@@ -105,8 +113,8 @@
 }
 
 .input-image-gal {
-  width: 8%;
-  height: 90px;
+  width: 76%;
+  height: 56px;
   opacity: 0;
 }
 
@@ -134,5 +142,17 @@
 
 .gallery-image {
   width: fit-content;
+  height: 300px;
   margin: 0px 10px;
+}
+
+@media only screen and (max-width: 531px) {
+  .venue-image-uploader img {
+    width: 60%;
+    height: 80%;
+  }
+
+  .venue-image-container {
+    display: grid;
+  }
 }

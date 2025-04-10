@@ -1,7 +1,8 @@
 "use client";
+
 import Image from "next/image";
 import Button from "../components/button";
-import Input from "../components/input";
+// import Input from "../components/input";
 import Navigation from "@/components/navigation";
 import { useNavHandler } from "@/context/NavContext";
 
@@ -84,8 +85,6 @@ export default function Home() {
           <section className="list-venue-ad">
             <div>
               <Image
-                className=""
-                aria-hidden
                 src="/assets/cityIcon.png"
                 alt="venue background"
                 width={200}

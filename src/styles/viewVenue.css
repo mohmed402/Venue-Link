@@ -1,0 +1,79 @@
+.viewVenue-container {
+  z-index: 100;
+  background-color: #e3e8e8;
+  position: absolute;
+  top: 10%;
+  left: 320px;
+  right: 2%;
+  border-radius: 10px;
+  padding: 10px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.viewVenue-container p {
+  text-align: center;
+}
+
+.images-container {
+  margin: 5px 40px;
+  overflow-y: scroll;
+  display: flex;
+  width: 90%;
+  /* position: relative;     */
+}
+.image-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.images-container img {
+  margin: 3px;
+  width: auto;
+}
+
+.main,
+.gallary {
+  border: 7px solid rgb(191, 100, 100);
+  outline: 1px solid red;
+}
+
+.gallary {
+  border: 7px solid #247bc7;
+  outline: 1px solid #247bc7;
+}
+
+.main-text-review,
+.gallary-text-review {
+  background: #bf6463;
+  height: fit-content;
+  color: #f0f8ff;
+  padding: 5px;
+  position: absolute;
+  top: -9px;
+  left: 7px;
+}
+.gallary-text-review {
+  background-color: #247bc7;
+}
+
+.main-content-review {
+  margin: 20px 40px;
+}
+.main-content-review h1 {
+  margin: 0px;
+}
+
+.viewVenue-container td,
+.viewVenue-container th {
+  border: 2px solid #9e9e9e;
+}
+
+.sec-arrow {
+  display: flex;
+}
+
+.arrow {
+  cursor: pointer;
+}

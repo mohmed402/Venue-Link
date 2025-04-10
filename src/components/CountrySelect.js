@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 const CountrySelect = ({ selectedCountry, setSelectedCountry }) => {
-  // Country data with country name and code
   const countries = [
     { name: "United States", code: "US" },
     { name: "United Kingdom", code: "GB" },
@@ -10,13 +9,8 @@ const CountrySelect = ({ selectedCountry, setSelectedCountry }) => {
     { name: "France", code: "FR" },
     { name: "Australia", code: "AU" },
     { name: "India", code: "IN" },
-    // Add more countries as needed
   ];
 
-  // State to store selected country code
-  //   const [selectedCountry, setSelectedCountry] = useState("");
-
-  // Handle the change event
   const handleChange = (event) => {
     setSelectedCountry(event.target.value);
     console.log("Selected country code:", event.target.value);

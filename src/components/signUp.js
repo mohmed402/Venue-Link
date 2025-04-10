@@ -5,14 +5,16 @@ import verifyUser from "@/context/verifyUser";
 import Input from "@/components/input";
 import Button from "@/components/button";
 
-export default function SignUp({}) {
+import "@/styles/signUp.css";
+
+export default function SignUp({ handleClick, setUserId }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [messageReceived, setMessageReceived] = useState("hello");
+  const [messageReceived, setMessageReceived] = useState("");
   const [formSent, setFormSent] = useState(false);
   const [userEmail, setUserEmail] = useState(null);
   const [isVerified, setIsVerified] = useState(false);
-  const [serverResText, setServerResText] = useState("");
+  const [verfiyTest, setVerfiyTest] = useState(0);
 
   // ✅ Check if user is already logged in
   useEffect(() => {
@@ -20,44 +22,31 @@ export default function SignUp({}) {
     const storedEmail = localStorage.getItem("user_email");
     if (storedEmail) {
       setUserEmail(storedEmail);
-      setMessageReceived("Already Loged-in");
-      //   setIsToken(true);
+      handleClick(storedEmail);
     }
-    // setIsLoading(false);
   }, []);
 
-  //   useEffect(() => {
-  //     console.log("Updated message:", messageReceived); // Logs the correct value
-  //   }, [messageReceived]);
-
-  //   useEffect(() => {
-  //     console.log("Updated test:", serverResText); // Logs the correct value
-  //   }, [serverResText]);
-
   async function handleAuth(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
+
     // setIsLoading(true);
 
     try {
-      let result = await authenticateUser(email, password, setServerResText);
+      let result = await authenticateUser(email, password);
       console.log("Auth result:", result);
-      console.log("Auth 3 result:", serverResText);
 
       if (!result || Object.keys(result).length === 0) {
         throw new Error("Empty response from authenticateUser");
       }
-
-      // setServerResText(result.message ? result.message : "no Msg");
+      setMessageReceived(result.message);
+      setUserId(result?.data?.data?.user?.id);
       setFormSent(true);
+      setUserEmail(email);
+      handleClick(email);
 
-      if (result.success) {
-        setUserEmail(email);
-        setIsToken(true);
-        setIsVerified(true);
-      }
+      handleVerify();
     } catch (error) {
       console.error("Authentication error:", error);
-      setServerResText("An error occurred. Please try again.");
     } finally {
       // setIsLoading(false);
     }
@@ -66,19 +55,21 @@ export default function SignUp({}) {
   async function signOut() {
     // setIsLoading(true);
     const result = await signOutUser();
-    // setMessageReceived(result);
-    setUserEmail(null);
-    setIsToken(false);
-    setIsVerified(false); // Reset verification status
+    console.log(result);
+    setVerfiyTest(0);
+    setFormSent(!result.success);
+    setUserEmail("");
+    setIsVerified(!result.success);
     // setIsLoading(false);
   }
 
   const handleVerify = async () => {
-    // // setIsLoading(true);
+    // setIsLoading(true);
+    if (verfiyTest > 5) signOut();
+    setVerfiyTest(verfiyTest + 1);
     const response = await verifyUser(); // Removed setIsLoading as an argument
-
+    console.log("verify response", response);
     setIsVerified(response.success);
-    // setMessageReceived(response);
 
     // setTimeout(() => {
     //   setMessageReceived("");
@@ -92,14 +83,31 @@ export default function SignUp({}) {
       {formSent || userEmail ? (
         <>
           <h3>Welcome, {userEmail}</h3>
-          <p className="logout-text" onClick={signOut}>
-            Not you? Logout
+          <p>
+            Not you?
+            <span className="logout-text" onClick={signOut}>
+              {" "}
+              Logout
+            </span>
           </p>
           <p>{messageReceived}</p>
+          {!isVerified && (
+            <Button
+              title={"Email Verified"}
+              width={191}
+              height={40}
+              colour={"main"}
+              classN={"btn-book"}
+              click={handleAuth}
+            />
+          )}
         </>
       ) : (
-        <form onSubmit={handleAuth}>
+        <form className="sign-up-form" onSubmit={handleAuth}>
           <div className="input-container em">
+            <label htmlFor="Email" className="input-label">
+              Email
+            </label>
             <Input
               type="text"
               value={email}
@@ -108,26 +116,22 @@ export default function SignUp({}) {
               onChange={(value) => setEmail(value)}
               required={true}
             />
-            <label htmlFor="Email" className="input-label">
-              Email
-            </label>
           </div>
           <div className="input-container em">
+            <label htmlFor="Password" className="input-label">
+              Password
+            </label>
             <Input
               type="password"
-              value={password}
               id="Password"
               classN="email-input input-field"
               onChange={(value) => setPassword(value)}
               required={true}
             />
-            <label htmlFor="Password" className="input-label">
-              Password
-            </label>
           </div>
           <Button
-            title={"Continue"}
-            width={"20%"}
+            title={"Sign-in"}
+            width={"100%"}
             height={40}
             colour={"main"}
             classN={"btn-book"}
@@ -135,17 +139,6 @@ export default function SignUp({}) {
           />
         </form>
       )}
-
-      {isVerified ? (
-        <Button
-          title={"Email Verified"}
-          width={"100%"}
-          height={40}
-          colour={"main"}
-          classN={"btn-book"}
-          click={handleVerify}
-        />
-      ) : null}
     </>
   );
 }

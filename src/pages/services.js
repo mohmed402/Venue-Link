@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Button from "../components/button";
+import { useState } from "react";
 
 import { useNavHandler } from "@/context/NavContext";
 import "@/styles/services.css";
@@ -14,10 +15,12 @@ import ToolBar from "@/components/toolBar";
 import Logo from "@/components/logo";
 
 export default function Services() {
+  const [qauntity, setQauntity] = useState(0);
+
   return (
     <>
       {/* <SideNav /> */}
-      <header>
+      <header className="services-header">
         <section className="header-bar">
           <Logo />
           <Navigation selcted={1} />
@@ -62,7 +65,7 @@ export default function Services() {
         <section className="main-header">
           <h1>Venues in Manchester</h1>
           <div className="search-info">
-            <p className="found-text"> Shown 267 venues in this area</p>
+            <p className="found-text"> Shown {qauntity} venues in this area</p>
 
             {/* <i class="uit uit-sort-amount-down"></i> */}
             <select className="sort" name="sort">
@@ -84,7 +87,7 @@ export default function Services() {
             <FiliterObj />
           </aside>
           <div className="vl"></div>
-          <VenueRender />
+          <VenueRender setQauntity={setQauntity} />
         </section>
       </main>
       <Footer />

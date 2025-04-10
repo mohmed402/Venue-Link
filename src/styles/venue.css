@@ -277,6 +277,10 @@ tr:nth-child(even) {
   font-weight: 600;
 }
 
+.loaderWrapper {
+  margin: 20%;
+}
+
 @media only screen and (max-width: 612px) {
   .booking-form {
     display: none;

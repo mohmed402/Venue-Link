@@ -2,11 +2,7 @@
 
 import validate from "../utils/validate";
 
-export default async function authenticateUser(
-  email,
-  password,
-  setServerResText
-) {
+export default async function authenticateUser(email, password) {
   try {
     const validation = validate(email, password);
     if (!validation.success) return validation;
@@ -60,10 +56,10 @@ export default async function authenticateUser(
         );
 
         const signUpData = await signUpResponse.json();
-
+        console.log("this: ", signUpData);
         if (signUpResponse.ok && !signUpData?.error) {
           console.log("✅ Signup successful! Verification email sent.");
-          setServerResText("Signup successful! Verification email sent.");
+
           return {
             success: true,
             message: "Signup successful! Verify your email to continue.",

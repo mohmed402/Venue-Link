@@ -9,14 +9,22 @@ export default async function signOutUser() {
     });
 
     const data = await response.json();
-
+    console.log(data);
     if (!response.ok) throw new Error(data.error || "Failed to sign out");
 
     // Clear local storage and update state
     localStorage.clear();
 
+    return {
+      success: true,
+      message: "Signout successful",
+    };
     console.log("Signout successful");
   } catch (error) {
+    return {
+      success: false,
+      message: "Error signing out",
+    };
     console.error("Error signing out:", error.message);
   }
 }
