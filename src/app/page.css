@@ -35,6 +35,7 @@ header {
   font-size: 70px;
   width: 600px;
   margin: auto;
+  color: #f8fbf8;
 }
 
 .search-bar {
@@ -183,9 +184,10 @@ main {
 .list-venue-ad div {
   display: grid;
 }
-.list-venue-ad h3 {
+.list-venue-ad h2 {
   width: 80%;
   margin: 15px auto;
+  font-size: 1.3rem;
 }
 .list-venue-ad p {
   max-width: 500px;
@@ -204,6 +206,12 @@ main {
   width: 100px;
   bottom: 96px;
   display: none;
+}
+
+.input-error {
+  outline: red;
+  outline-width: 3px;
+  outline-style: solid;
 }
 
 @media only screen and (max-width: 910px) {

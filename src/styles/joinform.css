@@ -83,3 +83,14 @@ button {
   font-family: "Montserrat";
   margin: 20px;
 }
+.sign-up-form {
+  justify-items: center;
+}
+
+.input-container {
+  display: flex;
+  width: 70%;
+  max-width: 300px;
+  justify-content: space-between;
+  align-items: center;
+}

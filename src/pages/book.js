@@ -4,9 +4,10 @@ import Input from "@/components/input";
 import Button from "@/components/button";
 import Image from "next/image";
 
-import "../styles/venue.css";
+// import "../styles/venue.css";
 
 import "../styles/book.css";
+import "../styles/headerTransion.css";
 
 import BookingForm from "@/components/bookingForm";
 

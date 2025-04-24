@@ -40,17 +40,6 @@ export default function Payment({ setIsLoading }) {
     }, 4000);
   };
 
-  // const invalidPhone = {
-  //   fName: "John",
-  //   lName: "Doe",
-  //   phoneNumber: "123343232", // Too short
-  //   cardNumber: "4111111111111111",
-  //   expiryDate: "12/26",
-  //   cvv: "123",
-  // };
-
-  // console.log(validateCardDetails(invalidPhone)); // Expected output: false
-
   return (
     <form onSubmit={handleSubmit}>
       <section className="payment-input-field">

@@ -67,7 +67,7 @@ export default function SignUp({ handleClick, setUserId }) {
     // setIsLoading(true);
     if (verfiyTest > 5) signOut();
     setVerfiyTest(verfiyTest + 1);
-    const response = await verifyUser(); // Removed setIsLoading as an argument
+    const response = await verifyUser();
     console.log("verify response", response);
     setIsVerified(response.success);
 

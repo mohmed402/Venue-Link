@@ -96,6 +96,7 @@
   margin-right: 100px;
   position: relative;
   overflow: hidden;
+  z-index: 100 !important;
 }
 
 .nav-bar ul {
@@ -109,6 +110,7 @@
   padding: 16px 30px;
   text-decoration: none;
   color: #ffffff;
+  cursor: pointer;
 }
 .nav-bar a {
   text-decoration: none;
@@ -160,6 +162,7 @@
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  margin-left: 19px;
 }
 
 @media only screen and (max-width: 770px) {

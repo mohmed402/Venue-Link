@@ -8,7 +8,8 @@ import Button from "@/components/button";
 export default function EmailInput({ setIsToken, setIsLoading }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [messageReceived, setMessageReceived] = useState("hello");
+  const [messageReceived, setMessageReceived] = useState("");
+
   const [formSent, setFormSent] = useState(false);
   const [userEmail, setUserEmail] = useState(null);
   const [isVerified, setIsVerified] = useState(false);
@@ -35,10 +36,10 @@ export default function EmailInput({ setIsToken, setIsLoading }) {
 
   async function handleAuth(e) {
     e.preventDefault();
-    setIsLoading(true);
 
     try {
       let result = await authenticateUser(email, password, setServerResText);
+      // setIsLoading(true);
       console.log("Auth result:", result);
       console.log("Auth 3 result:", serverResText);
 
@@ -46,7 +47,7 @@ export default function EmailInput({ setIsToken, setIsLoading }) {
         throw new Error("Empty response from authenticateUser");
       }
 
-      // setServerResText(result.message ? result.message : "no Msg");
+      setMessageReceived(result.message);
       setFormSent(true);
 
       if (result.success) {
@@ -58,7 +59,7 @@ export default function EmailInput({ setIsToken, setIsLoading }) {
       console.error("Authentication error:", error);
       setServerResText("An error occurred. Please try again.");
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }
 
@@ -68,28 +69,22 @@ export default function EmailInput({ setIsToken, setIsLoading }) {
     // setMessageReceived(result);
     setUserEmail(null);
     setIsToken(false);
-    setIsVerified(false); // Reset verification status
+    setIsVerified(false);
     setIsLoading(false);
   }
 
   const handleVerify = async () => {
     setIsLoading(true);
-    const response = await verifyUser(); // Removed setIsLoading as an argument
+    const response = await verifyUser();
 
     setIsVerified(response.success);
     // setMessageReceived(response);
-
-    // setTimeout(() => {
-    //   setMessageReceived("");
-    // }, 1000);
 
     setIsLoading(false);
   };
 
   return (
     <>
-      {console.log(messageReceived)}
-      <p>{messageReceived}</p>
       {formSent || userEmail ? (
         <>
           <h3>Welcome, {userEmail}</h3>
@@ -105,7 +100,7 @@ export default function EmailInput({ setIsToken, setIsLoading }) {
               type="text"
               value={email}
               id="Email"
-              className="email-input input-field"
+              classN="email-input input-field"
               onChange={(value) => setEmail(value)}
               required={true}
             />

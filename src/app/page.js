@@ -92,7 +92,7 @@ export default function Home() {
               />
             </div>
             <div>
-              <h3>List your venue for free and get more bookings!</h3>
+              <h2>List your venue for free and get more bookings!</h2>
               <p>
                 We are the fastest-growing online marketplace for venue hire,
                 connecting you directly with your ideal customers.

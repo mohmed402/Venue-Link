@@ -5,7 +5,7 @@ function Footer() {
     <section className="footer">
       <div className="footer-row">
         <div className="footer-col">
-          <h4>Info</h4>
+          <h3>Info</h3>
           <ul className="links">
             <li>
               <a href="#">About Us</a>
@@ -25,7 +25,7 @@ function Footer() {
           </ul>
         </div>
         <div className="footer-col">
-          <h4>Explore</h4>
+          <h3>Explore</h3>
           <ul className="links">
             <li>
               <a href="#">Free Designs</a>
@@ -48,7 +48,7 @@ function Footer() {
           </ul>
         </div>
         <div className="footer-col">
-          <h4>Legal</h4>
+          <h3>Legal</h3>
           <ul className="links">
             <li>
               <a href="#">Customer Agreement</a>
@@ -71,7 +71,7 @@ function Footer() {
           </ul>
         </div>
         <div className="footer-col">
-          <h4>Newsletter</h4>
+          <h3>Newsletter</h3>
           <p>
             Subscribe to our newsletter for a weekly dose of news, updates,
             helpful tips, and exclusive offers.

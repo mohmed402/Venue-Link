@@ -12,9 +12,10 @@ import VenueDisplayImg from "@/components/venueDisplayImg";
 import VenueInfo from "@/components/venueInfo";
 import Logo from "@/components/logo";
 
-// import Footer from "@/components/footer";
+import Footer from "@/components/footer";
 
 import "../styles/venue.css";
+import "../styles/headerTransion.css";
 import VenueFacilities from "@/components/venueFacilities";
 import VenuePrices from "@/components/VenuePrices";
 import VenueAboutSpace from "@/components/venueAboutSpace";
@@ -85,7 +86,7 @@ export default function Venue() {
           />
         </section>
       </main>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }
