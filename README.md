@@ -9,9 +9,9 @@ This web application provides a streamlined platform for booking event venues an
 - ✅ Multi-step booking form for venue selection
 - 📅 Real-time availability updates
 - 💳 Secure payment handling (mocked or real)
-- 🎯 User preference saving and booking history
-- 🧠 Optimized user experience with responsive UI
+- 🧠 Optimised user experience with responsive UI
 - 🔐 Integration with Supabase for authentication and database storage
+- 🛠️ Admin page for managing listings, reviewing submissions, and controlling platform data
 
 ---
 
