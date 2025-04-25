@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import useFetchGeolocation from "../hooks/useFetchGeolocation";
 import MapUpdater from "./MapUpdater";
-if (typeof window === "undefined") return null;
+// if (typeof window === "undefined") return null;
 
 // Dynamically import Leaflet components (client-only)
 const MapContainer = dynamic(
