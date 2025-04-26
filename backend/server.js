@@ -6,13 +6,17 @@ const supabase = require("./supabaseClient");
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Allow requests from your frontend (http://localhost:3000)
+
 const corsOptions = {
-  origin: "http://localhost:3000", // Allow requests only from this origin
-  methods: "GET,POST", // Allowed request methods
-  allowedHeaders: "Content-Type,Authorization", // Allowed headers
+  origin: [
+    "http://localhost:3000",
+    `${process.env.NEXT_PUBLIC_DOMAIN_URL}`,
+  ],
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 };
+
 
 app.use(cors(corsOptions));
 
@@ -50,5 +54,5 @@ app.use("/api/data", getData);
 
 // Start Server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });

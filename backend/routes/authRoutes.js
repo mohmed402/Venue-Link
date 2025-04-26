@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const supabase = require("../supabaseClient");
-
+const WEB_URL = process.env.DOMAIN_URL || "http://localhost:3000";
 // 📌 **Sign Up User**
 router.post("/signup", async (req, res) => {
   const { email, password } = req.body;
@@ -9,7 +9,7 @@ router.post("/signup", async (req, res) => {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { emailRedirectTo: "http://localhost:3000/book" }, // Update with your frontend URL
+    options: { emailRedirectTo: `${WEB_URL}/book` }, // Update with your frontend URL
   });
 
   if (error) return res.status(400).json({ error: error.message });
@@ -54,5 +54,5 @@ router.post("/signout", async (req, res) => {
   res.json({ message: "Signout successful" });
 });
 
-// return { redirect: { destination: "/signin", permanent: false } };
+
 module.exports = router;

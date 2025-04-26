@@ -1,6 +1,7 @@
 export default async function getToReview(type, venueId = null, status = null) {
   try {
-    const url = new URL(`http://localhost:5001/api/data/${type}`);
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+    const url = new URL(`${BASE_URL}/api/data/${type}`);
 
     if (venueId) {
       url.searchParams.append("venueId", venueId);

@@ -1,8 +1,8 @@
 async function signup(e, email, password) {
   e.preventDefault();
-
   try {
-    const response = await fetch("http://localhost:5001/auth/signup", {
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+    const response = await fetch(`${BASE_URL}/auth/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

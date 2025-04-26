@@ -2,6 +2,7 @@ import insertAndGetId from "./insertAndGetId";
 
 export default async function uploadVenueData(data, userId) {
   try {
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
     const cateringId = await insertAndGetId(
       "catering",
       data["Catering&Drinks"] || {}
@@ -32,7 +33,7 @@ export default async function uploadVenueData(data, userId) {
       lng: data.location[0].lng,
     });
 
-    const response = await fetch("http://localhost:5001/api/upload/venueInfo", {
+    const response = await fetch(`${BASE_URL}/api/upload/venueInfo`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

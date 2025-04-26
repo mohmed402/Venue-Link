@@ -5,6 +5,8 @@ const useFetchCities = (country) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+
   useEffect(() => {
     if (!country) return;
 
@@ -14,7 +16,7 @@ const useFetchCities = (country) => {
 
       try {
         const response = await fetch(
-          `http://localhost:5001/api/cities?country=${country}`
+          `${BASE_URL}/api/cities?country=${encodeURIComponent(country)}`
         );
 
         if (!response.ok) {
@@ -31,7 +33,7 @@ const useFetchCities = (country) => {
     };
 
     fetchCities();
-  }, [country]);
+  }, [country, BASE_URL]);
 
   return { cities, loading, error };
 };

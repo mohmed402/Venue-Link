@@ -1,13 +1,12 @@
-// // make sure I use api to sign out the user
-
 import validate from "../utils/validate";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
 
 export default async function authenticateUser(email, password) {
   try {
     const validation = validate(email, password);
     if (!validation.success) return validation;
 
-    // ✅ Step 1: Ensure session validity before assuming user is signed in
+    // Step 1: Ensure session validity before assuming user is signed in
     const storedToken = localStorage.getItem("supabase_token");
     if (storedToken) {
       // Optionally verify the token with an API call before assuming it's valid
@@ -15,9 +14,9 @@ export default async function authenticateUser(email, password) {
       return { success: true, message: "Already signed in." };
     }
 
-    // ✅ Step 2: Attempt Sign-in
+    // Step 2: Attempt Sign-in
     console.log("Attempting sign-in...");
-    const signInResponse = await fetch("http://localhost:5001/auth/signin", {
+    const signInResponse = await fetch(`${BASE_URL}/auth/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -39,7 +38,7 @@ export default async function authenticateUser(email, password) {
       };
     }
 
-    // ✅ Step 3: Handle Login Failure & Attempt Signup
+    //  Step 3: Handle Login Failure & Attempt Signup
     if (signInData?.error) {
       console.log("❌ Sign-in failed:", signInData.error);
 
@@ -47,7 +46,7 @@ export default async function authenticateUser(email, password) {
         console.log("🔍 User not found, attempting sign-up...");
 
         const signUpResponse = await fetch(
-          "http://localhost:5001/auth/signup",
+          `${BASE_URL}/auth/signup`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

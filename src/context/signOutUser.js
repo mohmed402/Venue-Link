@@ -1,6 +1,7 @@
 export default async function signOutUser() {
   try {
-    const response = await fetch("http://localhost:5001/auth/signout", {
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+    const response = await fetch(`${BASE_URL}/auth/signout`, {
       method: "POST",
       credentials: "include", // Ensure cookies (session) are sent if using Supabase auth with sessions
       headers: {

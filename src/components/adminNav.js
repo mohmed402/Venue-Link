@@ -1,5 +1,5 @@
 import Image from "next/image";
-
+const WEB_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || "http://localhost:3000";
 export default function AdminNav() {
   return (
     <aside>
@@ -21,7 +21,7 @@ export default function AdminNav() {
         </a>
       </nav>
       <div className="user-container">
-        <a href="http://localhost:3000" className="a-nav as">
+        <a href={WEB_URL} className="a-nav as">
           Sign-out
         </a>
         <section className="profileSec">

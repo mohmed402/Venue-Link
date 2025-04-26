@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+const BASE_URL =process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
 
 const useFetchGeolocation = (address) => {
   const [location, setLocation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     if (!address) return;
@@ -14,7 +16,7 @@ const useFetchGeolocation = (address) => {
 
       try {
         const response = await fetch(
-          `http://localhost:5001/api/geolocation?address=${encodeURIComponent(
+          `${BASE_URL}/api/geolocation?address=${encodeURIComponent(
             address
           )}`
         );
@@ -25,7 +27,7 @@ const useFetchGeolocation = (address) => {
 
         const data = await response.json();
 
-        // Ensure valid lat/lon
+
         if (!data || !data.lat || !data.lon) {
           throw new Error("Invalid geolocation data");
         }
@@ -33,7 +35,7 @@ const useFetchGeolocation = (address) => {
         setLocation({ lat: parseFloat(data.lat), lon: parseFloat(data.lon) });
       } catch (err) {
         setError(err.message);
-        setLocation(null); // Reset location on error
+        setLocation(null);
       } finally {
         setLoading(false);
       }

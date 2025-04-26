@@ -1,3 +1,5 @@
+const BASE_URL =
+process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
 export default async function uploadVenueImages(venueId, collected) {
   const formData = new FormData();
 
@@ -19,7 +21,7 @@ export default async function uploadVenueImages(venueId, collected) {
   }
 
   // Upload to server
-  const response = await fetch("http://localhost:5001/api/upload/venueImages", {
+  const response = await fetch(`${BASE_URL}/api/upload/venueImages`, {
     method: "POST",
     body: formData,
   });

@@ -1,7 +1,8 @@
 export default async function insertAndGetId(tableName, dataObj) {
   try {
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
     const response = await fetch(
-      "http://localhost:5001/api/upload/insertTable",
+      `${BASE_URL}/api/upload/insertTable`,
       {
         method: "POST",
         headers: {
