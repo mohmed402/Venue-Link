@@ -4,6 +4,7 @@ import Image from "next/image";
 import Footer from "@/components/footer";
 
 import "../styles/venue.css";
+import "../styles/headerTransion.css";
 
 import "../styles/book.css";
 import "../styles/success.css";
