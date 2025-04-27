@@ -6,28 +6,9 @@ const supabase = require("./supabaseClient");
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://www.venuelink.uk",
-];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-};
 
 
-app.options("*", cors(corsOptions)); // handle preflight requests
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 // Middleware
 app.use(express.json()); 
@@ -39,12 +20,9 @@ const geoNames = require("./routes/geoNames");
 const geoLocationRoute = require("./routes/geoLocation");
 const uploadData = require("./routes/uploadData");
 const getData = require("./routes/getData");
-// Sample Route
+
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
-});
-app.get("/name", (req, res) => {
-  res.send("My name is muhmmad 🚀");
 });
 
 
