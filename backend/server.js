@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5001;
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://venue-link.vercel.app",
+  "https://www.venuelink.uk",
 ];
 
 const corsOptions = {
