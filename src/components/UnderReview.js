@@ -13,7 +13,7 @@ export default function UnderReview() {
         alt={`background under review`}
         width={600}
         height={300}
-        className="image"
+        className="under-review-image"
       />
     </section>
   );

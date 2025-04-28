@@ -46,6 +46,18 @@
 .close {
   width: 0;
 }
+.nav-container {
+  position: absolute;
+  top: 1px;
+  right: 2px;
+}
+
+.admin-icon-container {
+  position: absolute;
+    right: 52px;
+    top: 43px;
+    filter: invert(1);
+}
 
 @media screen and (max-height: 450px) {
   .sidenav {

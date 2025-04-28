@@ -11,10 +11,11 @@ export default function SideNav() {
       <a href="#" className="closebtn" onClick={toggleNav}>
         &times;
       </a>
+      <a href="./">Home</a>
       <a href="./services">Services</a>
       <a href="./venue">Venue</a>
-      <a href="#">Clients</a>
-      <a href="#">Contact</a>
+      <a href="./book">Contact Us</a>
+      <a href="./underReview">Admin</a>
     </section>
   );
 }

@@ -1,7 +1,9 @@
 import "../styles/components.css";
+import Image from "next/image";
 
 export default function Navigation({ selcted }) {
   return (
+    <div className="nav-container">
     <nav className="nav-bar hide">
       <ul>
         <a href="./">
@@ -18,5 +20,17 @@ export default function Navigation({ selcted }) {
         </a>
       </ul>
     </nav>
+        <a className="admin-icon-container hide" href="./underReview">
+            <Image
+              className="profile-icon"
+              aria-hidden
+              src="/assets/user.png"
+              alt="admin page"
+              width={32}
+              height={32}
+                  />
+        </a>
+    </div>
+
   );
 }

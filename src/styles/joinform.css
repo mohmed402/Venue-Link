@@ -83,6 +83,11 @@ button {
   font-family: "Montserrat";
   margin: 20px;
 }
+
+.under-review-image{
+  width: 95%;
+    max-width: 600px;
+}
 .sign-up-form {
   justify-items: center;
 }
