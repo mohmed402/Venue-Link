@@ -50,7 +50,7 @@ function InquirieInfo({ inquirId, isReview, setIsReview, setDataHolder }) {
   if (inquirId == null)
     return (
       <section className="info emty">
-        <h2>Select User</h2>
+        <h2>Select Venue</h2>
       </section>
     );
 
