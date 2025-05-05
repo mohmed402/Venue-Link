@@ -32,7 +32,7 @@ Make sure you have the following installed:
 1. **Clone the repo:**
 
 ```bash
-git clone https://github.com/your-username/venue-booking-app.git
+git clone https://github.com/mohmed402/Venue-Link.git
 cd venue-booking-app
 
 ---
