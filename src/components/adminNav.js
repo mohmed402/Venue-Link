@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 const WEB_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || "http://localhost:3000";
 export default function AdminNav() {
   return (
@@ -7,18 +8,18 @@ export default function AdminNav() {
       <hr></hr>
 
       <nav>
-        <a href="#1" className="a-nav">
+        <Link href="/admin" className="a-nav">
           Dashboard
-        </a>
-        <a href="#1" className="a-nav selected">
+        </Link>
+        <Link href="/underReview" className="a-nav selected">
           Review
-        </a>
-        <a href="#1" className="a-nav">
+        </Link>
+        <Link href="/admin/bookings" className="a-nav">
           Bookings
-        </a>
-        <a href="#1" className="a-nav">
+        </Link>
+        <Link href="#1" className="a-nav">
           Inbox
-        </a>
+        </Link>
       </nav>
       <div className="user-container">
         <a href={WEB_URL} className="a-nav as">

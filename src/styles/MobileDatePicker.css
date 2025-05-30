@@ -1,0 +1,168 @@
+.mobile-date-picker-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1000;
+  animation: slideUp 0.3s ease-out;
+}
+
+.mobile-date-picker-content {
+  background: white;
+  width: 100%;
+  max-height: 90vh;
+  border-radius: 20px 20px 0 0;
+  padding: 20px;
+  position: relative;
+  overflow-y: auto;
+}
+
+.mobile-date-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.mobile-date-picker-header h3 {
+  margin: 0;
+  font-family: "Montserrat", serif;
+  font-weight: 600;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* Duration Selector Styles */
+.duration-selector {
+  margin-top: 20px;
+  padding: 20px 0;
+  border-top: 1px solid #eee;
+}
+
+.duration-selector h4 {
+  margin: 0 0 15px 0;
+  font-family: "Montserrat", serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.duration-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  padding: 0 5px;
+}
+
+.duration-button {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  padding: 10px 15px;
+  font-family: "Montserrat", serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.duration-button.selected {
+  background: #800020;
+  color: white;
+  border-color: #800020;
+}
+
+.duration-button:hover:not(.selected) {
+  background: #e8e8e8;
+}
+
+.confirm-button {
+  width: 100%;
+  background: #800020;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 15px;
+  margin-top: 20px;
+  font-family: "Montserrat", serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.confirm-button:hover {
+  background: #600018;
+}
+
+/* Custom styles for react-datepicker */
+.mobile-calendar {
+  width: 100% !important;
+  font-family: "Montserrat", serif !important;
+}
+
+.react-datepicker {
+  width: 100% !important;
+  border: none !important;
+  font-family: inherit !important;
+}
+
+.react-datepicker__month-container {
+  width: 100% !important;
+}
+
+.react-datepicker__header {
+  background-color: white !important;
+  border-bottom: none !important;
+}
+
+.react-datepicker__day {
+  margin: 0.5rem !important;
+  width: 2.5rem !important;
+  line-height: 2.5rem !important;
+  border-radius: 50% !important;
+}
+
+.react-datepicker__day--selected {
+  background-color: #800020 !important;
+  color: white !important;
+}
+
+.react-datepicker__time-container {
+  width: 100% !important;
+  border-left: none !important;
+}
+
+.react-datepicker__time-box {
+  width: 100% !important;
+  text-align: center !important;
+}
+
+.react-datepicker__time-list-item {
+  height: 40px !important;
+  line-height: 40px !important;
+}
+
+.react-datepicker__time-list-item--selected {
+  background-color: #800020 !important;
+  border-radius: 35px;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+} 

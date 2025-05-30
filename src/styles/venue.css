@@ -127,8 +127,10 @@ body {
 .form-inputs {
   display: grid;
   justify-items: center;
-  align-items: center;
-  margin-top: 10px;
+  align-items: start;
+  margin-top: 20px;
+  padding: 0 20px;
+  gap: 10px;
 }
 
 .form-inputs div {
@@ -142,6 +144,10 @@ body {
   display: grid;
   justify-items: start;
   justify-content: space-evenly;
+  width: 90%;
+  margin-bottom: 15px;
+  font-family: "Montserrat", serif;
+  font-weight: 600;
 }
 
 .form-inputs input {
@@ -210,11 +216,28 @@ tr:nth-child(even) {
   white-space: normal;
   background: #f9f9f9;
 }
+
+.mobile-book-sec > div {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.mobile-book-sec > div:active {
+  background-color: #f0f0f0;
+}
+
 .mobile-book-sec h4,
 .mobile-book-sec p {
   margin: 5px 0;
   font-family: "Montserrat", serif;
   font-weight: 600;
+}
+
+.mobile-book-sec p {
+  color: #666;
+  font-size: 0.9rem;
 }
 
 .loaderWrapper {
@@ -255,4 +278,413 @@ tr:nth-child(even) {
     transform: scaleY(1);
     transform-origin: 0% 100%;
   }
+}
+
+.booking-form.isbooking-available {
+  margin-top: 20px;
+  text-align: center;
+  padding: 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  width: 333px;
+
+}
+
+.booking-form.isbooking-available.available {
+  background-color: #e8f5e9;
+  border: 1px solid #4caf50;
+  color: #2e7d32;
+}
+
+.booking-form.isbooking-available.unavailable {
+  background-color: #ffebee;
+  border: 1px solid #ef5350;
+  color: #c62828;
+}
+
+/* Desktop DatePicker Styles */
+.custom-datepicker {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-family: "Montserrat", serif;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-family: "Montserrat", serif;
+  font-size: 0.9rem;
+  margin-top: 8px;
+  background-color: white;
+  cursor: pointer;
+}
+
+/* React DatePicker Custom Styles */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__input-container {
+  width: 100%;
+}
+
+.react-datepicker {
+  font-family: "Montserrat", serif !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.react-datepicker__header {
+  background-color: white !important;
+  border-bottom: 1px solid #eee !important;
+  padding-top: 12px !important;
+}
+
+.react-datepicker__current-month {
+  font-family: "Montserrat", serif !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+}
+
+.react-datepicker__day-name {
+  font-family: "Montserrat", serif !important;
+  font-weight: 600 !important;
+}
+
+.react-datepicker__day {
+  font-family: "Montserrat", serif !important;
+  margin: 0.4rem !important;
+  width: 2rem !important;
+  line-height: 2rem !important;
+  border-radius: 50% !important;
+  transition: all 0.2s ease !important;
+}
+
+.react-datepicker__day:hover {
+  background-color: #f0f0f0 !important;
+}
+
+.react-datepicker__day--selected {
+  background-color: #800020 !important;
+  color: white !important;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: rgba(128, 0, 32, 0.1) !important;
+  color: #800020 !important;
+}
+
+.react-datepicker__time-container {
+  border-left: 1px solid #eee !important;
+  width: 100px !important;
+}
+
+.react-datepicker__time-box {
+  width: 100% !important;
+}
+
+.react-datepicker__time-list-item {
+  font-family: "Montserrat", serif !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.react-datepicker__time-list-item:hover:not(.react-datepicker__time-list-item--selected) {
+  background-color: #f0f0f0 !important;
+}
+
+.react-datepicker__time-list-item--selected {
+  background-color: #800020 !important;
+  color: white !important;
+}
+
+/* Booking Steps Styles */
+.booking-step {
+  width: 100%;
+  padding: 15px 0;
+}
+
+.booking-step h4 {
+  font-family: "Montserrat", serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* Time Selection Styles */
+.time-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 0 5px;
+}
+
+.time-button {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  padding: 10px;
+  font-family: "Montserrat", serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.time-button:hover {
+  background: #e8e8e8;
+}
+
+.time-button.selected {
+  background: #800020;
+  color: white;
+  border-color: #800020;
+}
+
+/* Duration Selection Styles */
+.duration-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 0 5px;
+}
+
+.duration-button {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  padding: 12px;
+  font-family: "Montserrat", serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.duration-button:hover {
+  background: #e8e8e8;
+}
+
+.duration-button.selected {
+  background: #800020;
+  color: white;
+  border-color: #800020;
+}
+
+/* Booking Summary Styles */
+.booking-summary {
+  width: 100%;
+  padding: 15px;
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  margin: 4px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #f8f8f8;
+}
+
+.summary-item:hover {
+  background: #f0f0f0;
+}
+
+.summary-item.active {
+  background: rgba(128, 0, 32, 0.1);
+}
+
+.summary-label {
+  font-family: "Montserrat", serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.summary-value {
+  font-family: "Montserrat", serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Calendar Styles */
+.custom-calendar {
+  width: 100% !important;
+  border: none !important;
+  background: white !important;
+  font-family: "Montserrat", serif !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+}
+
+.react-datepicker__header {
+  background: white !important;
+  border-bottom: none !important;
+  padding: 0 !important;
+  font-family: "Montserrat", serif !important;
+}
+
+.react-datepicker__current-month {
+  font-family: "Montserrat", serif !important;
+  font-weight: 600 !important;
+  font-size: 1.1rem !important;
+  color: #333 !important;
+  margin-bottom: 15px !important;
+}
+
+.react-datepicker__day-names {
+  margin-bottom: 10px !important;
+}
+
+.react-datepicker__day-name {
+  color: #666 !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  margin: 5px !important;
+  width: 2.5rem !important;
+}
+
+.react-datepicker__day {
+  color: #333 !important;
+  font-family: "Montserrat", serif !important;
+  font-size: 0.9rem !important;
+  margin: 5px !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  line-height: 2.5rem !important;
+  border-radius: 50% !important;
+  transition: all 0.2s ease !important;
+}
+
+.react-datepicker__day:hover {
+  background-color: #f0f0f0 !important;
+}
+
+.react-datepicker__day--selected {
+  background-color: #800020 !important;
+  color: white !important;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: rgba(128, 0, 32, 0.1) !important;
+  color: #800020 !important;
+}
+
+/* Time Selection Styles */
+.time-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 8px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.time-button {
+  background: #f8f8f8;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 12px 8px;
+  font-family: "Montserrat", serif;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.time-button:hover {
+  background: #f0f0f0;
+}
+
+.time-button.selected {
+  background: #800020;
+  color: white;
+  border-color: #800020;
+}
+
+/* Duration Selection Styles */
+.duration-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 8px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.duration-button {
+  background: #f8f8f8;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: "Montserrat", serif;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.duration-button:hover {
+  background: #f0f0f0;
+}
+
+.duration-button.selected {
+  background: #800020;
+  color: white;
+  border-color: #800020;
+}
+
+/* Step Headers */
+.booking-step h4 {
+  font-family: "Montserrat", serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 16px;
+  margin-top: 0;
+}
+
+/* Scrollbar Styles */
+.time-options::-webkit-scrollbar {
+  width: 6px;
+}
+
+.time-options::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.time-options::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 3px;
+}
+
+.time-options::-webkit-scrollbar-thumb:hover {
+  background: #ccc;
 }

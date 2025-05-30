@@ -39,6 +39,7 @@ const geoNames = require("./routes/geoNames");
 const geoLocationRoute = require("./routes/geoLocation");
 const uploadData = require("./routes/uploadData");
 const getData = require("./routes/getData");
+const book = require("./routes/book");
 
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
@@ -57,6 +58,8 @@ app.use("/api/geolocation", geoLocationRoute);
 app.use("/api/upload", uploadData);
 
 app.use("/api/data", getData);
+
+app.use("/api/data/bookings", book);
 
 
 app.listen(PORT, () => {

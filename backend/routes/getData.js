@@ -69,4 +69,25 @@ router.get("/updateStateById", async (req, res) => {
 //   }
 // });
 
+router.get('/reviews/:venueId', async (req, res) => {
+  const venueId = parseInt(req.params.venueId);
+
+  if (isNaN(venueId)) {
+    return res.status(400).json({ error: 'Invalid venue ID' });
+  }
+
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('*')
+    .eq('venue_id', venueId)
+    .order('review_date', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching reviews:', error);
+    return res.status(500).json({ error: 'Failed to fetch reviews' });
+  }
+
+  res.json(data);
+});
+
 module.exports = router;

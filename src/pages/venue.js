@@ -16,9 +16,12 @@ import Footer from "@/components/footer";
 
 import "../styles/venue.css";
 import "../styles/headerTransion.css";
+import "../styles/MobileDatePicker.css";
 import VenueFacilities from "@/components/venueFacilities";
 import VenuePrices from "@/components/VenuePrices";
 import VenueAboutSpace from "@/components/venueAboutSpace";
+import MobileDatePicker from "@/components/MobileDatePicker";
+import { format } from 'date-fns';
 
 const Map = dynamic(() => import("@/components/map"), { ssr: false });
 
@@ -27,6 +30,9 @@ import Loader from "@/components/loader";
 export default function Venue() {
   const [venueId, setVenueId] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [selectedDateTime, setSelectedDateTime] = useState(null);
+  const [selectedDuration, setSelectedDuration] = useState(null);
 
   const venueData = {
     venueProvidesDrinks: true,
@@ -43,6 +49,26 @@ export default function Venue() {
       }, 1000);
     }
   }, []);
+
+  const handleDateTimeSelect = ({ date, duration }) => {
+    setSelectedDateTime(date);
+    setSelectedDuration(duration);
+  };
+
+  const formatDuration = (minutes) => {
+    if (minutes === 'full') return 'Full Day';
+    if (minutes < 60) return `${minutes}m`;
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return remainingMinutes ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
+  };
+
+  const formatDateTime = () => {
+    if (!selectedDateTime) return 'Select date and time';
+    const dateStr = format(selectedDateTime, 'dd MMM yyyy HH:mm');
+    const durationStr = selectedDuration ? ` • ${formatDuration(selectedDuration)}` : '';
+    return `${dateStr}${durationStr}`;
+  };
 
   if (loading) {
     return <Loader />;
@@ -62,7 +88,7 @@ export default function Venue() {
       </header>
       <main className="venue-main">
         <section className="venue-info-container">
-          <VenueInfo />
+          <VenueInfo venueId={venueId}/>
           <section>
             <VenueFacilities facilities={venueData} />
             <VenueAboutSpace />
@@ -70,11 +96,11 @@ export default function Venue() {
             <Map lat={32.888247} lng={13.2408143} />
           </section>
         </section>
-        <BookingForm />
+        <BookingForm venueId={venueId} />
         <section className="mobile-book-sec">
-          <div>
+          <div onClick={() => setIsDatePickerOpen(true)}>
             <h4>£1000</h4>
-            <p>14 Mar 2025</p>
+            <p>{formatDateTime()}</p>
           </div>
           <Button
             title={"Reserve"}
@@ -87,6 +113,12 @@ export default function Venue() {
         </section>
       </main>
       <Footer />
+      <MobileDatePicker
+        isOpen={isDatePickerOpen}
+        onClose={() => setIsDatePickerOpen(false)}
+        onSelect={handleDateTimeSelect}
+        selectedDate={selectedDateTime}
+      />
     </>
   );
 }
