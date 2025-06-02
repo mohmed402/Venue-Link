@@ -42,38 +42,64 @@ router.post("/venueInfo", async (req, res) => {
   const venueCapacity = info.venueCapacity;
   const about = info.about;
 
-  const { data: venueData, error: venueError } = await supabase
-    .from("venues")
-    .insert([
-      {
-        user_id: userId,
-        venue_place_type: venueType,
-        venue_place_size: placeType,
-        country,
-        city,
-        catering_id,
-        menu_id,
-        venueType_id,
-        facilities_id,
-        allowedEvents_id,
-        parking_id,
-        location_id,
-        venue_name: venueName,
-        venue_title: venueTitle,
-        venue_price: venuePrice,
-        about: about,
-        venue_capacity: venueCapacity, // Add proper image logic later
-      },
-    ])
-    .select("venue_id")
-    .single();
+  try {
+    // First insert the venue data
+    const { data: venueData, error: venueError } = await supabase
+      .from("venues")
+      .insert([
+        {
+          user_id: userId,
+          venue_place_type: venueType,
+          venue_place_size: placeType,
+          country,
+          city,
+          catering_id,
+          menu_id,
+          venueType_id,
+          facilities_id,
+          allowedEvents_id,
+          parking_id,
+          location_id,
+          venue_name: venueName,
+          venue_title: venueTitle,
+          venue_price: venuePrice,
+          about: about,
+          venue_capacity: venueCapacity,
+        }
+      ])
+      .select("venue_id")
+      .single();
 
-  if (venueError) return res.status(400).json({ error: venueError.message });
-  res.json({
-    message:
-      "Thanks! Your venue details have been added and are now under review. One of our team members will approve it soon.",
-    venueData,
-  });
+    if (venueError) throw venueError;
+
+    // Then insert the venue policies
+    const { venuePolicies } = formData;
+    const { data: policiesData, error: policiesError } = await supabase
+      .from("venue_policies")
+      .insert([
+        {
+          venue_id: venueData.venue_id,
+          requires_deposit: venuePolicies.requires_deposit,
+          deposit_amount: venuePolicies.deposit_amount || null,
+          allows_cancellation: venuePolicies.allows_cancellation,
+          cancellation_notice_days: venuePolicies.cancellation_notice_days,
+          refund_on_time_policy: venuePolicies.refund_on_time_policy,
+          refund_percentage: venuePolicies.refund_percentage || null,
+          late_cancellation_policy: venuePolicies.late_cancellation_policy,
+          late_cancellation_fee_percentage: venuePolicies.late_cancellation_fee_percentage || null
+        }
+      ]);
+
+    if (policiesError) throw policiesError;
+
+    res.json({
+      message: "Thanks! Your venue details have been added and are now under review. One of our team members will approve it soon.",
+      venueData,
+    });
+  } catch (error) {
+    console.error("Error inserting venue data:", error);
+    res.status(400).json({ error: error.message });
+  }
 });
 
 router.post("/insertTable", async (req, res) => {
@@ -177,5 +203,7 @@ router.post("/venueImages", upload.any(), async (req, res) => {
     return res.status(500).json({ error: "Server error during image upload." });
   }
 });
+
+
 
 module.exports = router;

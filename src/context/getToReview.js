@@ -19,7 +19,7 @@ export default async function getToReview(type, venueId = null, status = null) {
     });
 
     const result = await response.json();
-
+    console.log("result", result);
     if (!response.ok) {
       throw new Error(result.error || "Insert failed");
     }

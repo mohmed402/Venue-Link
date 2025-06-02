@@ -115,10 +115,16 @@
   width: 100% !important;
   border: none !important;
   font-family: inherit !important;
+  display: table-row;
 }
 
 .react-datepicker__month-container {
   width: 100% !important;
+}
+
+.react-datepicker__month {
+  margin: auto !important;
+
 }
 
 .react-datepicker__header {

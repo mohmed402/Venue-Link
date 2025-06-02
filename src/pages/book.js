@@ -9,13 +9,12 @@ import Image from "next/image";
 import "../styles/book.css";
 import "../styles/headerTransion.css";
 
-import BookingForm from "@/components/bookingForm";
+
 
 import PhoneNumberInput from "@/components/phoneNumberInput";
 import EmailInput from "@/components/emailInput";
 import PaymentOptions from "@/components/paymentOptions";
 import DatePickerModal from "@/components/datePickerModal";
-import VenueInfo from "@/components/venueInfo";
 import VenueInfoBook from "@/components/venueInfoBook";
 import VenuePriceBook from "@/components/venuePriceBook";
 import Payment from "@/components/payment";

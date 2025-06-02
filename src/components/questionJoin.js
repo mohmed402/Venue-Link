@@ -7,6 +7,8 @@ import JoinInfoForm from "./JoinInfoForm";
 import VenueImagesUploader from "./VenueImagesUploader";
 import SignUp from "./signUp";
 import dynamic from "next/dynamic";
+import VenuePricingSetup from './VenuePricingSetup';
+import BookingPolicies from './BookingPolicies';
 const MapLocation = dynamic(() => import("@/components/MapLocation"), {
   ssr: false,
 });
@@ -33,6 +35,8 @@ export default function QuestionJoin({
     "Tell us more about it?",
     "Tell us more about it?",
     "Tell us more about it?",
+    "Set your pricing",
+    "Set booking policies",
     "Venue details",
     "Venue details",
   ];
@@ -119,8 +123,20 @@ export default function QuestionJoin({
         key={"@9"}
       />,
     ],
-    [<JoinInfoForm handleStepData={handleStepData} key={"@10"} />],
-    [<VenueImagesUploader handleStepData={handleStepData} key={"@11"} />],
+    [
+      <VenuePricingSetup
+        handleStepData={handleStepData}
+        key={"@12"}
+      />,
+    ],
+    [
+      <BookingPolicies
+        handleStepData={handleStepData}
+        key={"@13"}
+      />,
+    ],
+    [<JoinInfoForm handleStepData={handleStepData} key={"@14"} />],
+    [<VenueImagesUploader handleStepData={handleStepData} key={"@15"} />],
     [""],
   ];
 

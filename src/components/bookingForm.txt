@@ -1,0 +1,535 @@
+// import React, { useState, useEffect } from "react";
+// import Button from "../components/button";
+// import Input from "@/components/input";
+// import Image from "next/image";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
+// import { checkAvailability } from "@/services/bookingService";
+// import { format } from 'date-fns';
+// import getToReview  from "@/context/getToReview";
+
+// const TIME_OPTIONS = Array.from({ length: 48 }, (_, i) => {
+//   const hour = Math.floor(i / 2);
+//   const minute = i % 2 === 0 ? '00' : '30';
+//   return {
+//     value: `${hour.toString().padStart(2, '0')}:${minute}`,
+//     label: `${hour.toString().padStart(2, '0')}:${minute}`
+//   };
+// });
+
+// export default function BookingForm({ venueId }) {
+//   const [formData, setFormData] = useState({
+//     venue_id: venueId,
+//     date: null,
+//     start_time: "",
+//     duration: null,
+//     people: "",
+//   });
+//   const [venueDetails, setVenueDetails] = useState(null);
+//   const [selectedDayPricing, setSelectedDayPricing] = useState(null);
+//   const [step, setStep] = useState('date');
+//   const [availability, setAvailability] = useState(null);
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [error, setError] = useState(null);
+//   const [calculatedPrice, setCalculatedPrice] = useState(null);
+
+//   // Fetch venue details including pricing and capacity
+//   useEffect(() => {
+//     const fetchVenueDetails = async () => {
+//       try {
+//         const [pricingResponse, venueData] = await Promise.all([
+//           fetch(`http://localhost:5001/api/data/venue-pricing/${venueId}`),
+//           getToReview("venueById", venueId)
+//         ]);
+  
+//         if (!pricingResponse.ok) {
+//           throw new Error('Failed to fetch venue pricing');
+//         }
+  
+//         const pricingData = await pricingResponse.json();
+  
+//         setVenueDetails({
+//           pricing: pricingData,
+//           capacity: venueData.venue_capacity, // or venueData.venue_capacity if using .single()
+//           name: venueData.venue_name,
+//           title: venueData.venue_title,
+//         });
+//       } catch (error) {
+//         console.error('Error fetching venue details:', error);
+//         setError('Unable to load venue details');
+//       }
+//     };
+  
+//     if (venueId) {
+//       fetchVenueDetails();
+//     }
+//   }, [venueId]);
+  
+
+//   // Update selected day pricing when date changes
+//   useEffect(() => {
+//     if (formData.date && venueDetails?.pricing) {
+//       const dayOfWeek = new Date(formData.date).toLocaleString('en-US', { weekday: 'long' });
+//       const dayPricing = venueDetails.pricing.find(p => p.day_of_week === dayOfWeek);
+//       setSelectedDayPricing(dayPricing);
+      
+//       // Reset duration if pricing type changes
+//       setFormData(prev => ({
+//         ...prev,
+//         duration: null
+//       }));
+//     }
+//   }, [formData.date, venueDetails]);
+
+//   // Modified DURATION_OPTIONS based on pricing type and available time
+//   const getDurationOptions = () => {
+//     if (!selectedDayPricing || !formData.start_time) return [];
+
+//     const hourlyOptions = [
+//       { value: 90, label: '1h 30m' },
+//       { value: 120, label: '2h' },
+//       { value: 180, label: '3h' },
+//       { value: 240, label: '4h' },
+//       { value: 300, label: '5h' },
+//       { value: 360, label: '6h' },
+//       { value: 420, label: '7h' }
+//     ];
+
+//     // If pricing type is full_day only, return only full day option
+//     if (selectedDayPricing.pricing_type === 'full_day') {
+//       return [{ value: 'full', label: 'Full Day' }];
+//     }
+
+//     // Calculate maximum possible duration based on closing time
+//     const [startHours, startMinutes] = formData.start_time.split(':').map(Number);
+//     const [endHours, endMinutes] = selectedDayPricing.end_time.split(':').map(Number);
+    
+//     const startTimeInMinutes = startHours * 60 + startMinutes;
+//     const endTimeInMinutes = endHours * 60 + endMinutes;
+//     const maxPossibleDuration = endTimeInMinutes - startTimeInMinutes;
+
+//     // Filter hourly options based on available time and minimum hours
+//     const filteredHourlyOptions = hourlyOptions.filter(option => 
+//       option.value >= (selectedDayPricing.minimum_hours * 60) && // Check minimum hours
+//       option.value <= maxPossibleDuration // Check if duration fits before closing time
+//     );
+
+//     // If pricing type allows both, include both hourly and full day options
+//     if (selectedDayPricing.pricing_type === 'both') {
+//       // Only include full day option if starting at opening time
+//       const isStartingAtOpeningTime = formData.start_time === selectedDayPricing.start_time;
+//       return [
+//         ...filteredHourlyOptions,
+//         ...(isStartingAtOpeningTime ? [{ value: 'full', label: 'Full Day' }] : [])
+//       ];
+//     }
+
+//     // For hourly only, return filtered hourly options
+//     return filteredHourlyOptions;
+//   };
+
+//   const handlePeopleChange = (value) => {
+//     const numPeople = parseInt(value);
+//     console.log(venueDetails);
+//     if (venueDetails && numPeople > venueDetails.capacity) {
+//       setError(`This venue has a maximum capacity of ${venueDetails.capacity} people`);
+//     } else {
+//       setError(null);
+//     }
+//     handleInputChange("people", value);
+//   };
+
+//   const handleDateSelect = (date) => {
+//     const dayOfWeek = date.toLocaleString('en-US', { weekday: 'long' });
+//     const dayPricing = venueDetails?.pricing?.find(p => p.day_of_week === dayOfWeek);
+
+//     if (!dayPricing?.is_available) {
+//       setError('Venue is not available on this day');
+//       return;
+//     }
+
+//     setFormData(prev => ({
+//       ...prev,
+//       date: format(date, 'yyyy-MM-dd')
+//     }));
+//     setStep('time');
+//     setAvailability(null);
+//     setError(null);
+//   };
+
+//   const handleTimeSelect = (time) => {
+//     if (!selectedDayPricing) {
+//       setError('Please select a date first');
+//       return;
+//     }
+
+//     const [hours, minutes] = time.split(':').map(Number);
+//     const selectedTime = hours * 60 + minutes;
+//     const [startHours, startMinutes] = selectedDayPricing.start_time.split(':').map(Number);
+//     const [endHours, endMinutes] = selectedDayPricing.end_time.split(':').map(Number);
+//     const venueStart = startHours * 60 + startMinutes;
+//     const venueEnd = endHours * 60 + endMinutes;
+
+//     if (selectedTime < venueStart || selectedTime > venueEnd) {
+//       setError(`Venue is only available between ${selectedDayPricing.start_time} and ${selectedDayPricing.end_time}`);
+//       return;
+//     }
+
+//     // Reset duration when changing time as previous duration might not be valid anymore
+//     setFormData(prev => ({
+//       ...prev,
+//       start_time: time,
+//       duration: null
+//     }));
+//     setStep('duration');
+//     setError(null);
+//   };
+
+//   const handleDurationSelect = (duration) => {
+//     const durationValue = duration === 'full' 
+//       ? 'full' 
+//       : parseInt(duration);
+
+//     setFormData(prev => ({
+//       ...prev,
+//       duration: durationValue,
+//       // If full day is selected, automatically set the start and end times
+//       ...(durationValue === 'full' ? {
+//         start_time: selectedDayPricing.start_time,
+//         end_time: selectedDayPricing.end_time
+//       } : {})
+//     }));
+
+//     if (!formData.people) {
+//       setStep('people');
+//     }
+//   };
+
+//   const handleInputChange = (id, value) => {
+//     setFormData(prev => ({
+//       ...prev,
+//       [id]: value
+//     }));
+//     setAvailability(null);
+//     setError(null);
+//   };
+
+//   const calculateEndTime = (start, durationMinutes) => {
+//     const [hours, minutes] = start.split(":").map(Number);
+//     const startDate = new Date(2000, 0, 1, hours, minutes);
+//     const endDate = new Date(startDate.getTime() + durationMinutes * 60000);
+//     return `${endDate.getHours().toString().padStart(2, "0")}:${endDate.getMinutes().toString().padStart(2, "0")}`;
+//   };
+
+//   const handleCheckAvailability = async () => {
+//     const { date, start_time, duration, people } = formData;
+//     if (!date || !start_time || !duration || !people) {
+//       setError("Please fill in all fields");
+//       return;
+//     }
+
+//     if (parseInt(people) <= 0) {
+//       setError("Number of people must be greater than 0");
+//       return;
+//     }
+
+//     let time_from, time_to;
+
+//     // Handle full day bookings
+//     if (duration === 'full' || selectedDayPricing?.pricing_type === 'full_day') {
+//       time_from = selectedDayPricing.start_time;
+//       time_to = selectedDayPricing.end_time;
+//     } else {
+//       // For hourly bookings, calculate end time based on duration
+//       time_from = start_time;
+//       time_to = calculateEndTime(start_time, parseInt(duration));
+//     }
+
+//     try {
+//       setIsLoading(true);
+//       setError(null);
+
+//       const response = await checkAvailability({
+//         venue_id: venueId,
+//         date,
+//         time_from,
+//         time_to,
+//         people: parseInt(people),
+//       });
+
+//       setAvailability(response.available);
+//     } catch (err) {
+//       setError("Failed to check availability. Please try again.");
+//       console.error("Error checking availability:", err);
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+
+//   // Handle full day time selection
+//   useEffect(() => {
+//     if (step === 'time' && selectedDayPricing?.pricing_type === 'full_day') {
+//       setFormData(prev => ({
+//         ...prev,
+//         start_time: selectedDayPricing.start_time
+//       }));
+//       setStep('duration');
+//     }
+//   }, [step, selectedDayPricing]);
+
+//   const calculatePrice = () => {
+//     if (!selectedDayPricing || !formData.duration) return null;
+
+//     let price;
+//     if (formData.duration === 'full' || selectedDayPricing.pricing_type === 'full_day') {
+//       // Full day price
+//       price = selectedDayPricing.full_day_price;
+//     } else {
+//       // Hourly price calculation
+//       const hours = formData.duration / 60; // Convert minutes to hours
+//       price = hours * selectedDayPricing.hourly_price;
+//     }
+
+//     setCalculatedPrice(price);
+//     return price;
+//   };
+
+//   // Update price whenever duration or selectedDayPricing changes
+//   useEffect(() => {
+//     calculatePrice();
+//   }, [formData.duration, selectedDayPricing]);
+
+//   // Update the summary display to show full day properly
+//   const formatDurationDisplay = (duration) => {
+//     if (duration === 'full') return 'Full Day';
+//     const hours = Math.floor(duration / 60);
+//     const minutes = duration % 60;
+//     return minutes ? `${hours}h ${minutes}m` : `${hours}h`;
+//   };
+
+//   const renderSummary = () => {
+//     if (!formData.date) return null;
+    
+//     const summaryItems = [
+//       {
+//         label: 'Date',
+//         value: formData.date ? format(new Date(formData.date), 'dd MMM yyyy') : null,
+//         onClick: () => setStep('date')
+//       },
+//       {
+//         label: 'Time',
+//         value: formData.start_time ? (
+//           formData.duration === 'full' 
+//             ? `Full Day (${formData.start_time} - ${selectedDayPricing?.end_time})` 
+//             : formData.start_time
+//         ) : null,
+//         onClick: () => setStep('time')
+//       },
+//       {
+//         label: 'Duration',
+//         value: formData.duration ? formatDurationDisplay(formData.duration) : null,
+//         onClick: () => setStep('duration')
+//       },
+//       {
+//         label: 'People',
+//         value: formData.people ? `${formData.people} people` : null,
+//         onClick: () => setStep('people')
+//       }
+//     ];
+
+//     return (
+//       <div className="booking-summary">
+//         {summaryItems.map((item, index) => (
+//           item.value && (
+//             <div 
+//               key={item.label} 
+//               className={`summary-item ${step === item.label.toLowerCase() ? 'active' : ''}`}
+//               onClick={item.onClick}
+//             >
+//               <span className="summary-label">{item.label}</span>
+//               <span className="summary-value">{item.value}</span>
+//             </div>
+//           )
+//         ))}
+//       </div>
+//     );
+//   };
+
+//   const renderTimeStep = () => {
+//     if (selectedDayPricing?.pricing_type === 'full_day') {
+//       return (
+//         <div className="booking-step">
+//           <h4>Full Day Booking</h4>
+//           <p>This venue is only available for full-day bookings</p>
+//           <p>Hours: {selectedDayPricing.start_time} - {selectedDayPricing.end_time}</p>
+//         </div>
+//       );
+//     }
+
+//     return (
+//       <div className="booking-step">
+//         <h4>Select Start Time</h4>
+//         <div className="time-options">
+//           {TIME_OPTIONS
+//             .filter(time => {
+//               if (!selectedDayPricing) return true;
+//               return time.value >= selectedDayPricing.start_time && 
+//                      time.value <= selectedDayPricing.end_time;
+//             })
+//             .map((time) => (
+//               <button
+//                 key={time.value}
+//                 className={`time-button ${formData.start_time === time.value ? 'selected' : ''}`}
+//                 onClick={() => handleTimeSelect(time.value)}
+//               >
+//                 {time.label}
+//               </button>
+//             ))}
+//         </div>
+//       </div>
+//     );
+//   };
+
+//   const renderStep = () => {
+//     switch (step) {
+//       case 'date':
+//         return (
+//           <div className="booking-step">
+//             <h4>Select Date</h4>
+//             <DatePicker
+//               selected={formData.date ? new Date(formData.date) : null}
+//               onChange={handleDateSelect}
+//               dateFormat="dd/MM/yyyy"
+//               minDate={new Date()}
+//               inline
+//               showTimeSelect={false}
+//               calendarClassName="custom-calendar"
+//               dayClassName={date => {
+//                 const dayOfWeek = date.toLocaleString('en-US', { weekday: 'long' });
+//                 const dayPricing = venueDetails?.pricing?.find(p => p.day_of_week === dayOfWeek);
+//                 return !dayPricing?.is_available ? 'react-datepicker__day--disabled' : undefined;
+//               }}
+//             />
+//           </div>
+//         );
+      
+//       case 'time':
+//         return renderTimeStep();
+      
+//       case 'duration':
+//         return (
+//           <div className="booking-step">
+//             <h4>Select Duration</h4>
+//             <div className="duration-options">
+//               {getDurationOptions().map((option) => (
+//                 <button
+//                   key={option.value}
+//                   className={`duration-button ${formData.duration === option.value ? 'selected' : ''}`}
+//                   onClick={() => handleDurationSelect(option.value)}
+//                 >
+//                   {option.label}
+//                 </button>
+//               ))}
+//             </div>
+//             {selectedDayPricing?.minimum_hours && (
+//               <p className="minimum-hours-notice">
+//                 Minimum booking duration: {selectedDayPricing.minimum_hours} hours
+//               </p>
+//             )}
+//           </div>
+//         );
+      
+//       case 'people':
+//         return (
+//           <div className="booking-step">
+//             <h4>Number of People</h4>
+//             <Input
+//               type="number"
+//               id="people"
+//               width="100%"
+//               height={35}
+//               value={formData.people}
+//               onChange={handlePeopleChange}
+//               min="1"
+//               max={venueDetails?.capacity}
+//               placeholder={`Enter number of people (max ${venueDetails?.capacity})`}
+//             />
+//           </div>
+//         );
+//     }
+//   };
+
+//   return (
+//     <section className="main-sec-booking-container">
+//       <section className="booking-form">
+//         <div className="venue-profile">
+//           <Image
+//             className="profile-image"
+//             aria-hidden
+//             src="/assets/cateringAd.png"
+//             alt="profile picture"
+//             width={70}
+//             height={70}
+//           />
+//           <div className="profile-info">
+//             <h3>{venueDetails?.name || 'Loading...'}</h3>
+//             <p>{venueDetails?.title || 'Loading venue details...'}</p>
+//           </div>
+//         </div>
+        
+//         <section className="form-inputs">
+//           {renderSummary()}
+//           {renderStep()}
+          
+//           {formData.date && formData.start_time && formData.duration && formData.people && (
+//             <>
+//               {calculatedPrice !== null && (
+//                 <div className="price-display" style={{
+//                   textAlign: 'center',
+//                   fontSize: '1.2rem'
+//                 }}>
+//                   <span style={{ color: '#333', fontSize: '1.3rem' }}>£{calculatedPrice}</span>
+//                 </div>
+//               )}
+//               <Button
+//                 title={isLoading ? "Checking..." : "Check availability"}
+//                 width={"75%"}
+//                 height={40}
+//                 colour={"main"}
+//                 hide={false}
+//                 click={handleCheckAvailability}
+//                 disabled={isLoading}
+//               />
+//             </>
+//           )}
+          
+//           {error && (
+//             <p className="error-message" style={{ color: "red", marginTop: "10px" }}>
+//               {error}
+//             </p>
+//           )}
+//         </section>
+//       </section>
+      
+//       {(availability !== null || error) && (
+//         <section className={`booking-form isbooking-available ${availability ? "available" : "unavailable"}`}>
+//           <p>
+//             {availability
+//               ? `${formData.date} at ${formData.start_time} is available`
+//               : `Sorry, the venue is not available at the selected time.`}
+//           </p>
+//           {availability && (
+//             <Button
+//               title="Proceed to book"
+//               width={"75%"}
+//               height={40}
+//               colour={"main"}
+//               hide={false}
+//               style={{ marginTop: "10px" }}
+//             />
+//           )}
+//         </section>
+//       )}
+//     </section>
+//   );
+// }

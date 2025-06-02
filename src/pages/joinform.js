@@ -28,6 +28,7 @@ export default function Joinform() {
 
   async function handleClick() {
     const venue = await uploadVenueData(formData, userId);
+    console.log(venue);
     const venueId = venue.id.venue_id;
     console.log(venueId);
 
@@ -100,7 +101,7 @@ export default function Joinform() {
               />
             )}
 
-            {question >= 13 ? (
+            {question >= 15 ? (
               <Button
                 title="Send"
                 width={300}

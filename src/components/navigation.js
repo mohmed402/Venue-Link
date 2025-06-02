@@ -15,7 +15,7 @@ export default function Navigation({ selcted }) {
         <a href="./venue">
           <li className={selcted == 2 ? "selected c" : ""}>Venue</li>
         </a>
-        <a href="./book">
+        <a href="./contact">
           <li className={selcted == 3 ? "selected end" : ""}>Contact Us</li>
         </a>
       </ul>

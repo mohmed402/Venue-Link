@@ -25,16 +25,23 @@ export default function VenueRender({ setQauntity }) {
       try {
         const venues = await getToReview("venues");
         console.log(venues);
-
-        if (venues) {
+        console.log("typeof venues:", typeof venues);
+        console.log("venues instanceof Array:", venues instanceof Array);
+        console.log("venues:", venues);
+        
+        if (Array.isArray(venues)) {
           setData(venues);
-          setLoading(false);
           setQauntity(venues.length);
         } else {
-          console.error("No data received from getToReview");
+          console.error("Invalid venue data:", venues);
+          setData([]); // fallback to empty array
         }
+      
+        setLoading(false);
+        
       } catch (err) {
         console.error("Error fetching data:", err.message);
+        setData([]); // prevent undefined
       }
     }
 
