@@ -15,7 +15,8 @@ const allowedOrigins = [
   `192.168.1.103:8081`,
   `192.168.1.103:3000`,
   "http://192.168.1.103:8081",  
-  "exp://192.168.1.103:8081" 
+  "exp://192.168.1.103:8081",
+  `https://venue-link-production.up.railway.app` 
 ];
 
 const corsOptions = {
