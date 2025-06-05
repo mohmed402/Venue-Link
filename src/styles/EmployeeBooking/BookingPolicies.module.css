@@ -1,0 +1,219 @@
+.container {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.title span {
+  margin-right: 8px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 16px;
+}
+
+.policyGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.policyCard {
+  padding: 16px;
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.policyCard.deposit {
+  background: #eff6ff;
+}
+
+.policyCard.cancellation {
+  background: #fff7ed;
+}
+
+.policyCard.payment {
+  background: #f0fdf4;
+}
+
+.policyIcon {
+  margin-right: 8px;
+}
+
+.policyIcon.deposit {
+  color: #2563eb;
+}
+
+.policyIcon.cancellation {
+  color: #ea580c;
+}
+
+.policyIcon.payment {
+  color: #16a34a;
+}
+
+.policyContent h4 {
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.policyContent.deposit h4 {
+  color: #1e3a8a;
+}
+
+.policyContent.cancellation h4 {
+  color: #7c2d12;
+}
+
+.policyContent.payment h4 {
+  color: #14532d;
+}
+
+.policyBadge {
+  margin-left: 8px;
+  padding: 2px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+.policyBadge.deposit {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.policyBadge.cancellation {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+.policyBadge.payment {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.policyDescription {
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.policyDescription.deposit {
+  color: #1e40af;
+}
+
+.policyDescription.cancellation {
+  color: #9a3412;
+}
+
+.policyDescription.payment {
+  color: #15803d;
+}
+
+.additionalTerms {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.termItem {
+  display: flex;
+  align-items: flex-start;
+}
+
+.termIcon {
+  color: #9ca3af;
+  margin-right: 8px;
+}
+
+.termContent h4 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.termDescription {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.footer {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.warning {
+  display: flex;
+  align-items: flex-start;
+}
+
+.warningIcon {
+  color: #f59e0b;
+  margin-right: 8px;
+}
+
+.warningTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.warningText {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.contact {
+  margin-top: 16px;
+}
+
+.contactTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.contactText {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.contactLink {
+  color: #2563eb;
+}
+
+.contactLink:hover {
+  color: #1d4ed8;
+}
+
+.version {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+} 

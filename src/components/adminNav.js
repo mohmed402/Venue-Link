@@ -17,8 +17,14 @@ export default function AdminNav() {
         <Link href="/admin/bookings" className="a-nav">
           Bookings
         </Link>
-        <Link href="#1" className="a-nav">
-          Inbox
+        <Link href="/admin/employee-booking" className="a-nav">
+        Booking System
+        </Link>
+        <Link href="/admin/reviews" className="a-nav">
+          reviews
+        </Link>
+        <Link href="/admin/employees" className="a-nav">
+        Employees
         </Link>
       </nav>
       <div className="user-container">

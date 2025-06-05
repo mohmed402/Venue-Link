@@ -2,6 +2,17 @@ const express = require("express");
 const router = express.Router();
 const supabase = require("../supabaseClient");
 
+
+router.get("/bookings", async (req, res) => {
+  const { data, error } = await supabase.from("bookings").select("*");
+
+  if (error) return res.status(500).json({ error: error.message });
+
+  res.json(data);
+});
+
+
+
 router.post('/check-availability', async (req, res) => {
   const { venue_id, date, time_from, time_to } = req.body;
 

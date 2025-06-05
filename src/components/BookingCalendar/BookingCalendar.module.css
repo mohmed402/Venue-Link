@@ -1,0 +1,409 @@
+.container {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.viewControls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.viewButton {
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: white;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.viewButton:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.viewButton.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.datePicker,
+.select,
+.searchInput {
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #374151;
+  background: white;
+}
+
+.searchInput {
+  min-width: 200px;
+}
+
+.select {
+  min-width: 120px;
+}
+
+/* Day View Styles */
+.dayView,
+.weekView {
+  height: calc(100vh - 300px);
+  min-height: 600px;
+  overflow-y: auto;
+}
+
+.timelineHeader,
+.weekHeader {
+  display: grid;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.timelineHeader {
+  grid-template-columns: 60px repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.weekHeader {
+  grid-template-columns: 60px repeat(7, 1fr);
+}
+
+.timeGutter {
+  width: 60px;
+  border-right: 1px solid #e5e7eb;
+}
+
+.spaceHeader,
+.dayHeader {
+  padding: 12px;
+  font-weight: 500;
+  color: #111827;
+  text-align: center;
+  border-right: 1px solid #e5e7eb;
+}
+
+.dayName {
+  font-weight: 500;
+  color: #111827;
+}
+
+.dayDate {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.timelineBody,
+.weekBody {
+  display: flex;
+}
+
+.timeGutter {
+  flex-shrink: 0;
+}
+
+.timeSlot {
+  height: 60px;
+  padding: 8px;
+  font-size: 12px;
+  color: #6b7280;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: start;
+}
+
+.bookingsGrid,
+.weekGrid {
+  flex: 1;
+  display: grid;
+  position: relative;
+}
+
+.bookingsGrid {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-rows: repeat(24, 60px);
+}
+
+.weekGrid {
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(24, 60px);
+}
+
+.gridLine,
+.spaceGridLine,
+.dayGridLine {
+  position: absolute;
+  pointer-events: none;
+}
+
+.gridLine {
+  width: 100%;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.spaceGridLine,
+.dayGridLine {
+  width: 1px;
+  height: 100%;
+  background: #e5e7eb;
+}
+
+.bookingBlock {
+  position: relative;
+  margin: 1px;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.bookingBlock:hover {
+  transform: scale(1.01);
+  z-index: 5;
+}
+
+.bookingBlock.confirmed {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+
+.bookingBlock.pending {
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+}
+
+.bookingBlock.cancelled {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+
+.bookingBlock.internal {
+  background: #e0e7ff;
+  border: 1px solid #a5b4fc;
+  color: #3730a3;
+}
+
+.bookingContent {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.bookingContent h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bookingDetails {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bookingTime {
+  font-weight: 500;
+}
+
+.bookingInfo {
+  display: flex;
+  gap: 8px;
+}
+
+.bookingType {
+  text-transform: capitalize;
+  font-size: 11px;
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  align-self: start;
+}
+
+@media (max-width: 1024px) {
+  .filters {
+    flex-direction: column;
+  }
+
+  .searchInput,
+  .select {
+    width: 100%;
+  }
+
+  .bookingsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .dayView,
+  .weekView {
+    height: calc(100vh - 200px);
+  }
+
+  .timeSlot {
+    height: 50px;
+  }
+
+  .bookingsGrid,
+  .weekGrid {
+    grid-template-rows: repeat(24, 50px);
+  }
+}
+
+/* Month View Styles */
+.monthView {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.monthHeader {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.monthHeader h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.weekDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 8px;
+}
+
+.weekDay {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  padding: 8px;
+}
+
+.monthGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.dateCell {
+  aspect-ratio: 1;
+  background: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+
+.dateCell:hover {
+  background: #f9fafb;
+}
+
+.dateCell.otherMonth {
+  opacity: 0.5;
+}
+
+.dateCell.available {
+  background: #dcfce7;
+}
+
+.dateCell.busy {
+  background: #fee2e2;
+}
+
+.dateCell.partially-available {
+  background: #fef3c7;
+}
+
+.dateNumber {
+  font-size: 16px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.dateSummary {
+  display: flex;
+  gap: 4px;
+  margin-top: auto;
+}
+
+.confirmedDot,
+.pendingDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.confirmedDot {
+  background: #059669;
+}
+
+.pendingDot {
+  background: #d97706;
+}
+
+/* Responsive styles for month view */
+@media (max-width: 768px) {
+  .monthView {
+    padding: 16px;
+  }
+
+  .dateCell {
+    padding: 4px;
+  }
+
+  .dateNumber {
+    font-size: 14px;
+  }
+
+  .weekDay {
+    font-size: 12px;
+    padding: 4px;
+  }
+} 

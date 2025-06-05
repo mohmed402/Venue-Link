@@ -1,0 +1,231 @@
+.container {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 24px 0;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.input {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #111827;
+  background: white;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.flexGroup {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.durationInput {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.durationInput input {
+  width: 80px;
+}
+
+.durationInput span {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.fullDayButton {
+  padding: 8px 16px;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  height: 38px;
+  white-space: nowrap;
+}
+
+.fullDayButton:hover {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+/* Time Selection Styles */
+.timeSection {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+.stats {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.statCount {
+  margin-left: 4px;
+  color: #6b7280;
+}
+
+.availableDot,
+.bookedDot,
+.selectedDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.availableDot {
+  background: #10b981;
+}
+
+.bookedDot {
+  background: #ef4444;
+}
+
+.selectedDot {
+  background: #3b82f6;
+  border: 2px solid #2563eb;
+}
+
+.bookingInfo {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #ecfdf5;
+  border: 1px solid #d1fae5;
+  border-radius: 8px;
+}
+
+.bookingInfo h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #065f46;
+  margin: 0 0 8px 0;
+}
+
+.selectedTimeRange {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #047857;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.checkIcon {
+  color: #10b981;
+}
+
+.availabilityBadge {
+  margin-left: auto;
+  padding: 4px 8px;
+  background: #d1fae5;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #047857;
+}
+
+.timeGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+}
+
+.timeSlot {
+  padding: 8px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.timeSlot:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.timeSlot.selected {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+@media (max-width: 1024px) {
+  .timeGrid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  
+  .flexGroup {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .fullDayButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .timeGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .stats {
+    flex-direction: column;
+    gap: 12px;
+  }
+} 
