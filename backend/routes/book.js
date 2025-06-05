@@ -3,11 +3,21 @@ const router = express.Router();
 const supabase = require("../supabaseClient");
 
 
-router.get("/bookings", async (req, res) => {
+router.get("/book", async (req, res) => {
+  console.log('Received request:', {
+    method: req.method,
+    url: req.url,
+    headers: req.headers
+  });
+  
   const { data, error } = await supabase.from("bookings").select("*");
-
-  if (error) return res.status(500).json({ error: error.message });
-
+  
+  if (error) {
+    console.error('Supabase error:', error);
+    return res.status(500).json({ error: error.message });
+  }
+  
+  console.log('Sending response:', data);
   res.json(data);
 });
 

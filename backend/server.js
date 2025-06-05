@@ -12,7 +12,10 @@ const allowedOrigins = [
   `${process.env.NEXT_PUBLIC_DOMAIN_URL}`,
   `http://192.168.1.103:3000`,
   `http://localhost:8081`,
-  `192.168.1.103:3000`
+  `192.168.1.103:8081`,
+  `192.168.1.103:3000`,
+  "http://192.168.1.103:8081",  
+  "exp://192.168.1.103:8081" 
 ];
 
 const corsOptions = {
