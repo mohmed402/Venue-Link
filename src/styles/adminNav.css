@@ -1,0 +1,157 @@
+@import url("https://fonts.googleapis.com/css2?family=Hubballi&display=swap");
+@import url(https://db.onlinewebfonts.com/c/bac2256db7a8e8553e6637d0cfd93635?family=HorshamSerial-Xlight-Regular);
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap");
+
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(#d8d3d3, #e3e3e3);
+    font-family: Montserrat, serif;
+  }
+
+/* Arabic font support */
+html[lang="ar"] body {
+  font-family: 'Noto Kufi Arabic', Montserrat, serif;
+}
+
+aside {
+  width: 200px;
+  height: 100vh;
+  background-color: #480012;
+  min-width: 300px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 10px;
+  background: linear-gradient(135deg, #480012 0%, #6b0018 100%);
+}
+
+.logo {
+  max-width: 100%;
+  height: auto;
+  filter: brightness(1.1);
+}
+
+/* RTL support for logo */
+aside.rtl .logo-container {
+  direction: ltr; /* Keep logo in original orientation */
+}
+
+aside h1 {
+  color: #f4f1ed;
+  text-align: center;
+  padding: 10px 6px;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(244, 241, 237, 0.2);
+}
+
+nav {
+  display: grid;
+  text-align: center;
+}
+
+.a-nav {
+  color: #000000;
+  background-color: #f4f1ed;
+  text-decoration: none;
+  padding: 10px;
+  margin: 15px;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+.selected {
+  background-color: #740100;
+  color: #fff;
+  font-weight: 700;
+}
+
+.profileSec {
+  display: flex;
+  background-color: #f4f1ed;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 17px;
+  border-radius: 10px;
+  position: absolute;
+  width: 263px;
+  bottom: 0;
+}
+
+.user-container {
+  position: absolute;
+  bottom: 0;
+}
+
+.as {
+  display: block;
+  position: relative;
+  bottom: 115px;
+  margin: 20px;
+  text-decoration: underline;
+  font-weight: bold;
+  width: 240.5px;
+  text-align: center;
+}
+
+/* RTL Support */
+aside.rtl {
+  direction: rtl;
+  font-family: 'Noto Kufi Arabic', Montserrat, serif;
+}
+
+aside.rtl * {
+  font-family: 'Noto Kufi Arabic', Montserrat, serif;
+}
+
+aside.rtl nav {
+  text-align: center;
+}
+
+aside.rtl .a-nav {
+  text-align: center;
+  font-family: 'Noto Kufi Arabic', Montserrat, serif;
+}
+
+aside.rtl .profileSec {
+  flex-direction: row-reverse;
+}
+
+aside.rtl h1 {
+  direction: ltr; /* Keep the brand name in LTR */
+}
+
+/* Role Badge Styles */
+.role-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+  display: inline-block;
+}
+
+.role-badge.admin {
+  background-color: #740100;
+  color: white;
+}
+
+.role-badge.staff {
+  background-color: #2563eb;
+  color: white;
+}
+
+.role-badge:not(.admin):not(.staff) {
+  background-color: #6b7280;
+  color: white;
+}

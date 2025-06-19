@@ -1,0 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap");
+
+/* Arabic font support for admin panel */
+html[lang="ar"] body,
+html[lang="ar"] * {
+  font-family: 'Noto Kufi Arabic', Arial, sans-serif !important;
+}
+
+/* Specific admin panel elements */
+html[lang="ar"] .pageContainer,
+html[lang="ar"] .pageContainer *,
+html[lang="ar"] aside,
+html[lang="ar"] aside *,
+html[lang="ar"] .tabContent,
+html[lang="ar"] .tabContent *,
+html[lang="ar"] .formGroup,
+html[lang="ar"] .formGroup *,
+html[lang="ar"] .input,
+html[lang="ar"] .select,
+html[lang="ar"] .textarea,
+html[lang="ar"] .saveButton,
+html[lang="ar"] .resetButton,
+html[lang="ar"] .tabButton,
+html[lang="ar"] .languageOption,
+html[lang="ar"] .languageInfo * {
+  font-family: 'Noto Kufi Arabic', Arial, sans-serif !important;
+}
+
+/* Navigation elements */
+html[lang="ar"] .a-nav,
+html[lang="ar"] nav,
+html[lang="ar"] nav * {
+  font-family: 'Noto Kufi Arabic', Arial, sans-serif !important;
+}
+
+/* Booking management elements */
+html[lang="ar"] .booking-details,
+html[lang="ar"] .booking-details *,
+html[lang="ar"] .payment-management,
+html[lang="ar"] .payment-management *,
+html[lang="ar"] .customer-info,
+html[lang="ar"] .customer-info * {
+  font-family: 'Noto Kufi Arabic', Arial, sans-serif !important;
+}
+
+/* Form elements */
+html[lang="ar"] input,
+html[lang="ar"] select,
+html[lang="ar"] textarea,
+html[lang="ar"] button,
+html[lang="ar"] label {
+  font-family: 'Noto Kufi Arabic', Arial, sans-serif !important;
+}
+
+/* Headers and text */
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3,
+html[lang="ar"] h4,
+html[lang="ar"] h5,
+html[lang="ar"] h6,
+html[lang="ar"] p,
+html[lang="ar"] span,
+html[lang="ar"] div {
+  font-family: 'Noto Kufi Arabic', Arial, sans-serif !important;
+} 

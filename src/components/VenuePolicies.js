@@ -43,7 +43,7 @@ export default function VenuePolicies({ venueId }) {
         <div className="policy-item">
           <h4>Security Deposit</h4>
           {policies.requires_deposit ? (
-            <p>£{policies.deposit_amount} deposit required</p>
+            <p>{policies.deposit_amount_percentage}% deposit required</p>
           ) : (
             <p>No security deposit required</p>
           )}

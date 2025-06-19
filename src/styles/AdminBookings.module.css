@@ -1,10 +1,11 @@
 .adminLayout {
   display: flex;
-  min-height: 100vh;
+  max-height: 100vh;
   background-color: #f8f9fa;
 }
 
 .mainContent {
+  overflow-y: scroll;
   flex: 1;
   padding: 2rem;
 }
@@ -238,4 +239,39 @@
   .searchInput {
     width: 100%;
   }
+}
+
+/* Loading and Error States */
+.loading, .error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  font-size: 1.125rem;
+  color: #6b7280;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.error {
+  flex-direction: column;
+  gap: 1rem;
+  color: #dc2626;
+}
+
+.retryButton {
+  background-color: #800020;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Montserrat", serif;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.retryButton:hover {
+  background-color: #600018;
 } 

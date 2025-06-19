@@ -43,12 +43,13 @@
 }
 
 .remaining {
-  color: #f97316;
+  color: #750923;
+  font-weight: 500;
 }
 
 .remainingAmount {
   font-weight: 600;
-  color: #f97316;
+  color: #750923;
 }
 
 .progressSection {
@@ -72,7 +73,7 @@
 
 .progressFill {
   height: 100%;
-  background: #3b82f6;
+  background: #750923;
   border-radius: 4px;
   transition: width 0.3s ease;
 }
@@ -98,7 +99,7 @@
 
 .addButton {
   padding: 8px 16px;
-  background: #1a56db;
+  background: #363636;
   color: white;
   border: none;
   border-radius: 6px;
@@ -110,7 +111,17 @@
 }
 
 .addButton:hover {
-  background: #1e40af;
+  background: #750923;
+}
+
+.addButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.addButton:disabled:hover {
+  background: #9ca3af;
 }
 
 .addPaymentForm {
@@ -161,7 +172,7 @@
 
 .saveButton {
   padding: 8px 16px;
-  background: #1a56db;
+  background: #750923;
   color: white;
   border: none;
   border-radius: 6px;
@@ -393,9 +404,9 @@
 }
 
 .methodSelected {
-  background: #eff6ff;
-  border-color: #3b82f6;
-  color: #1e40af;
+  background: #65030324;
+  border-color: #750923;
+  color: #750923;
 }
 
 .modalActions {
@@ -406,7 +417,7 @@
 
 .saveButton {
   padding: 10px 20px;
-  background: #1a56db;
+  background: #750923;
   color: white;
   border: none;
   border-radius: 6px;
@@ -421,5 +432,83 @@
 }
 
 .saveButton:not(:disabled):hover {
-  background: #1e40af;
+  background: #750923;
+}
+
+.depositInfo {
+  background: #750923;
+  border: 1px solid #750923;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 8px;
+}
+
+.depositInfo p {
+  margin: 0;
+  color: #ffffff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.depositInfo svg {
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.depositNotice {
+  background: #750923;
+  border: 1px solid #0ea5e9;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.depositNotice p {
+  margin: 0;
+  color: #ffffff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.depositNotice svg {
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.requirementsInfo {
+  background: #f2f2f1;
+  border: 1px solid #000000;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 8px;
+}
+
+.requirementsInfo p {
+  margin: 0 0 8px 0;
+  color: #750923;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.requirementsInfo svg {
+  color: #750923;
+  flex-shrink: 0;
+}
+
+.requirementsInfo ul {
+  margin: 0;
+  padding-left: 24px;
+  color: #750923;  
+  font-size: 14px;
+}
+
+.requirementsInfo li {
+  margin-bottom: 4px;
 } 

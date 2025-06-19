@@ -1,35 +1,76 @@
 import Image from "next/image";
 import Link from "next/link";
+import "../styles/adminNav.css";
+import { usePathname } from "next/navigation";
+import { useAuth } from "../contexts/AuthContext";
+import { useLanguage } from "../contexts/LanguageContext";
+import { checkPermission } from "../utils/roles";
+
 const WEB_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || "http://localhost:3000";
 export default function AdminNav() {
+  const pathname = usePathname();
+  const { user, logout, userRole } = useAuth();
+  const { t, isRTL } = useLanguage();
+
+  const handleSignOut = (e) => {
+    e.preventDefault();
+    logout();
+  };
+
   return (
-    <aside>
-      <h1>The Wellhall</h1>
+    <aside className={isRTL ? 'rtl' : ''}>
+      <div className="logo-container">
+        <Image
+          src="/assets/venue-link-logo.png"
+          alt="Venue Link Management"
+          width={200}
+          height={80}
+          className="logo"
+          priority
+        />
+      </div>
       <hr></hr>
 
       <nav>
-        <Link href="/admin" className="a-nav">
-          Dashboard
-        </Link>
-        <Link href="/underReview" className="a-nav selected">
-          Review
-        </Link>
-        <Link href="/admin/bookings" className="a-nav">
-          Bookings
-        </Link>
-        <Link href="/admin/employee-booking" className="a-nav">
-        Booking System
-        </Link>
-        <Link href="/admin/reviews" className="a-nav">
-          reviews
-        </Link>
-        <Link href="/admin/employees" className="a-nav">
-        Employees
-        </Link>
+        {checkPermission(userRole, 'canViewDashboard') && (
+          <Link href="/admin" className={`a-nav ${pathname === "/admin" ? "selected" : ""}`}>
+            {t('nav.dashboard')}
+          </Link>
+        )}
+        {checkPermission(userRole, 'canAccessReview') && (
+          <Link href="/underReview" className={`a-nav ${pathname === "/underReview" ? "selected" : ""}`}>
+            {t('nav.review')}
+          </Link>
+        )}
+        {checkPermission(userRole, 'canManageBookings') && (
+          <Link href="/admin/bookings" className={`a-nav ${pathname === "/admin/bookings" ? "selected" : ""}`}>
+            {t('nav.bookings')}
+          </Link>
+        )}
+        {checkPermission(userRole, 'canManageBookings') && (
+          <Link href="/admin/employee-booking" className={`a-nav ${pathname === "/admin/employee-booking" ? "selected" : ""}`}>
+            {t('booking.title')}
+          </Link>
+        )}
+        {checkPermission(userRole, 'canAccessReview') && (
+          <Link href="/admin/reviews" className={`a-nav ${pathname === "/admin/reviews" ? "selected" : ""}`}>
+            {t('nav.reviews')}
+          </Link>
+        )}
+        {checkPermission(userRole, 'canManageEmployees') && (
+          <Link href="/admin/employees" className={`a-nav ${pathname === "/admin/employees" ? "selected" : ""}`}>
+            Staff Management
+          </Link>
+        )}
+        {checkPermission(userRole, 'canEditVenue') && (
+          <Link href="/admin/settings" className={`a-nav ${pathname === "/admin/settings" ? "selected" : ""}`}>
+            {t('nav.settings')}
+          </Link>
+        )}
       </nav>
       <div className="user-container">
-        <a href={WEB_URL} className="a-nav as">
-          Sign-out
+        <a href="#" onClick={handleSignOut} className="a-nav as">
+          {t('nav.signout')}
         </a>
         <section className="profileSec">
           <Image
@@ -41,8 +82,13 @@ export default function AdminNav() {
           />
 
           <div>
-            <h2>Muhammad Ben</h2>
-            <p>Admin</p>
+            <h2>{user?.name || user?.email || user?.phone || 'User'}</h2>
+            <p className={`role-badge ${user?.role}`}>
+              {user?.role === 'admin' ? 'Administrator' : 
+               user?.role === 'manager' ? 'Manager' :
+               user?.role === 'employee' ? 'Employee' :
+               user?.role === 'staff' ? 'Staff Member' : 'User'}
+            </p>
           </div>
         </section>
       </div>

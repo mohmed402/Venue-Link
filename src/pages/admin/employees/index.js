@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import AdminNav from '@/components/adminNav';
 import EmployeeModal from '@/components/EmployeeModal';
+import ProtectedRoute from '@/components/ProtectedRoute';
 import styles from '@/styles/adminEmployees.module.css';
 
 // Mock data for demonstration
@@ -183,8 +184,9 @@ export default function EmployeeManagement() {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <AdminNav />
+    <ProtectedRoute requiredPermission="canManageEmployees">
+      <div className={styles.pageContainer}>
+        <AdminNav />
       <main className={styles.main}>
         <header className={styles.header}>
           <div>
@@ -283,21 +285,27 @@ export default function EmployeeManagement() {
                       className={styles.actionButton}
                       title="Edit"
                     >
-                      ✏️
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/>
+                      </svg>
                     </button>
                     <button
                       onClick={() => handleResetPassword(employee.email)}
                       className={styles.actionButton}
                       title="Reset Password"
                     >
-                      🔐
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" fill="currentColor"/>
+                      </svg>
                     </button>
                     <button
                       onClick={() => handleRemoveEmployee(employee.id)}
                       className={styles.actionButton}
                       title="Remove"
                     >
-                      ❌
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/>
+                      </svg>
                     </button>
                   </td>
                 </tr>
@@ -340,5 +348,6 @@ export default function EmployeeManagement() {
         )}
       </main>
     </div>
+    </ProtectedRoute>
   );
 } 

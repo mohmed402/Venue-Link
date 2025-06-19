@@ -93,50 +93,36 @@ router.get('/reviews/:venueId', async (req, res) => {
 
 // Get venue pricing
 router.get("/venue-pricing/:venueId", async (req, res) => {
-  const { venueId } = req.params;
-
   try {
-    const { data: pricingData, error } = await supabase
+    const { venueId } = req.params;
+    const { data, error } = await supabase
       .from("venue_pricing")
       .select("*")
-      .eq("venue_id", venueId)
-      .order("day_of_week");
+      .eq("venue_id", venueId);
 
     if (error) throw error;
-
-    if (!pricingData || pricingData.length === 0) {
-      return res.status(404).json({ error: "No pricing data found for this venue" });
-    }
-
-    res.json(pricingData);
+    res.json(data);
   } catch (error) {
     console.error("Error fetching venue pricing:", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Failed to fetch venue pricing" });
   }
 });
 
 // Get venue policies
 router.get("/venue-policies/:venueId", async (req, res) => {
-  const { venueId } = req.params;
-
   try {
-    const { data: policiesData, error } = await supabase
+    const { venueId } = req.params;
+    const { data, error } = await supabase
       .from("venue_policies")
       .select("*")
       .eq("venue_id", venueId)
       .single();
 
-    if (error) {
-      if (error.code === 'PGRST116') {
-        return res.status(404).json({ error: "No policies found for this venue" });
-      }
-      throw error;
-    }
-
-    res.json(policiesData);
+    if (error) throw error;
+    res.json(data);
   } catch (error) {
     console.error("Error fetching venue policies:", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Failed to fetch venue policies" });
   }
 });
 

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import AdminNav from '@/components/adminNav';
+import ProtectedRoute from '@/components/ProtectedRoute';
 import styles from '@/styles/adminReviews.module.css';
 
 const MOCK_REVIEWS = [
@@ -58,8 +59,9 @@ export default function AdminReviews() {
   });
 
   return (
-    <div className={styles.pageContainer}>
-      <AdminNav />
+    <ProtectedRoute requiredPermission="canAccessReview">
+      <div className={styles.pageContainer}>
+        <AdminNav />
       <main className={styles.main}>
         <header className={styles.header}>
           <div className={styles.headerTop}>
@@ -154,5 +156,6 @@ export default function AdminReviews() {
         </div>
       </main>
     </div>
+    </ProtectedRoute>
   );
 } 

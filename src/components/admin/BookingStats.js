@@ -1,7 +1,10 @@
 import React from 'react';
 import styles from '@/styles/AdminBookings.module.css';
-
+import { useAuth } from "../../contexts/AuthContext";
+import { checkPermission } from "../../utils/roles";
 export default function BookingStats({ bookings }) {
+  const { userRole } = useAuth();
+
   const stats = {
     total: bookings.length,
     confirmed: bookings.filter(b => b.status === 'confirmed').length,
@@ -14,6 +17,7 @@ export default function BookingStats({ bookings }) {
 
   return (
     <div className={styles.statsContainer}>
+        {checkPermission(userRole, 'canViewIncome') && (
       <div className={styles.statCard}>
         <div className={styles.statIcon}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -25,6 +29,7 @@ export default function BookingStats({ bookings }) {
           <p>£{stats.totalRevenue.toFixed(2)}</p>
         </div>
       </div>
+        )}
 
       <div className={styles.statCard}>
         <div className={styles.statIcon}>

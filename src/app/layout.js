@@ -1,6 +1,7 @@
 import { Geist_Mono, Glory, Montserrat } from "next/font/google";
 import "./globals.css";
 import { NavProvider } from "@/context/NavContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -34,7 +35,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistMono.variable} ${glory.variable} ${montserrat.variable}`}
       >
-        <NavProvider>{children}</NavProvider>
+        <AuthProvider>
+          <NavProvider>{children}</NavProvider>
+        </AuthProvider>
       </body>
     </html>
   );

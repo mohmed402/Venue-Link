@@ -1,6 +1,7 @@
 import "../styles/Inquiries.css";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 // import "/assets/user.png" from "../../public/assets/user.png";
 // import "/assets/delete.png" from "/assets/delete.png";
@@ -21,7 +22,7 @@ export default function UnderReview() {
     console.log("from main: ", inquirId);
   }, [inquirId]);
   return (
-    <>
+    <ProtectedRoute requiredPermission="canAccessReview">
       <div className="container">
         <AdminNav />
         <main>
@@ -48,6 +49,6 @@ export default function UnderReview() {
           <UserData getId={setInquirId} setInquirId={setInquirId} />
         </main>
       </div>
-    </>
+    </ProtectedRoute>
   );
 }

@@ -1,0 +1,385 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap");
+
+.pageContainer {
+  min-height: 100vh;
+  display: flex;
+  background: #f8f9fa;
+  font-family: 'Montserrat', serif;
+}
+
+.pageContainer.rtl {
+  direction: rtl;
+  font-family: 'Noto Kufi Arabic', 'Montserrat', serif;
+}
+
+.pageContainer.rtl * {
+  text-align: right;
+  font-family: 'Noto Kufi Arabic', 'Montserrat', serif;
+}
+
+.main {
+  flex: 1;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #480012;
+  margin: 0 0 0.5rem 0;
+}
+
+.header p {
+  color: #6c757d;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.headerActions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.saveButton {
+  background: #480012;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Montserrat', serif;
+  transition: background-color 0.2s;
+}
+
+.saveButton:hover {
+  background: #600018;
+}
+
+.saveButton:disabled {
+  background: #adb5bd;
+  cursor: not-allowed;
+}
+
+.resetButton {
+  background: transparent;
+  color: #6c757d;
+  border: 2px solid #6c757d;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Montserrat', serif;
+  transition: all 0.2s;
+}
+
+.resetButton:hover {
+  background: #6c757d;
+  color: white;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 2rem;
+  min-height: 60vh;
+}
+
+.tabNav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  height: fit-content;
+}
+
+.tabButton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Montserrat', serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+.rtl .tabButton {
+  text-align: right;
+  flex-direction: row-reverse;
+}
+
+.tabButton:hover {
+  background: #f8f9fa;
+  color: #480012;
+}
+
+.tabButton.active {
+  background: #480012;
+  color: white;
+}
+
+.tabIcon {
+  font-size: 1.2rem;
+}
+
+.tabContent {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  min-height: 600px;
+}
+
+.section {
+  max-width: 800px;
+}
+
+.section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #480012;
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.formGroup {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #480012;
+}
+
+.rtl .formGroup {
+  border-left: none;
+  border-right: 4px solid #480012;
+}
+
+.formGroup h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #343a40;
+  margin: 0 0 1rem 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field label {
+  font-weight: 500;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.input,
+.select,
+.textarea {
+  padding: 0.75rem;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: 'Montserrat', serif;
+  transition: border-color 0.2s;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #480012;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Language Options */
+.languageOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.languageOption {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+}
+
+.languageOption:hover {
+  border-color: #480012;
+  background: #f8f9fa;
+}
+
+.languageOption.active {
+  border-color: #480012;
+  background: rgba(72, 0, 18, 0.05);
+}
+
+.languageFlag {
+  font-size: 2rem;
+}
+
+.languageInfo {
+  flex: 1;
+}
+
+.languageInfo h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #343a40;
+}
+
+.languageInfo p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.checkmark {
+  color: #480012;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.languageNote {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #e7f3ff;
+  border-radius: 8px;
+  border-left: 4px solid #0066cc;
+}
+
+.rtl .languageNote {
+  border-left: none;
+  border-right: 4px solid #0066cc;
+}
+
+.languageNote p {
+  margin: 0;
+  color: #0066cc;
+  font-size: 0.9rem;
+}
+
+/* RTL specific adjustments */
+.rtl .content {
+  grid-template-columns: 1fr 790px;
+}
+
+
+
+.rtl .headerActions {
+  flex-direction: row-reverse;
+}
+
+.rtl .languageOption {
+  flex-direction: row-reverse;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .rtl .content {
+    grid-template-columns: 1fr;
+  }
+  
+  .tabNav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 1rem;
+  }
+  
+  .tabButton {
+    white-space: nowrap;
+    min-width: 120px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 1rem;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .rtl .header {
+    align-items: flex-end;
+  }
+  
+  .headerActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .rtl .headerActions {
+    justify-content: flex-start;
+  }
+  
+  .row {
+    grid-template-columns: 1fr;
+  }
+  
+  .tabContent {
+    padding: 1rem;
+  }
+  
+  .languageOption {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .rtl .languageOption {
+    flex-direction: column;
+  }
+} 

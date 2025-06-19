@@ -5,7 +5,7 @@ import "@/styles/BookingPolicies.css";
 export default function BookingPolicies({ handleStepData }) {
   const [policies, setPolicies] = useState({
     requires_deposit: false,
-    deposit_amount: '',
+    deposit_amount_percentage: '',
     allows_cancellation: false,
     cancellation_notice_days: 7,
     refund_on_time_policy: 'no_refund', // 'no_refund', 'full_refund', 'partial_refund'
@@ -49,11 +49,11 @@ export default function BookingPolicies({ handleStepData }) {
 
         {policies.requires_deposit && (
           <div className="amount-input">
-            <label>Amount required (£)</label>
+            <label>Percentage required (%)</label>
             <Input
               type="number"
-              value={policies.deposit_amount}
-              onChange={(value) => handlePolicyChange('deposit_amount', value)}
+              value={policies.deposit_amount_percentage}
+              onChange={(value) => handlePolicyChange('deposit_amount_percentage', value)}
               width="150px"
               height={35}
             />

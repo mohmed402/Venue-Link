@@ -265,4 +265,116 @@
 
 .hiddenInput {
   display: none;
+}
+
+/* Priority level styling */
+.statusButton.vip {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #000;
+  font-weight: 600;
+  border: 2px solid #ffd700;
+}
+
+.statusButton.urgent {
+  background: linear-gradient(135deg, #ff4444 0%, #ff6b6b 100%);
+  color: white;
+  font-weight: 600;
+  border: 2px solid #ff4444;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); }
+}
+
+/* Time input group */
+.timeInputGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+  align-items: end;
+}
+
+.timeInput {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.timeInput label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #666;
+  margin: 0;
+}
+
+.numberInput {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.numberInput:focus {
+  outline: none;
+  border-color: #480012;
+  box-shadow: 0 0 0 2px rgba(72, 0, 18, 0.1);
+}
+
+.numberInput::-webkit-outer-spin-button,
+.numberInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.numberInput[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* RTL Support for new components */
+.container.rtl .timeInputGroup {
+  direction: rtl;
+}
+
+.container.rtl .timeInput label {
+  text-align: right;
+}
+
+.container.rtl .numberInput {
+  text-align: right;
+}
+
+.container.rtl .statusButton.vip,
+.container.rtl .statusButton.urgent {
+  text-align: center;
+}
+
+/* Enhanced section spacing */
+.section:has(.timeInputGroup) {
+  padding-bottom: 20px;
+}
+
+/* Priority badge enhancements */
+.sectionTitle:has(+ .timeInputGroup) {
+  margin-bottom: 12px;
+}
+
+/* Revenue category icon styling */
+.sectionTitle svg[viewBox="0 0 24 24"] path[d*="12 2C6.48"] {
+  fill: #73041f;
+}
+
+/* Priority star icon styling */
+.sectionTitle svg[viewBox="0 0 24 24"] path[d*="12 2l3.09"] {
+  fill: #73041f;
+}
+
+/* Clock icon styling */
+.sectionTitle svg[viewBox="0 0 24 24"] path[d*="11.99 2C6.47"] {
+  fill: #007bff;
 } 

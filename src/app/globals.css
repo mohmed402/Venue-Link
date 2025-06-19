@@ -1,14 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap");
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 html,
 body {
@@ -22,7 +26,23 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgba(0, 0, 0, 0.867);
+  /* background-color: rgba(0, 0, 0, 0.867); */
+}
+
+/* Arabic font support */
+html[lang="ar"] body,
+html[lang="ar"] * {
+  font-family: 'Noto Kufi Arabic', Arial, sans-serif !important;
+}
+
+/* Ensure admin panel uses Arabic font when language is Arabic */
+html[lang="ar"] .admin-panel,
+html[lang="ar"] .admin-panel *,
+html[lang="ar"] aside,
+html[lang="ar"] aside *,
+html[lang="ar"] .pageContainer,
+html[lang="ar"] .pageContainer * {
+  font-family: 'Noto Kufi Arabic', Arial, sans-serif !important;
 }
 
 * {
@@ -36,8 +56,8 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
-}
+} */

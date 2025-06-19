@@ -15,7 +15,8 @@
   gap: 8px;
   width: 100%;
   padding: 14px;
-  background: #2563eb;
+  background: #7a0420;
+
   color: white;
   border: none;
   border-radius: 8px;
@@ -26,7 +27,7 @@
 }
 
 .submitButton:hover {
-  background: #1d4ed8;
+  background: #232323;
 }
 
 .draftButton {
@@ -75,4 +76,125 @@
 .draftIcon,
 .clearIcon {
   font-size: 18px;
-} 
+}
+
+.loadingIcon {
+  font-size: 18px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.errorMessage {
+  padding: 12px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  color: #dc2626;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.submitButton:disabled,
+.draftButton:disabled,
+.clearButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.submitButton:disabled:hover {
+  background: #7a0420;
+}
+
+.draftButton:disabled:hover {
+  background: white;
+}
+
+.clearButton:disabled:hover {
+  background: transparent;
+}
+
+.statusInfo {
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.statusItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.statusItem:last-child {
+  margin-bottom: 0;
+}
+
+.statusLabel {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.statusValue {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.statusValue.confirmed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.statusValue.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.statusValue.cancelled {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.statusValue.unpaid {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.statusValue.deposit_paid,
+.statusValue.deposit_pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.statusValue.partial {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.statusValue.paid {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.unpaidBooking {
+  background: #dc2626 !important;
+  border: 2px solid #b91c1c;
+}
+
+.unpaidBooking:hover {
+  background: #b91c1c !important;
+}

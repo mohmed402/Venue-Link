@@ -80,7 +80,7 @@ router.post("/venueInfo", async (req, res) => {
         {
           venue_id: venueData.venue_id,
           requires_deposit: venuePolicies.requires_deposit,
-          deposit_amount: venuePolicies.deposit_amount || null,
+          deposit_amount_percentage: venuePolicies.deposit_amount_percentage || null,
           allows_cancellation: venuePolicies.allows_cancellation,
           cancellation_notice_days: venuePolicies.cancellation_notice_days,
           refund_on_time_policy: venuePolicies.refund_on_time_policy,

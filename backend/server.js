@@ -27,11 +27,10 @@ const corsOptions = {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 };
-
 
 app.options("*", cors(corsOptions));
 
@@ -47,6 +46,8 @@ const geoLocationRoute = require("./routes/geoLocation");
 const uploadData = require("./routes/uploadData");
 const getData = require("./routes/getData");
 const book = require("./routes/book");
+const dashboardRoutes = require("./routes/dashboard");
+const employeeBookingRoutes = require("./routes/employeeBooking");
 
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
@@ -66,8 +67,14 @@ app.use("/api/upload", uploadData);
 
 app.use("/api/data", getData);
 
-app.use("/api/data/bookings", book);
+app.use("/api", book);
 
+app.use("/api/admin/dashboard", dashboardRoutes);
+
+app.use("/api/admin/employee-booking", employeeBookingRoutes);
+
+// Initialize cron jobs
+require('./cron');
 
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
