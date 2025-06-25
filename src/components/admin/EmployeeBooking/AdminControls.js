@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import styles from '@/styles/EmployeeBooking/AdminControls.module.css'
+import { documentService } from '@/services/documentService'
+import ConfirmationNotification from '../../ConfirmationNotification'
 
 const BOOKING_STATUSES = [
   { value: 'draft', label: 'Draft' },
@@ -39,11 +41,24 @@ const CANCELLATION_POLICIES = [
   { value: 'custom', label: 'cancellation.custom' }
 ];
 
-export default function AdminControls({ adminControls, setAdminControls }) {
+export default function AdminControls({ adminControls, setAdminControls, bookingId, userId, venueId = 86 }) {
   const { t, isRTL } = useLanguage();
+  
+  // Document management state
+  const [documents, setDocuments] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const [uploadSuccess, setUploadSuccess] = useState('');
+  const [uploadProgress, setUploadProgress] = useState({ current: 0, total: 0, currentFile: '', status: '' });
 
-  // Local state for UI-only fields
-  const [localStatus, setLocalStatus] = useState('draft');
+  // Confirmation notification state
+  const [confirmationNotification, setConfirmationNotification] = useState({
+    isVisible: false,
+    title: '',
+    message: '',
+    type: 'warning',
+    onConfirm: null
+  });
 
   // Provide default values if adminControls is not provided
   const safeAdminControls = adminControls || {
@@ -63,6 +78,31 @@ export default function AdminControls({ adminControls, setAdminControls }) {
     pricingReason: '',
     notes: ''
   };
+
+  const loadDocuments = useCallback(async () => {
+    if (!bookingId) {
+      setDocuments([]);
+      return;
+    }
+
+    try {
+      const result = await documentService.getDocuments(bookingId);
+      setDocuments(result.documents || []);
+    } catch (error) {
+      console.error('Error loading documents:', error);
+      setDocuments([]);
+    }
+  }, [bookingId]);
+
+  // Load documents when component mounts or booking ID changes
+  useEffect(() => {
+    if (bookingId) {
+      loadDocuments();
+    } else {
+      // Clear documents when no booking ID (new booking)
+      setDocuments([]);
+    }
+  }, [bookingId, loadDocuments]);
 
   const handleInputChange = (field, value) => {
     if (setAdminControls) {
@@ -85,9 +125,121 @@ export default function AdminControls({ adminControls, setAdminControls }) {
     }
   };
 
-  const handleFileUpload = (e) => {
-    // Handle file upload logic here
-    console.log('Files:', e.target.files);
+  const handleFileUpload = async (e) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+    setUploadError('');
+    setUploadSuccess('');
+    setUploadProgress({ current: 0, total: files.length, currentFile: '', status: 'starting' });
+
+    try {
+      // Validate files
+      const validationErrors = [];
+      Array.from(files).forEach((file) => {
+        const validation = documentService.validateFile(file);
+        if (!validation.valid) {
+          validationErrors.push(`${file.name}: ${validation.error}`);
+        }
+      });
+
+      if (validationErrors.length > 0) {
+        setUploadError(validationErrors.join(', '));
+        setUploading(false);
+        setUploadProgress({ current: 0, total: 0, currentFile: '', status: '' });
+        return;
+      }
+
+      // Debug: Log upload attempt
+      console.log('Upload attempt:', {
+        bookingId: bookingId || 'temp',
+        userId,
+        venueId,
+        fileCount: files.length,
+        files: Array.from(files).map(f => ({ name: f.name, size: f.size, type: f.type }))
+      });
+
+      // Upload files with progress tracking
+      const result = await documentService.uploadDocuments(
+        bookingId || 'temp', // Use temp if no booking ID yet
+        files,
+        userId,
+        venueId, // Include venue_id
+        (progress) => {
+          setUploadProgress(progress);
+        }
+      );
+
+      // Refresh document list
+      if (bookingId) {
+        await loadDocuments();
+      }
+
+      // Clear file input
+      e.target.value = '';
+
+      console.log('Documents uploaded successfully:', result);
+
+      // Show success message
+      setUploadSuccess(`Successfully uploaded ${files.length} document(s)!`);
+
+      // Hide progress and success message after a delay
+      setTimeout(() => {
+        setUploadProgress({ current: 0, total: 0, currentFile: '', status: '' });
+        setUploadSuccess('');
+      }, 4000);
+
+    } catch (error) {
+      console.error('Upload error:', error);
+      setUploadError(`Upload failed: ${error.message}`);
+      setUploadProgress({ current: 0, total: 0, currentFile: '', status: 'error' });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // Helper function to show confirmation notifications
+  const showConfirmation = (title, message, onConfirm, type = 'warning') => {
+    setConfirmationNotification({
+      isVisible: true,
+      title,
+      message,
+      type,
+      onConfirm
+    });
+  };
+
+  // Helper function to close confirmation notifications
+  const closeConfirmation = () => {
+    setConfirmationNotification({
+      isVisible: false,
+      title: '',
+      message: '',
+      type: 'warning',
+      onConfirm: null
+    });
+  };
+
+  const handleDeleteDocument = (documentId) => {
+    showConfirmation(
+      'Delete Document',
+      'Are you sure you want to delete this document? This action cannot be undone.',
+      () => deleteDocument(documentId),
+      'danger'
+    );
+  };
+
+  const deleteDocument = async (documentId) => {
+    closeConfirmation();
+    
+    try {
+      await documentService.deleteDocument(documentId);
+      await loadDocuments();
+    } catch (error) {
+      console.error('Error deleting document:', error);
+      setUploadError(error.message);
+    }
   };
 
   return (
@@ -114,7 +266,7 @@ export default function AdminControls({ adminControls, setAdminControls }) {
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
           </svg>
-          {t('booking_status.confirmed')}
+          {t('booking_status.title')}
         </h3>
         <select 
           className={styles.statusButton}
@@ -236,7 +388,7 @@ export default function AdminControls({ adminControls, setAdminControls }) {
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z" fill="currentColor"/>
+            <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
           </svg>
           {t('admin.cancellation_policy')}
         </h3>
@@ -376,14 +528,124 @@ export default function AdminControls({ adminControls, setAdminControls }) {
           multiple
           className={styles.hiddenInput}
           id="document-upload"
+          onChange={handleFileUpload}
         />
         <label htmlFor="document-upload" className={styles.uploadButton}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.uploadIcon}>
             <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" fill="currentColor"/>
           </svg>
-          Upload Documents
+          {uploading ? 'Uploading...' : 'Upload Documents'}
         </label>
+
+        {/* Upload Progress */}
+        {(uploading || uploadProgress.status === 'completed') && uploadProgress.total > 0 && (
+          <div className={styles.uploadProgress}>
+            <div className={styles.progressHeader}>
+              <span className={styles.progressText}>
+                {uploadProgress.status === 'completed' ? 'Completed' : 'Uploading'} {uploadProgress.current}/{uploadProgress.total} files
+              </span>
+              <span className={styles.progressPercentage}>
+                {Math.round((uploadProgress.current / uploadProgress.total) * 100)}%
+              </span>
+            </div>
+            <div className={styles.progressBar}>
+              <div
+                className={styles.progressFill}
+                style={{
+                  width: `${(uploadProgress.current / uploadProgress.total) * 100}%`,
+                  transition: 'width 0.3s ease'
+                }}
+              />
+            </div>
+            {uploadProgress.currentFile && uploadProgress.status !== 'completed' && (
+              <div className={styles.currentFile}>
+                Currently uploading: {uploadProgress.currentFile}
+              </div>
+            )}
+            {uploadProgress.status === 'completed' && (
+              <div className={styles.currentFile}>
+                All files uploaded successfully!
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Upload Error */}
+        {uploadError && (
+          <div className={styles.uploadError}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            {uploadError}
+          </div>
+        )}
+
+                 {/* Upload Success */}
+         {uploadSuccess && (
+           <div className={styles.uploadSuccess}>
+             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+             </svg>
+             {uploadSuccess}
+           </div>
+         )}
+
+        {/* Documents List */}
+        {documents.length > 0 && (
+          <div className={styles.documentsList}>
+            <h4 className={styles.documentsTitle}>Uploaded Documents ({documents.length})</h4>
+            {documents.map((doc) => {
+              const extension = documentService.getFileExtension(doc.document_name);
+              const icon = documentService.getFileIcon(extension);
+              const size = documentService.formatFileSize(doc.document_size);
+              
+              return (
+                <div key={doc.id} className={styles.documentItem}>
+                  <div className={styles.documentInfo}>
+                    <span className={styles.documentIcon}>{icon}</span>
+                    <div className={styles.documentDetails}>
+                      <a 
+                        href={doc.document_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className={styles.documentName}
+                      >
+                        {doc.document_name}
+                      </a>
+                      <div className={styles.documentMeta}>
+                        <span>{size}</span>
+                        <span>•</span>
+                        <span>{new Date(doc.uploaded_at).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleDeleteDocument(doc.id)}
+                    className={styles.deleteButton}
+                    title="Delete document"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
+
+      {/* Confirmation Notification */}
+      <ConfirmationNotification
+        isVisible={confirmationNotification.isVisible}
+        onConfirm={confirmationNotification.onConfirm}
+        onCancel={closeConfirmation}
+        title={confirmationNotification.title}
+        message={confirmationNotification.message}
+        type={confirmationNotification.type}
+        confirmText="Delete"
+        cancelText="Cancel"
+      />
     </div>
   )
 } 

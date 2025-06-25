@@ -2,14 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import "../styles/adminNav.css";
 import { usePathname } from "next/navigation";
-import { useAuth } from "../contexts/AuthContext";
+
 import { useLanguage } from "../contexts/LanguageContext";
 import { checkPermission } from "../utils/roles";
+import { useUnifiedAuth } from "@/contexts/UnifiedAuthContext";
 
 const WEB_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || "http://localhost:3000";
 export default function AdminNav() {
   const pathname = usePathname();
-  const { user, logout, userRole } = useAuth();
+  const { user, logout, userRole } = useUnifiedAuth();
   const { t, isRTL } = useLanguage();
 
   const handleSignOut = (e) => {

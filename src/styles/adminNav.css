@@ -4,12 +4,40 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap");
 
+/* Dark mode variables for admin nav */
+body:not(.dark-mode) {
+  --nav-bg: #480012;
+  --nav-gradient: linear-gradient(135deg, #480012 0%, #6b0018 100%);
+  --nav-text: #f4f1ed;
+  --nav-link-bg: #f4f1ed;
+  --nav-link-text: #000000;
+  --nav-link-selected-bg: #740100;
+  --nav-link-selected-text: #fff;
+  --nav-profile-bg: #f4f1ed;
+}
+
+body.dark-mode {
+  --nav-bg: #1a1a1a;
+  --nav-gradient: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  --nav-text: #ffffff;
+  --nav-link-bg: #2d2d2d;
+  --nav-link-text: #ffffff;
+  --nav-link-selected-bg: #480012;
+  --nav-link-selected-text: #fff;
+  --nav-profile-bg: #2d2d2d;
+}
+
 body {
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(#d8d3d3, #e3e3e3);
-    font-family: Montserrat, serif;
-  }
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(#d8d3d3, #e3e3e3);
+  font-family: Montserrat, serif;
+  transition: background-color 0.3s ease;
+}
+
+body.dark-mode {
+  background: linear-gradient(#1a1a1a, #2d2d2d);
+}
 
 /* Arabic font support */
 html[lang="ar"] body {
@@ -19,8 +47,9 @@ html[lang="ar"] body {
 aside {
   width: 200px;
   height: 100vh;
-  background-color: #480012;
+  background-color: var(--nav-bg);
   min-width: 300px;
+  transition: background-color 0.3s ease;
 }
 
 .logo-container {
@@ -28,7 +57,8 @@ aside {
   justify-content: center;
   align-items: center;
   padding: 20px 10px;
-  background: linear-gradient(135deg, #480012 0%, #6b0018 100%);
+  background: var(--nav-gradient);
+  transition: background 0.3s ease;
 }
 
 .logo {
@@ -43,7 +73,7 @@ aside.rtl .logo-container {
 }
 
 aside h1 {
-  color: #f4f1ed;
+  color: var(--nav-text);
   text-align: center;
   padding: 10px 6px;
   margin: 0;
@@ -51,6 +81,7 @@ aside h1 {
   font-weight: 600;
   letter-spacing: 0.5px;
   border-bottom: 1px solid rgba(244, 241, 237, 0.2);
+  transition: color 0.3s ease;
 }
 
 nav {
@@ -59,24 +90,30 @@ nav {
 }
 
 .a-nav {
-  color: #000000;
-  background-color: #f4f1ed;
+  color: var(--nav-link-text);
+  background-color: var(--nav-link-bg);
   text-decoration: none;
   padding: 10px;
   margin: 15px;
   border-radius: 10px;
   font-size: 20px;
+  transition: all 0.3s ease;
+}
+
+.a-nav:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .selected {
-  background-color: #740100;
-  color: #fff;
+  background-color: var(--nav-link-selected-bg);
+  color: var(--nav-link-selected-text);
   font-weight: 700;
 }
 
 .profileSec {
   display: flex;
-  background-color: #f4f1ed;
+  background-color: var(--nav-profile-bg);
   align-items: center;
   justify-content: space-evenly;
   margin: 17px;
@@ -84,6 +121,15 @@ nav {
   position: absolute;
   width: 263px;
   bottom: 0;
+  transition: background-color 0.3s ease;
+}
+
+.profileSec h2 {
+  color: var(--nav-link-text);
+  margin: 5px 0;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.3s ease;
 }
 
 .user-container {
@@ -100,6 +146,12 @@ nav {
   font-weight: bold;
   width: 240.5px;
   text-align: center;
+  color: var(--nav-text);
+  transition: color 0.3s ease;
+}
+
+.as:hover {
+  color: #ff6b6b;
 }
 
 /* RTL Support */
@@ -139,6 +191,7 @@ aside.rtl h1 {
   letter-spacing: 0.5px;
   margin-top: 2px;
   display: inline-block;
+  transition: all 0.3s ease;
 }
 
 .role-badge.admin {
@@ -154,4 +207,17 @@ aside.rtl h1 {
 .role-badge:not(.admin):not(.staff) {
   background-color: #6b7280;
   color: white;
+}
+
+/* Dark mode specific adjustments */
+body.dark-mode .role-badge.admin {
+  background-color: #480012;
+}
+
+body.dark-mode .role-badge.staff {
+  background-color: #1d4ed8;
+}
+
+body.dark-mode .role-badge:not(.admin):not(.staff) {
+  background-color: #4b5563;
 }

@@ -204,6 +204,199 @@ router.post("/venueImages", upload.any(), async (req, res) => {
   }
 });
 
+router.post("/bookingDocuments", upload.any(), async (req, res) => {
+  const { bookingId, uploadedBy, venueId = 86 } = req.body;
+  const files = req.files;
 
+  console.log('Document upload request received:', {
+    bookingId,
+    uploadedBy,
+    venueId,
+    filesCount: files?.length || 0,
+    hasFiles: !!files?.length
+  });
+
+  if (!bookingId) {
+    return res.status(400).json({ error: "Missing bookingId parameter" });
+  }
+
+  if (!files?.length) {
+    return res.status(400).json({ error: "No files provided for upload" });
+  }
+
+  if (!uploadedBy) {
+    console.warn('No uploadedBy parameter provided');
+  }
+
+  try {
+    const uploadResults = [];
+
+    for (let file of files) {
+      const timestamp = Date.now();
+      const filePath = `bookings/${bookingId}/documents/${timestamp}_${file.originalname}`;
+
+      console.log("Processing file upload:", {
+        name: file.originalname,
+        type: file.mimetype,
+        size: file.size,
+        path: filePath,
+        bookingId,
+        venueId,
+        uploadedBy
+      });
+
+      // Validate file size (10MB limit)
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      if (file.size > maxSize) {
+        return res.status(400).json({ 
+          error: `File ${file.originalname} is too large. Maximum size is 10MB.` 
+        });
+      }
+
+      // Upload to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("booking-documents")
+        .upload(filePath, file.buffer, {
+          contentType: file.mimetype,
+          upsert: true,
+        });
+
+      if (uploadError) {
+        console.error("Supabase storage upload failed:", uploadError);
+        return res.status(500).json({ 
+          error: `Storage upload failed for ${file.originalname}: ${uploadError.message}` 
+        });
+      }
+
+      console.log("File uploaded to storage successfully:", uploadData);
+
+      const { data: publicData } = supabase.storage
+        .from("booking-documents")
+        .getPublicUrl(filePath);
+
+      const publicUrl = publicData.publicUrl;
+
+      // Insert document record to DB with venue_id
+      const { data: documentRecord, error: insertError } = await supabase
+        .from("booking_documents")
+        .insert([
+          {
+            booking_id: bookingId,
+            venue_id: venueId,
+            document_name: file.originalname,
+            document_url: publicUrl,
+            document_type: file.mimetype,
+            document_size: file.size,
+            uploaded_by: uploadedBy,
+            uploaded_at: new Date().toISOString(),
+          },
+        ])
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error("Database insert failed:", insertError);
+        // Try to clean up the uploaded file
+        await supabase.storage
+          .from("booking-documents")
+          .remove([filePath]);
+        
+        return res.status(500).json({ 
+          error: `Database insert failed for ${file.originalname}: ${insertError.message}` 
+        });
+      }
+
+      console.log("Document record saved to database:", documentRecord);
+      uploadResults.push(documentRecord);
+    }
+
+    console.log(`Successfully uploaded ${uploadResults.length} documents`);
+
+    return res.json({
+      success: true,
+      message: `Successfully uploaded ${uploadResults.length} document(s)!`,
+      documents: uploadResults,
+    });
+  } catch (error) {
+    console.error("Unexpected error uploading booking documents:", error);
+    res.status(500).json({ 
+      error: `Server error: ${error.message}` 
+    });
+  }
+});
+
+// Get booking documents
+router.get("/bookingDocuments/:bookingId", async (req, res) => {
+  const { bookingId } = req.params;
+
+  try {
+    const { data: documents, error } = await supabase
+      .from("booking_documents")
+      .select("*")
+      .eq("booking_id", bookingId)
+      .order("uploaded_at", { ascending: false });
+
+    if (error) throw error;
+
+    res.json({
+      success: true,
+      documents: documents || [],
+    });
+  } catch (error) {
+    console.error("Error fetching booking documents:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete booking document
+router.delete("/bookingDocuments/:documentId", async (req, res) => {
+  const { documentId } = req.params;
+
+  try {
+    // First get the document to find the file path
+    const { data: document, error: fetchError } = await supabase
+      .from("booking_documents")
+      .select("*")
+      .eq("id", documentId)
+      .single();
+
+    if (fetchError) throw fetchError;
+
+    if (!document) {
+      return res.status(404).json({ error: "Document not found" });
+    }
+
+    // Extract file path from URL
+    const urlParts = document.document_url.split('/');
+    const bucketIndex = urlParts.findIndex(part => part === 'booking-documents');
+    const filePath = urlParts.slice(bucketIndex + 1).join('/');
+
+    // Delete from storage
+    const { error: storageError } = await supabase.storage
+      .from("booking-documents")
+      .remove([filePath]);
+
+    if (storageError) {
+      console.error("Storage deletion error:", storageError.message);
+      // Continue with DB deletion even if storage deletion fails
+    }
+
+    // Delete from database
+    const { error: deleteError } = await supabase
+      .from("booking_documents")
+      .delete()
+      .eq("id", documentId);
+
+    if (deleteError) throw deleteError;
+
+    res.json({
+      success: true,
+      message: "Document deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting booking document:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 module.exports = router;

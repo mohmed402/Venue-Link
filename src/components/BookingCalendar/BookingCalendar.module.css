@@ -1,9 +1,84 @@
+/* Dark mode variables */
+:global(.dark-mode) {
+  --bc-bg-primary: #2d2d2d;
+  --bc-bg-secondary: #1a1a1a;
+  --bc-bg-tertiary: #404040;
+  --bc-text-primary: #ffffff;
+  --bc-text-secondary: #b3b3b3;
+  --bc-text-muted: #9ca3af;
+  --bc-border-color: #404040;
+  --bc-accent-color: #480012;
+  --bc-card-bg: #2d2d2d;
+  --bc-card-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  --bc-input-bg: #404040;
+  --bc-hover-bg: #555555;
+  --bc-focus-color: #60a5fa;
+  --bc-grid-line: #555555;
+  --bc-legend-bg: #404040;
+  --bc-confirmed-bg: rgba(16, 185, 129, 0.1);
+  --bc-confirmed-border: rgba(16, 185, 129, 0.3);
+  --bc-confirmed-text: #10b981;
+  --bc-pending-bg: rgba(251, 191, 36, 0.1);
+  --bc-pending-border: rgba(251, 191, 36, 0.3);
+  --bc-pending-text: #fbbf24;
+  --bc-cancelled-bg: rgba(248, 113, 113, 0.1);
+  --bc-cancelled-border: rgba(248, 113, 113, 0.3);
+  --bc-cancelled-text: #f87171;
+  --bc-internal-bg: rgba(96, 165, 250, 0.1);
+  --bc-internal-border: rgba(96, 165, 250, 0.3);
+  --bc-internal-text: #60a5fa;
+  --bc-month-grid-bg: #555555;
+  --bc-date-available: rgba(16, 185, 129, 0.2);
+  --bc-date-busy: rgba(248, 113, 113, 0.2);
+  --bc-date-partial: rgba(251, 191, 36, 0.2);
+  --bc-confirmed-dot: #10b981;
+  --bc-pending-dot: #fbbf24;
+}
+
+:global(body:not(.dark-mode)) {
+  --bc-bg-primary: #ffffff;
+  --bc-bg-secondary: #f8fafc;
+  --bc-bg-tertiary: #f3f4f6;
+  --bc-text-primary: #111827;
+  --bc-text-secondary: #6b7280;
+  --bc-text-muted: #374151;
+  --bc-border-color: #e5e7eb;
+  --bc-accent-color: #800020;
+  --bc-card-bg: #ffffff;
+  --bc-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --bc-input-bg: #ffffff;
+  --bc-hover-bg: #f9fafb;
+  --bc-focus-color: #2563eb;
+  --bc-grid-line: #e5e7eb;
+  --bc-legend-bg: #f9fafb;
+  --bc-confirmed-bg: #dcfce7;
+  --bc-confirmed-border: #86efac;
+  --bc-confirmed-text: #166534;
+  --bc-pending-bg: #fef3c7;
+  --bc-pending-border: #fcd34d;
+  --bc-pending-text: #92400e;
+  --bc-cancelled-bg: #fee2e2;
+  --bc-cancelled-border: #fca5a5;
+  --bc-cancelled-text: #991b1b;
+  --bc-internal-bg: #e0e7ff;
+  --bc-internal-border: #a5b4fc;
+  --bc-internal-text: #3730a3;
+  --bc-month-grid-bg: #f3f4f6;
+  --bc-date-available: #dcfce7;
+  --bc-date-busy: #fee2e2;
+  --bc-date-partial: #fef3c7;
+  --bc-confirmed-dot: #059669;
+  --bc-pending-dot: #d97706;
+}
+
 .container {
-  background: white;
+  background: var(--bc-card-bg);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--bc-card-shadow);
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  border: 1px solid var(--bc-border-color);
+  transition: all 0.3s ease;
 }
 
 .header {
@@ -18,10 +93,10 @@
 
 .viewButton {
   padding: 8px 16px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--bc-border-color);
   border-radius: 6px;
-  background: white;
-  color: #6b7280;
+  background: var(--bc-card-bg);
+  color: var(--bc-text-secondary);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -29,13 +104,13 @@
 }
 
 .viewButton:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
+  background: var(--bc-hover-bg);
+  border-color: var(--bc-text-secondary);
 }
 
 .viewButton.active {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: var(--bc-focus-color);
+  border-color: var(--bc-focus-color);
   color: white;
 }
 
@@ -49,11 +124,12 @@
 .select,
 .searchInput {
   padding: 8px 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--bc-border-color);
   border-radius: 6px;
   font-size: 14px;
-  color: #374151;
-  background: white;
+  color: var(--bc-text-primary);
+  background: var(--bc-input-bg);
+  transition: all 0.3s ease;
 }
 
 .searchInput {
@@ -77,13 +153,14 @@
   display: grid;
   position: sticky;
   top: 0;
-  background: white;
+  background: var(--bc-card-bg);
   z-index: 10;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--bc-border-color);
+  transition: all 0.3s ease;
 }
 
 .timelineHeader {
-  grid-template-columns: 60px repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: 60px 1fr;
 }
 
 .weekHeader {
@@ -92,27 +169,31 @@
 
 .timeGutter {
   width: 60px;
-  border-right: 1px solid #e5e7eb;
+  border-right: 1px solid var(--bc-border-color);
+  transition: border-color 0.3s ease;
 }
 
 .spaceHeader,
 .dayHeader {
   padding: 12px;
   font-weight: 500;
-  color: #111827;
+  color: var(--bc-text-primary);
   text-align: center;
-  border-right: 1px solid #e5e7eb;
+  border-right: 1px solid var(--bc-border-color);
+  transition: all 0.3s ease;
 }
 
 .dayName {
   font-weight: 500;
-  color: #111827;
+  color: var(--bc-text-primary);
+  transition: color 0.3s ease;
 }
 
 .dayDate {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--bc-text-secondary);
   margin-top: 4px;
+  transition: color 0.3s ease;
 }
 
 .timelineBody,
@@ -128,10 +209,11 @@
   height: 60px;
   padding: 8px;
   font-size: 12px;
-  color: #6b7280;
-  border-bottom: 1px solid #e5e7eb;
+  color: var(--bc-text-secondary);
+  border-bottom: 1px solid var(--bc-border-color);
   display: flex;
   align-items: start;
+  transition: all 0.3s ease;
 }
 
 .bookingsGrid,
@@ -142,7 +224,7 @@
 }
 
 .bookingsGrid {
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: 1fr;
   grid-template-rows: repeat(24, 60px);
 }
 
@@ -161,14 +243,16 @@
 .gridLine {
   width: 100%;
   height: 1px;
-  background: #e5e7eb;
+  background: var(--bc-grid-line);
+  transition: background-color 0.3s ease;
 }
 
 .spaceGridLine,
 .dayGridLine {
   width: 1px;
   height: 100%;
-  background: #e5e7eb;
+  background: var(--bc-grid-line);
+  transition: background-color 0.3s ease;
 }
 
 .bookingBlock {
@@ -187,27 +271,27 @@
 }
 
 .bookingBlock.confirmed {
-  background: #dcfce7;
-  border: 1px solid #86efac;
-  color: #166534;
+  background: var(--bc-confirmed-bg);
+  border: 1px solid var(--bc-confirmed-border);
+  color: var(--bc-confirmed-text);
 }
 
 .bookingBlock.pending {
-  background: #fef3c7;
-  border: 1px solid #fcd34d;
-  color: #92400e;
+  background: var(--bc-pending-bg);
+  border: 1px solid var(--bc-pending-border);
+  color: var(--bc-pending-text);
 }
 
 .bookingBlock.cancelled {
-  background: #fee2e2;
-  border: 1px solid #fca5a5;
-  color: #991b1b;
+  background: var(--bc-cancelled-bg);
+  border: 1px solid var(--bc-cancelled-border);
+  color: var(--bc-cancelled-text);
 }
 
 .bookingBlock.internal {
-  background: #e0e7ff;
-  border: 1px solid #a5b4fc;
-  color: #3730a3;
+  background: var(--bc-internal-bg);
+  border: 1px solid var(--bc-internal-border);
+  color: var(--bc-internal-text);
 }
 
 .bookingContent {
@@ -250,6 +334,64 @@
   align-self: start;
 }
 
+:global(.dark-mode) .bookingType {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Status Legend */
+.statusLegend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: var(--bc-legend-bg);
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.legendTitle {
+  font-weight: 500;
+  color: var(--bc-text-muted);
+  margin-right: 8px;
+  transition: color 0.3s ease;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legendDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1px solid;
+  transition: all 0.3s ease;
+}
+
+.legendDot.confirmed {
+  background: var(--bc-confirmed-bg);
+  border-color: var(--bc-confirmed-border);
+}
+
+.legendDot.pending {
+  background: var(--bc-pending-bg);
+  border-color: var(--bc-pending-border);
+}
+
+.legendDot.cancelled {
+  background: var(--bc-cancelled-bg);
+  border-color: var(--bc-cancelled-border);
+}
+
+.legendDot.internal {
+  background: var(--bc-internal-bg);
+  border-color: var(--bc-internal-border);
+}
+
 @media (max-width: 1024px) {
   .filters {
     flex-direction: column;
@@ -261,7 +403,12 @@
   }
 
   .bookingsGrid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: 1fr;
+  }
+
+  .statusLegend {
+    flex-wrap: wrap;
+    gap: 12px;
   }
 }
 
@@ -283,13 +430,25 @@
   .weekGrid {
     grid-template-rows: repeat(24, 50px);
   }
+
+  .statusLegend {
+    padding: 8px 12px;
+    font-size: 12px;
+    gap: 8px;
+  }
+
+  .legendDot {
+    width: 10px;
+    height: 10px;
+  }
 }
 
 /* Month View Styles */
 .monthView {
-  background: white;
+  background: var(--bc-card-bg);
   border-radius: 12px;
   padding: 24px;
+  transition: all 0.3s ease;
 }
 
 .monthHeader {
@@ -300,8 +459,9 @@
 .monthHeader h2 {
   font-size: 24px;
   font-weight: 600;
-  color: #111827;
+  color: var(--bc-text-primary);
   margin: 0;
+  transition: color 0.3s ease;
 }
 
 .weekDays {
@@ -314,22 +474,24 @@
   text-align: center;
   font-size: 14px;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--bc-text-secondary);
   padding: 8px;
+  transition: color 0.3s ease;
 }
 
 .monthGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 2px;
-  background: #f3f4f6;
+  background: var(--bc-month-grid-bg);
   border-radius: 8px;
   padding: 2px;
+  transition: background-color 0.3s ease;
 }
 
 .dateCell {
   aspect-ratio: 1;
-  background: white;
+  background: var(--bc-card-bg);
   border: none;
   border-radius: 6px;
   padding: 8px;
@@ -342,7 +504,7 @@
 }
 
 .dateCell:hover {
-  background: #f9fafb;
+  background: var(--bc-hover-bg);
 }
 
 .dateCell.otherMonth {
@@ -350,21 +512,22 @@
 }
 
 .dateCell.available {
-  background: #dcfce7;
+  background: var(--bc-date-available);
 }
 
 .dateCell.busy {
-  background: #fee2e2;
+  background: var(--bc-date-busy);
 }
 
 .dateCell.partially-available {
-  background: #fef3c7;
+  background: var(--bc-date-partial);
 }
 
 .dateNumber {
   font-size: 16px;
   font-weight: 500;
-  color: #111827;
+  color: var(--bc-text-primary);
+  transition: color 0.3s ease;
 }
 
 .dateSummary {
@@ -381,11 +544,13 @@
 }
 
 .confirmedDot {
-  background: #059669;
+  background: var(--bc-confirmed-dot);
+  transition: background-color 0.3s ease;
 }
 
 .pendingDot {
-  background: #d97706;
+  background: var(--bc-pending-dot);
+  transition: background-color 0.3s ease;
 }
 
 /* Responsive styles for month view */
@@ -406,4 +571,47 @@
     font-size: 12px;
     padding: 4px;
   }
-} 
+}
+
+/* Loading and Error States */
+.loading,
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  min-height: 300px;
+}
+
+.loading p,
+.error p {
+  font-size: 16px;
+  color: var(--bc-text-secondary);
+  margin: 0 0 16px 0;
+  transition: color 0.3s ease;
+}
+
+.error p {
+  color: #dc2626;
+}
+
+:global(.dark-mode) .error p {
+  color: #f87171;
+}
+
+.retryButton {
+  background: var(--bc-focus-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.retryButton:hover {
+  background: var(--bc-accent-color);
+}

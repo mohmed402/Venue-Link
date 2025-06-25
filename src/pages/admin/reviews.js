@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminNav from '@/components/adminNav';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import styles from '@/styles/adminReviews.module.css';
+import { initializeDarkMode } from '../../utils/darkMode';
+import { fetchReviews } from '../../services/reviewsService';
 
 const MOCK_REVIEWS = [
   {
@@ -39,9 +41,50 @@ const MOCK_REVIEWS = [
 ];
 
 export default function AdminReviews() {
-  const [reviews, setReviews] = useState(MOCK_REVIEWS);
+  const venueId = 86; // Using the same venue ID as other admin pages
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all'); // all, pending, approved, rejected
   const [sortBy, setSortBy] = useState('date'); // date, rating
+
+  // Initialize dark mode on component mount
+  useEffect(() => {
+    initializeDarkMode();
+  }, []);
+
+  // Fetch reviews from database
+  useEffect(() => {
+    const loadReviews = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await fetchReviews(venueId);
+
+        // Transform the data to match the expected format
+        const transformedReviews = data.map(review => ({
+          id: review.id,
+          customerName: review.name || 'Anonymous',
+          rating: review.rating,
+          date: review.review_date,
+          review: review.content,
+          status: 'approved', // Default status since we don't have moderation yet
+          images: [] // No images support yet
+        }));
+
+        setReviews(transformedReviews);
+      } catch (err) {
+        console.error('Error loading reviews:', err);
+        setError('Failed to load reviews. Please try again.');
+        // Fallback to mock data if there's an error
+        setReviews(MOCK_REVIEWS);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadReviews();
+  }, [venueId]);
 
   const handleStatusChange = (reviewId, newStatus) => {
     setReviews(reviews.map(review => 
@@ -92,8 +135,29 @@ export default function AdminReviews() {
           </div>
         </header>
 
-        <div className={styles.reviewsGrid}>
-          {filteredReviews.map(review => (
+        {loading ? (
+          <div className={styles.loadingState}>
+            <div className={styles.spinner}></div>
+            <p>Loading reviews...</p>
+          </div>
+        ) : error ? (
+          <div className={styles.errorState}>
+            <p>{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className={styles.retryButton}
+            >
+              Retry
+            </button>
+          </div>
+        ) : filteredReviews.length === 0 ? (
+          <div className={styles.emptyState}>
+            <p>No reviews found for this venue.</p>
+            <p>Reviews will appear here once customers submit them.</p>
+          </div>
+        ) : (
+          <div className={styles.reviewsGrid}>
+            {filteredReviews.map(review => (
             <div key={review.id} className={styles.reviewCard}>
               <div className={styles.reviewHeader}>
                 <div className={styles.customerInfo}>
@@ -153,7 +217,8 @@ export default function AdminReviews() {
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        )}
       </main>
     </div>
     </ProtectedRoute>

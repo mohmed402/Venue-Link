@@ -17,10 +17,12 @@ router.get('/deposit-percentage', employeeBookingController.getVenueDepositPerce
 
 // Booking Management
 router.get('/bookings', employeeBookingController.getAllBookings);
+router.post('/bookings/draft', employeeBookingController.saveDraftBooking);
+router.get('/bookings/draft', employeeBookingController.getDraftBookings);
+router.delete('/bookings/draft/:id', employeeBookingController.deleteDraftBooking);
 router.get('/bookings/:id', employeeBookingController.getBookingById);
 router.post('/bookings', employeeBookingController.createBooking);
 router.put('/bookings/:id', employeeBookingController.updateBooking);
-router.post('/bookings/draft', employeeBookingController.saveDraftBooking);
 
 // Payment Management
 router.post('/payments', employeeBookingController.addPayment);
@@ -37,7 +39,11 @@ router.post('/price-change', employeeBookingController.recordPriceChange);
 // Staff management
 router.get('/staff', employeeBookingController.getStaff);
 router.post('/staff', employeeBookingController.createStaff);
+router.post('/staff/with-auth', employeeBookingController.createStaffWithAuth);
 router.put('/staff/:id', employeeBookingController.updateStaff);
 router.delete('/staff/:id', employeeBookingController.deleteStaff);
 
-module.exports = router; 
+// Activity log
+router.get('/activity-log', employeeBookingController.getActivityLog);
+
+module.exports = router;

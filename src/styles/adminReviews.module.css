@@ -1,3 +1,54 @@
+/* Dark mode variables */
+:global(.dark-mode) {
+  --reviews-bg-primary: #1a1a1a;
+  --reviews-bg-secondary: #2d2d2d;
+  --reviews-bg-tertiary: #404040;
+  --reviews-text-primary: #ffffff;
+  --reviews-text-secondary: #b3b3b3;
+  --reviews-text-muted: #9ca3af;
+  --reviews-border-color: #404040;
+  --reviews-accent-color: #480012;
+  --reviews-card-bg: #2d2d2d;
+  --reviews-card-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  --reviews-input-bg: #404040;
+  --reviews-hover-bg: #555555;
+  --reviews-focus-color: #60a5fa;
+  --reviews-rating-color: #fbbf24;
+  --reviews-success-bg: rgba(16, 185, 129, 0.1);
+  --reviews-success-text: #10b981;
+  --reviews-success-border: rgba(16, 185, 129, 0.3);
+  --reviews-success-hover: rgba(16, 185, 129, 0.15);
+  --reviews-error-bg: rgba(248, 113, 113, 0.1);
+  --reviews-error-text: #f87171;
+  --reviews-error-border: rgba(248, 113, 113, 0.3);
+  --reviews-error-hover: rgba(248, 113, 113, 0.15);
+}
+
+:global(body:not(.dark-mode)) {
+  --reviews-bg-primary: #f5f5f5;
+  --reviews-bg-secondary: #ffffff;
+  --reviews-bg-tertiary: #f8fafc;
+  --reviews-text-primary: #111827;
+  --reviews-text-secondary: #6b7280;
+  --reviews-text-muted: #374151;
+  --reviews-border-color: #e5e7eb;
+  --reviews-accent-color: #800020;
+  --reviews-card-bg: #ffffff;
+  --reviews-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --reviews-input-bg: #ffffff;
+  --reviews-hover-bg: #f8fafc;
+  --reviews-focus-color: #2563eb;
+  --reviews-rating-color: #f59e0b;
+  --reviews-success-bg: #dcfce7;
+  --reviews-success-text: #166534;
+  --reviews-success-border: #86efac;
+  --reviews-success-hover: #bbf7d0;
+  --reviews-error-bg: #fee2e2;
+  --reviews-error-text: #991b1b;
+  --reviews-error-border: #fca5a5;
+  --reviews-error-hover: #fecaca;
+}
+
 .pageContainer {
   min-height: 100vh;
   display: flex;
@@ -7,7 +58,8 @@
   flex: 1;
   min-height: 100vh;
   padding: 40px;
-  background-color: #f5f5f5;
+  background-color: var(--reviews-bg-primary);
+  transition: background-color 0.3s ease;
 }
 
 .header {
@@ -24,16 +76,18 @@
 .title {
   font-size: 32px;
   font-weight: 600;
-  color: #111827;
+  color: var(--reviews-text-primary);
   margin-bottom: 8px;
   letter-spacing: -0.025em;
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  transition: color 0.3s ease;
 }
 
 .subtitle {
   font-size: 16px;
-  color: #6b7280;
+  color: var(--reviews-text-secondary);
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  transition: color 0.3s ease;
 }
 
 .controls {
@@ -43,23 +97,24 @@
 
 .select {
   padding: 8px 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--reviews-border-color);
   border-radius: 6px;
   font-size: 14px;
-  color: #111827;
-  background-color: white;
+  color: var(--reviews-text-primary);
+  background-color: var(--reviews-input-bg);
   cursor: pointer;
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  transition: all 0.3s ease;
 }
 
 .select:hover {
-  border-color: #9ca3af;
+  border-color: var(--reviews-text-secondary);
 }
 
 .select:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 1px #2563eb;
+  border-color: var(--reviews-focus-color);
+  box-shadow: 0 0 0 1px var(--reviews-focus-color);
 }
 
 .reviewsGrid {
@@ -69,10 +124,12 @@
 }
 
 .reviewCard {
-  background: white;
+  background: var(--reviews-card-bg);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--reviews-card-shadow);
+  border: 1px solid var(--reviews-border-color);
+  transition: all 0.3s ease;
 }
 
 .reviewHeader {
@@ -89,21 +146,24 @@
 .customerName {
   font-size: 16px;
   font-weight: 600;
-  color: #111827;
+  color: var(--reviews-text-primary);
   margin: 0 0 4px 0;
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  transition: color 0.3s ease;
 }
 
 .eventType {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--reviews-text-secondary);
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  transition: color 0.3s ease;
 }
 
 .rating {
-  color: #f59e0b;
+  color: var(--reviews-rating-color);
   font-size: 18px;
   letter-spacing: 2px;
+  transition: color 0.3s ease;
 }
 
 .reviewContent {
@@ -113,9 +173,10 @@
 .reviewText {
   font-size: 14px;
   line-height: 1.6;
-  color: #374151;
+  color: var(--reviews-text-muted);
   margin: 0 0 16px 0;
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  transition: color 0.3s ease;
 }
 
 .imageGrid {
@@ -129,6 +190,8 @@
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 6px;
+  border: 1px solid var(--reviews-border-color);
+  transition: border-color 0.3s ease;
 }
 
 .imageContainer img {
@@ -143,13 +206,15 @@
   align-items: center;
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--reviews-border-color);
+  transition: border-color 0.3s ease;
 }
 
 .reviewDate {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--reviews-text-secondary);
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  transition: color 0.3s ease;
 }
 
 .actions {
@@ -168,23 +233,23 @@
 }
 
 .approveButton {
-  background-color: #dcfce7;
-  color: #166534;
-  border: 1px solid #86efac;
+  background-color: var(--reviews-success-bg);
+  color: var(--reviews-success-text);
+  border: 1px solid var(--reviews-success-border);
 }
 
 .approveButton:hover {
-  background-color: #bbf7d0;
+  background-color: var(--reviews-success-hover);
 }
 
 .rejectButton {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fca5a5;
+  background-color: var(--reviews-error-bg);
+  color: var(--reviews-error-text);
+  border: 1px solid var(--reviews-error-border);
 }
 
 .rejectButton:hover {
-  background-color: #fecaca;
+  background-color: var(--reviews-error-hover);
 }
 
 .statusBadge {
@@ -192,14 +257,15 @@
   border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
-  background-color: #dcfce7;
-  color: #166534;
+  background-color: var(--reviews-success-bg);
+  color: var(--reviews-success-text);
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  transition: all 0.3s ease;
 }
 
 .statusBadge.rejected {
-  background-color: #fee2e2;
-  color: #991b1b;
+  background-color: var(--reviews-error-bg);
+  color: var(--reviews-error-text);
 }
 
 @media (max-width: 1280px) {
@@ -250,4 +316,66 @@
     flex: 1;
     text-align: center;
   }
-} 
+}
+
+/* Loading, Error, and Empty States */
+.loadingState,
+.errorState,
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--reviews-text-secondary);
+  background: var(--reviews-card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--reviews-border-color);
+  margin: 20px 0;
+}
+
+.loadingState .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--reviews-border-color);
+  border-top: 4px solid var(--reviews-accent-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loadingState p,
+.errorState p,
+.emptyState p {
+  margin: 8px 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.errorState p {
+  color: var(--reviews-error-text);
+}
+
+.retryButton {
+  margin-top: 16px;
+  padding: 10px 20px;
+  background: var(--reviews-accent-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.retryButton:hover {
+  background: #660100;
+  transform: translateY(-1px);
+}

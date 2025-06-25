@@ -16,7 +16,8 @@ const allowedOrigins = [
   `192.168.1.103:3000`,
   "http://192.168.1.103:8081",  
   "exp://192.168.1.103:8081",
-  `https://venue-link-production.up.railway.app` 
+  `https://venue-link-production.up.railway.app`,
+  "http://localhost:48752" 
 ];
 
 const corsOptions = {
@@ -48,6 +49,7 @@ const getData = require("./routes/getData");
 const book = require("./routes/book");
 const dashboardRoutes = require("./routes/dashboard");
 const employeeBookingRoutes = require("./routes/employeeBooking");
+const customerRoutes = require("./routes/customer");
 
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
@@ -72,6 +74,8 @@ app.use("/api", book);
 app.use("/api/admin/dashboard", dashboardRoutes);
 
 app.use("/api/admin/employee-booking", employeeBookingRoutes);
+
+app.use("/api/customer", customerRoutes);
 
 // Initialize cron jobs
 require('./cron');

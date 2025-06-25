@@ -1,12 +1,12 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../../contexts/AuthContext';
+import { useUnifiedAuth } from '../../contexts/UnifiedAuthContext';
 import '../../styles/unauthorized.css';
 
 export default function UnauthorizedPage() {
   const router = useRouter();
-  const { logout, user } = useAuth();
+  const { logout, user } = useUnifiedAuth();
 
   const handleGoBack = () => {
     if (user?.role === 'employee') {

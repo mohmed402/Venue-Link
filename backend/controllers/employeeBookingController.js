@@ -156,9 +156,20 @@ exports.getBookingsByDate = async (req, res) => {
 // Venue Availability & Pricing
 exports.checkAvailability = async (req, res) => {
   const venue_id = parseInt(req.query.venue_id, 10) || 86;
-  const { date, start_time, end_time, exclude_booking_id } = req.query;
+  const { date, start_time, end_time, exclude_booking_id, override_availability } = req.query;
   
   try {
+    // If override is enabled, skip availability check and return available
+    if (override_availability === 'true') {
+      console.log('Override availability enabled - skipping conflict check');
+      return res.json({ 
+        available: true, 
+        conflictingBookings: [],
+        buffer_minutes: 0,
+        override_enabled: true
+      });
+    }
+
     // Get venue buffer_minutes
     const { data: venueData, error: venueError } = await supabase
       .from('venues')
@@ -171,12 +182,14 @@ exports.checkAvailability = async (req, res) => {
     const bufferMinutes = venueData.buffer_minutes || 0;
     
     // Get existing bookings, excluding the specified booking if provided
+    // Only consider non-overridden bookings as real conflicts
     let query = supabase
       .from('bookings')
-      .select('id, date, time_from, time_to')
+      .select('id, date, time_from, time_to, override_availability')
       .eq('venue_id', venue_id)
       .eq('date', date)
-      .neq('status', 'cancelled');
+      .neq('status', 'cancelled')
+      .eq('override_availability', false); // Only check against non-overridden bookings
 
     // Exclude the current booking if editing
     if (exclude_booking_id) {
@@ -206,7 +219,8 @@ exports.checkAvailability = async (req, res) => {
     res.json({ 
       available: !hasConflict, 
       conflictingBookings: hasConflict ? bookingsData : [],
-      buffer_minutes: bufferMinutes
+      buffer_minutes: bufferMinutes,
+      override_enabled: false
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -273,10 +287,37 @@ exports.createBooking = async (req, res) => {
     system_fee_percentage = 1,
     status = 'confirmed',
     notes,
-    created_by
+    created_by,
+    // New admin control fields
+    setup_time = 0,
+    breakdown_time = 0,
+    priority = 'standard',
+    revenue_category = '',
+    risk_level = 'low',
+    cancellation_policy = 'standard',
+    override_availability = false,
+    override_deposit = false,
+    override_capacity = false,
+    override_custom_pricing = false,
+    pricing_reason = '',
+    managed_by = null
   } = req.body;
   
   try {
+    // Note: The following database columns need to be added to the 'bookings' table:
+    // - setup_time (DECIMAL)
+    // - breakdown_time (DECIMAL) 
+    // - priority (VARCHAR) - 'standard', 'high', 'vip', 'urgent'
+    // - revenue_category (VARCHAR) - 'wedding', 'corporate', 'charity', 'internal', 'social'
+    // - risk_level (VARCHAR) - 'low', 'medium', 'high'
+    // - cancellation_policy (VARCHAR) - 'standard', 'flexible', 'strict', 'custom'
+    // - override_availability (BOOLEAN)
+    // - override_deposit (BOOLEAN) 
+    // - override_capacity (BOOLEAN)
+    // - override_custom_pricing (BOOLEAN)
+    // - pricing_reason (TEXT)
+    // - managed_by (UUID) - References the manager/staff member
+
     // Log the incoming data for debugging
     console.log('Creating booking with data:', {
       venue_id,
@@ -292,7 +333,19 @@ exports.createBooking = async (req, res) => {
       system_fee_percentage,
       status,
       notes,
-      created_by
+      created_by,
+      setup_time,
+      breakdown_time,
+      priority,
+      revenue_category,
+      risk_level,
+      cancellation_policy,
+      override_availability,
+      override_deposit,
+      override_capacity,
+      override_custom_pricing,
+      pricing_reason,
+      managed_by
     });
 
     // Validate required fields
@@ -327,6 +380,19 @@ exports.createBooking = async (req, res) => {
         notes,
         handled_by: created_by,
         is_online: false,
+        // Admin control fields
+        setup_time: parseFloat(setup_time) || 0,
+        breakdown_time: parseFloat(breakdown_time) || 0,
+        priority,
+        revenue_category,
+        risk_level,
+        cancellation_policy,
+        override_availability,
+        override_deposit,
+        override_capacity,
+        override_custom_pricing,
+        pricing_reason,
+        managed_by,
         created_at: new Date().toISOString()
       }])
       .select(`
@@ -339,12 +405,16 @@ exports.createBooking = async (req, res) => {
       throw error;
     }
     
-    // Log activity
+    // Log activity with priority information
+    const activityMessage = priority === 'vip' ? 'VIP Booking created' :
+                           priority === 'urgent' ? 'Urgent Booking created' :
+                           'Booking created';
+    
     await supabase
       .from('activity_log')
       .insert([{
         venue_id,
-        action: 'Booking created',
+        action: activityMessage,
         user: created_by || 'Employee',
         timestamp: new Date().toISOString()
       }]);
@@ -376,10 +446,55 @@ exports.updateBooking = async (req, res) => {
     notes,
     setup_time,
     breakdown_time,
-    created_by
+    created_by,
+    // New admin control fields
+    priority = 'standard',
+    revenue_category = '',
+    risk_level = 'low',
+    cancellation_policy = 'standard',
+    override_availability = false,
+    override_deposit = false,
+    override_capacity = false,
+    override_custom_pricing = false,
+    pricing_reason = '',
+    managed_by = null
   } = req.body;
 
   try {
+    // Handle both integer and UUID booking IDs
+    // If the ID looks like an integer, try to find the booking using integer comparison
+    // If it's a UUID format, use it directly
+    const isIntegerId = /^\d+$/.test(id);
+    let bookingQuery;
+    
+    if (isIntegerId) {
+      // For integer IDs, cast to integer for comparison
+      bookingQuery = supabase
+        .from('bookings')
+        .select('id')
+        .eq('id', parseInt(id))
+        .single();
+    } else {
+      // For UUID format, use as string
+      bookingQuery = supabase
+        .from('bookings')
+        .select('id')
+        .eq('id', id)
+        .single();
+    }
+    
+    // First, verify the booking exists and get its actual ID
+    const { data: existingBooking, error: findError } = await bookingQuery;
+    
+    if (findError) {
+      if (findError.code === 'PGRST116') {
+        return res.status(404).json({ error: 'Booking not found' });
+      }
+      throw findError;
+    }
+    
+    // Use the actual booking ID from the database for the update
+    const actualBookingId = existingBooking.id;
     // Log the incoming data for debugging
     console.log('Updating booking with data:', {
       id,
@@ -398,7 +513,17 @@ exports.updateBooking = async (req, res) => {
       notes,
       setup_time,
       breakdown_time,
-      created_by
+      created_by,
+      priority,
+      revenue_category,
+      risk_level,
+      cancellation_policy,
+      override_availability,
+      override_deposit,
+      override_capacity,
+      override_custom_pricing,
+      pricing_reason,
+      managed_by
     });
 
     // Validate required fields
@@ -433,9 +558,20 @@ exports.updateBooking = async (req, res) => {
         notes,
         setup_time: setup_time ? parseFloat(setup_time) : 0.0,
         breakdown_time: breakdown_time ? parseFloat(breakdown_time) : 0.0,
-        handled_by: created_by
+        handled_by: created_by,
+        // Admin control fields
+        priority,
+        revenue_category,
+        risk_level,
+        cancellation_policy,
+        override_availability,
+        override_deposit,
+        override_capacity,
+        override_custom_pricing,
+        pricing_reason,
+        managed_by
       })
-      .eq('id', id)
+      .eq('id', actualBookingId)
       .select(`
         *,
         customer:customer_id (*)
@@ -450,12 +586,16 @@ exports.updateBooking = async (req, res) => {
       return res.status(404).json({ error: 'Booking not found' });
     }
 
-    // Log activity
+    // Log activity with priority information
+    const activityMessage = priority === 'vip' ? 'VIP Booking updated' :
+                           priority === 'urgent' ? 'Urgent Booking updated' :
+                           'Booking updated';
+
     await supabase
       .from('activity_log')
       .insert([{
         venue_id,
-        action: 'Booking updated',
+        action: activityMessage,
         user: created_by || 'Employee',
         timestamp: new Date().toISOString()
       }]);
@@ -479,9 +619,15 @@ exports.saveDraftBooking = async (req, res) => {
     event_type,
     amount,
     deposit_amount,
+    notes,
+    created_at,
+    setup_time,
+    breakdown_time,
+    status,
+    override_availability,
+    staff_id,
     deposit_percentage,
-    system_fee_percentage = 1,
-    notes
+    system_fee_percentage = 1
   } = req.body;
   
   try {
@@ -497,15 +643,71 @@ exports.saveDraftBooking = async (req, res) => {
         event_type,
         amount,
         deposit_amount,
-        deposit_percentage,
-        system_fee_percentage,
         notes,
-        created_at: new Date().toISOString()
+        created_at: created_at || new Date().toISOString(),
+        setup_time,
+        breakdown_time,
+        status,
+        override_availability,
+        staff_id,
+        deposit_percentage,
+        system_fee_percentage
       }])
       .select();
     if (error) throw error;
     res.json(data[0]);
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getDraftBookings = async (req, res) => {
+  const { venue_id = 86, date } = req.query;
+  
+  try {
+    let query = supabase
+      .from('booking_drafts')
+      .select(`
+        *,
+        customer:customer_id (*)
+      `)
+      .eq('venue_id', venue_id)
+      .order('created_at', { ascending: false });
+
+    // Filter by date if provided
+    if (date) {
+      query = query.eq('date', date);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    
+    res.json(data);
+  } catch (error) {
+    console.error('getDraftBookings error:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.deleteDraftBooking = async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const { data, error } = await supabase
+      .from('booking_drafts')
+      .delete()
+      .eq('id', id)
+      .select();
+    
+    if (error) throw error;
+    
+    if (data.length === 0) {
+      return res.status(404).json({ error: 'Draft booking not found' });
+    }
+    
+    res.json({ success: true, deleted: data[0] });
+  } catch (error) {
+    console.error('deleteDraftBooking error:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -753,15 +955,34 @@ exports.getBookingById = async (req, res) => {
   try {
     const { id } = req.params;
 
+    // Handle both integer and UUID booking IDs
+    const isIntegerId = /^\d+$/.test(id);
+    let bookingQuery;
+    
+    if (isIntegerId) {
+      // For integer IDs, cast to integer for comparison
+      bookingQuery = supabase
+        .from('bookings')
+        .select(`
+          *,
+          customer:customer_id (*)
+        `)
+        .eq('id', parseInt(id))
+        .single();
+    } else {
+      // For UUID format, use as string
+      bookingQuery = supabase
+        .from('bookings')
+        .select(`
+          *,
+          customer:customer_id (*)
+        `)
+        .eq('id', id)
+        .single();
+    }
+
     // Get booking with customer data
-    const { data: booking, error: bookingError } = await supabase
-      .from('bookings')
-      .select(`
-        *,
-        customer:customer_id (*)
-      `)
-      .eq('id', id)
-      .single();
+    const { data: booking, error: bookingError } = await bookingQuery;
 
     if (bookingError) {
       if (bookingError.code === 'PGRST116') {
@@ -779,7 +1000,7 @@ exports.getBookingById = async (req, res) => {
           full_name
         )
       `)
-      .eq('booking_id', id)
+      .eq('booking_id', booking.id)
       .order('payment_date', { ascending: false });
 
     if (paymentsError) {
@@ -790,7 +1011,7 @@ exports.getBookingById = async (req, res) => {
     const { data: priceChanges, error: priceChangesError } = await supabase
       .from('booking_price_changes')
       .select('*')
-      .eq('booking_id', id)
+      .eq('booking_id', booking.id)
       .order('updated_at', { ascending: false });
 
     if (priceChangesError) {
@@ -897,7 +1118,7 @@ exports.deleteStaff = async (req, res) => {
       .select();
 
     if (error) throw error;
-    
+
     if (data.length === 0) {
       return res.status(404).json({ error: 'Staff member not found' });
     }
@@ -905,6 +1126,58 @@ exports.deleteStaff = async (req, res) => {
     res.json({ success: true, deleted: data[0] });
   } catch (error) {
     console.error('Error deleting staff:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.createStaffWithAuth = async (req, res) => {
+  try {
+    const {
+      full_name,
+      email,
+      password,
+      role,
+      status = 'active',
+      venue_id = 86
+    } = req.body;
+
+    // First, create the auth user
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: {
+        role: 'staff',
+        staff_role: role,
+        full_name
+      }
+    });
+
+    if (authError) throw authError;
+
+    // Then create the staff record
+    const { data: staffData, error: staffError } = await supabase
+      .from('staff')
+      .insert([{
+        id: authData.user.id,
+        full_name,
+        email,
+        role,
+        status,
+        venue_id,
+        created_at: new Date().toISOString()
+      }])
+      .select();
+
+    if (staffError) {
+      // If staff creation fails, try to delete the auth user
+      await supabase.auth.admin.deleteUser(authData.user.id);
+      throw staffError;
+    }
+
+    res.json(staffData[0]);
+  } catch (error) {
+    console.error('Error creating staff with auth:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -1023,6 +1296,61 @@ exports.updatePaymentStatus = async (req, res) => {
     }
   } catch (error) {
     console.error('Error updating payment status:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Activity Log Management
+exports.getActivityLog = async (req, res) => {
+  try {
+    const { venue_id = 86, limit = 10 } = req.query;
+
+    // First try to get activity log with staff join
+    let { data, error } = await supabase
+      .from('activity_log')
+      .select(`
+        id,
+        venue_id,
+        action,
+        user,
+        timestamp
+      `)
+      .eq('venue_id', venue_id)
+      .order('timestamp', { ascending: false })
+      .limit(parseInt(limit));
+
+    if (error) {
+      console.error('Error fetching activity log:', error);
+      throw error;
+    }
+
+    // Try to get staff information for each user
+    const enrichedData = await Promise.all(
+      data.map(async (activity) => {
+        if (activity.user) {
+          try {
+            const { data: staffData } = await supabase
+              .from('staff')
+              .select('full_name, email')
+              .eq('id', activity.user)
+              .single();
+
+            return {
+              ...activity,
+              staff: staffData
+            };
+          } catch (staffError) {
+            console.warn(`Could not fetch staff data for user ${activity.user}:`, staffError);
+            return activity;
+          }
+        }
+        return activity;
+      })
+    );
+
+    res.json(enrichedData);
+  } catch (error) {
+    console.error('Error fetching activity log:', error);
     res.status(500).json({ error: error.message });
   }
 };

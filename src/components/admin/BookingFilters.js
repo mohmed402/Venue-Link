@@ -19,7 +19,7 @@ export default function BookingFilters({ filters, onFilterChange }) {
   const handleSearchChange = (e) => {
     onFilterChange({
       ...filters,
-      searchQuery: e.target.value
+      searchTerm: e.target.value
     });
   };
 
@@ -30,7 +30,7 @@ export default function BookingFilters({ filters, onFilterChange }) {
           type="text"
           placeholder="Search by customer or venue..."
           className={styles.searchInput}
-          value={filters.searchQuery}
+          value={filters.searchTerm}
           onChange={handleSearchChange}
         />
       </div>

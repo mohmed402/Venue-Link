@@ -1,3 +1,5 @@
+import { supabase } from '../lib/supabaseClient';
+
 async function login(e, email, password) {
   e.preventDefault();
 
@@ -10,11 +12,7 @@ async function login(e, email, password) {
     return { success: false, message: error.message };
   }
 
-  // ✅ Store session token in localStorage
-  if (data.session) {
-    localStorage.setItem("supabase_token", data.session.access_token);
-  }
-
+  // No need to store tokens - Supabase automatically handles cookies
   return { success: true, message: "Login successful!" };
 }
 

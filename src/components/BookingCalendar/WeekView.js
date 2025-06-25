@@ -7,17 +7,29 @@ import styles from './BookingCalendar.module.css';
 export default function WeekView({ startDate, bookings, timeSlots, spaces, onBookingClick }) {
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(startDate, i));
 
-  const formatBookingTime = (time) => {
-    return time.split(':')[0];
+  const parseTime = (timeString) => {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return { hours, minutes };
   };
 
   const getBookingStyle = (booking, dayIndex) => {
-    const startHour = parseInt(formatBookingTime(booking.startTime));
-    const endHour = parseInt(formatBookingTime(booking.endTime));
-    
+    const startTime = parseTime(booking.startTime);
+    const endTime = parseTime(booking.endTime);
+
+    // Calculate the position based on hours and minutes
+    const startPosition = startTime.hours + (startTime.minutes / 60);
+    const endPosition = endTime.hours + (endTime.minutes / 60);
+
+    // Grid rows are 1-indexed, so we add 1 to the hour
+    const startRow = Math.floor(startPosition) + 1;
+    const endRow = Math.ceil(endPosition) + 1;
+    const minuteOffset = (startTime.minutes / 60) * 60; // Convert to pixels
+
     return {
-      gridRow: `time-${startHour} / time-${endHour}`,
-      gridColumn: `day-${dayIndex}`,
+      gridRow: `${startRow} / ${endRow}`,
+      gridColumn: `${dayIndex}`,
+      transform: `translateY(${minuteOffset}px)`,
+      height: `${(endPosition - startPosition) * 60}px`,
     };
   };
 

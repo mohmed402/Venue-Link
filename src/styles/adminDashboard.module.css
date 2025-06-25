@@ -1,3 +1,28 @@
+/* Dark mode variables */
+:global(.dark-mode) {
+  --dash-bg-primary: #1a1a1a;
+  --dash-bg-secondary: #2d2d2d;
+  --dash-bg-tertiary: #404040;
+  --dash-text-primary: #ffffff;
+  --dash-text-secondary: #b3b3b3;
+  --dash-border-color: #404040;
+  --dash-accent-color: #480012;
+  --dash-card-bg: #2d2d2d;
+  --dash-card-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+}
+
+:global(body:not(.dark-mode)) {
+  --dash-bg-primary: #f5f5f5;
+  --dash-bg-secondary: #ffffff;
+  --dash-bg-tertiary: #f9fafb;
+  --dash-text-primary: #111827;
+  --dash-text-secondary: #6b7280;
+  --dash-border-color: #e5e7eb;
+  --dash-accent-color: #480012;
+  --dash-card-bg: #ffffff;
+  --dash-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
 .pageContainer {
   min-height: 100vh;
   display: flex;
@@ -8,8 +33,9 @@
   max-height: 100vh;
   overflow-y: scroll;
   padding: 40px;
-  background-color: #f5f5f5;
+  background-color: var(--dash-bg-primary);
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease;
 }
 
 .header {
@@ -22,9 +48,10 @@
 .header h1 {
   font-size: 32px;
   font-weight: 600;
-  color: #111827;
+  color: var(--dash-text-primary);
   margin: 0;
   letter-spacing: -0.025em;
+  transition: color 0.3s ease;
 }
 
 .quickActions {
@@ -37,19 +64,20 @@
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--dash-card-bg);
+  border: 1px solid var(--dash-border-color);
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: #374151;
+  color: var(--dash-text-secondary);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .actionButton:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
+  background: var(--dash-bg-tertiary);
+  border-color: var(--dash-border-color);
+  color: var(--dash-accent-color);
 }
 
 .actionButton span {
@@ -72,12 +100,13 @@
 }
 
 .card {
-  background: white;
+  background: var(--dash-card-bg);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+  box-shadow: var(--dash-card-shadow);
+  transition: transform 0.2s, background-color 0.3s ease;
   cursor: pointer;
+  border: 1px solid var(--dash-border-color);
 }
 
 .card:hover {
@@ -86,14 +115,16 @@
 
 .card h3 {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--dash-text-secondary);
   margin: 0 0 8px 0;
+  transition: color 0.3s ease;
 }
 
 .metric {
   font-size: 24px;
   font-weight: 600;
-  color: #111827;
+  color: var(--dash-text-primary);
+  transition: color 0.3s ease;
 }
 
 /* Today's Bookings */
@@ -105,8 +136,9 @@
 .calendarView h2 {
   font-size: 20px;
   font-weight: 600;
-  color: #111827;
+  color: var(--dash-text-primary);
   margin: 0 0 16px 0;
+  transition: color 0.3s ease;
 }
 
 .bookingsList {
@@ -116,10 +148,12 @@
 }
 
 .bookingCard {
-  background: white;
+  background: var(--dash-card-bg);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--dash-card-shadow);
+  transition: background-color 0.3s ease;
+  border: 1px solid var(--dash-border-color);
 }
 
 .bookingCard.active {
@@ -145,8 +179,9 @@
 .bookingHeader h3 {
   font-size: 16px;
   font-weight: 600;
-  color: #111827;
+  color: var(--dash-text-primary);
   margin: 0;
+  transition: color 0.3s ease;
 }
 
 .status {
@@ -161,14 +196,29 @@
   color: #166534;
 }
 
+:global(.dark-mode) .status.confirmed {
+  background: rgba(22, 101, 52, 0.2);
+  color: #4ade80;
+}
+
 .status.pending {
   background: #fef3c7;
   color: #92400e;
 }
 
+:global(.dark-mode) .status.pending {
+  background: rgba(146, 64, 14, 0.2);
+  color: #fbbf24;
+}
+
 .status.cancelled {
   background: #fee2e2;
   color: #991b1b;
+}
+
+:global(.dark-mode) .status.cancelled {
+  background: rgba(153, 27, 27, 0.2);
+  color: #f87171;
 }
 
 .bookingDetails {
@@ -178,10 +228,11 @@
 .bookingDetails p {
   margin: 8px 0;
   font-size: 14px;
-  color: #4b5563;
+  color: var(--dash-text-secondary);
   display: flex;
   align-items: center;
   gap: 8px;
+  transition: color 0.3s ease;
 }
 
 .manageLink {
@@ -190,6 +241,11 @@
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+:global(.dark-mode) .manageLink {
+  color: #60a5fa;
 }
 
 .manageLink:hover {
@@ -199,10 +255,12 @@
 /* Calendar View */
 .calendarView {
   grid-column: 1;
-  background: white;
+  background: var(--dash-card-bg);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--dash-card-shadow);
+  border: 1px solid var(--dash-border-color);
+  transition: background-color 0.3s ease;
 }
 
 .calendar {
@@ -213,8 +271,9 @@
 }
 
 .placeholder {
-  color: #9ca3af;
+  color: var(--dash-text-secondary);
   font-size: 14px;
+  transition: color 0.3s ease;
 }
 
 /* Sidebar */
@@ -227,19 +286,22 @@
 }
 
 .activityFeed,
-.alerts {
-  background: white;
+.alertsList {
+  background: var(--dash-card-bg);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--dash-card-shadow);
+  border: 1px solid var(--dash-border-color);
+  transition: background-color 0.3s ease;
 }
 
 .activityFeed h2,
-.alerts h2 {
+.alertsList h2 {
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: var(--dash-text-primary);
   margin: 0 0 16px 0;
+  transition: color 0.3s ease;
 }
 
 .activities {
@@ -250,7 +312,8 @@
 
 .activity {
   padding-bottom: 16px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--dash-border-color);
+  transition: border-color 0.3s ease;
 }
 
 .activity:last-child {
@@ -261,12 +324,14 @@
 .activity p {
   margin: 0 0 4px 0;
   font-size: 14px;
-  color: #374151;
+  color: var(--dash-text-primary);
+  transition: color 0.3s ease;
 }
 
 .activity small {
-  color: #6b7280;
+  color: var(--dash-text-secondary);
   font-size: 12px;
+  transition: color 0.3s ease;
 }
 
 .alertsList {
@@ -276,30 +341,162 @@
 }
 
 .alert {
-  display: flex;
-  align-items: center;
-  gap: 12px;
   padding: 12px;
   border-radius: 8px;
   font-size: 14px;
+  border-left: 4px solid;
+  position: relative;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.alert.pending {
-  background: #fee2e2;
-  color: #991b1b;
+.alertHoverable {
+  cursor: pointer;
 }
 
-.alert.warning {
-  background: #fef3c7;
-  color: #92400e;
+.alertHoverable:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+:global(.dark-mode) .alertHoverable:hover {
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+.alertHoverable:hover .markDoneButton {
+  opacity: 1;
+  visibility: visible;
+}
+
+.alert.critical {
+  background: #fdf2f2;
+  color: #800020;
+  border-left-color: #800020;
+}
+
+:global(.dark-mode) .alert.critical {
+  background: rgba(128, 0, 32, 0.2);
+  color: #fca5a5;
+}
+
+.alert.high {
+  background: #fef7ed;
+  color: #9a3412;
+  border-left-color: #ea580c;
+}
+
+:global(.dark-mode) .alert.high {
+  background: rgba(154, 52, 18, 0.2);
+  color: #fed7aa;
+}
+
+.alert.medium {
+  background: #f8fafc;
+  color: #475569;
+  border-left-color: #64748b;
+}
+
+:global(.dark-mode) .alert.medium {
+  background: rgba(71, 85, 105, 0.2);
+  color: #cbd5e1;
+}
+
+.alert.low {
+  background: #f9fafb;
+  color: #6b7280;
+  border-left-color: #9ca3af;
+}
+
+:global(.dark-mode) .alert.low {
+  background: rgba(107, 114, 128, 0.2);
+  color: #d1d5db;
+}
+
+.alertContent {
+  width: 100%;
+  flex: 1;
+}
+
+.alertHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
 }
 
 .alertIcon {
   font-size: 16px;
+  display: flex;
+  align-items: center;
+  color: inherit;
 }
 
-.alert p {
+.markDoneButton {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: #800020;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(128, 0, 32, 0.3);
+}
+
+.markDoneButton:hover {
+  background: #600018;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 12px rgba(128, 0, 32, 0.4);
+}
+
+.markDoneButton:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.priorityBadge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
+
+.priorityBadge.critical {
+  background: #800020;
+  color: white;
+}
+
+.priorityBadge.high {
+  background: #ea580c;
+  color: white;
+}
+
+.priorityBadge.medium {
+  background: #64748b;
+  color: white;
+}
+
+.priorityBadge.low {
+  background: #9ca3af;
+  color: white;
+}
+
+.alertMessage {
   margin: 0;
+  line-height: 1.4;
+  color: inherit;
 }
 
 @media (max-width: 1280px) {

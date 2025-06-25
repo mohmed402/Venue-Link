@@ -3,6 +3,7 @@ export const rolePermissions = {
   admin: {
     canViewDashboard: true,
     canManageBookings: true,
+    canModifyBookings: true,
     canManageEmployees: true,
     canEditVenue: true,
     canAccessReview: true,
@@ -18,6 +19,7 @@ export const rolePermissions = {
   manager: {
     canViewDashboard: true,
     canManageBookings: true,
+    canModifyBookings: false,
     canManageEmployees: false,
     canEditVenue: false,
     canAccessReview: true,
@@ -33,6 +35,7 @@ export const rolePermissions = {
   employee: {
     canViewDashboard: true,
     canManageBookings: true,
+    canModifyBookings: false,
     canManageEmployees: false,
     canEditVenue: false,
     canAccessReview: false,
@@ -48,6 +51,7 @@ export const rolePermissions = {
   staff: {
     canViewDashboard: true,
     canManageBookings: true,
+    canModifyBookings: false,
     canManageEmployees: false,
     canEditVenue: false,
     canAccessReview: false,
@@ -72,5 +76,23 @@ export const hasAnyPermission = (userRole, permissions) => {
 
 export const hasAllPermissions = (userRole, permissions) => {
   return permissions.every(permission => checkPermission(userRole, permission));
-}; 
+};
+
+// Map database roles (capitalized) to permission roles (lowercase)
+export const mapDatabaseRoleToPermissionRole = (databaseRole) => {
+  const roleMap = {
+    'Admin': 'admin',
+    'Manager': 'manager',
+    'Staff': 'staff',
+    'Viewer': 'staff', // Viewer uses staff permissions
+    'Employee': 'employee'
+  };
+  return roleMap[databaseRole] || 'staff';
+};
+
+// Get permissions for a database role
+export const getDatabaseRolePermissions = (databaseRole) => {
+  const permissionRole = mapDatabaseRoleToPermissionRole(databaseRole);
+  return rolePermissions[permissionRole] || {};
+};
 

@@ -1,11 +1,62 @@
+/* Dark mode variables */
+:global(.dark-mode) {
+  --ba-bg-primary: #2d2d2d;
+  --ba-bg-secondary: #1a1a1a;
+  --ba-text-primary: #ffffff;
+  --ba-text-secondary: #b3b3b3;
+  --ba-border-color: #404040;
+  --ba-accent-color: #480012;
+  --ba-card-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  --ba-hover-bg: #404040;
+  --ba-submit-bg: #7a0420;
+  --ba-submit-hover: #5a0318;
+  --ba-draft-bg: #404040;
+  --ba-draft-hover: #555555;
+  --ba-clear-hover: #404040;
+  --ba-error-bg: rgba(220, 38, 38, 0.1);
+  --ba-error-border: rgba(220, 38, 38, 0.3);
+  --ba-error-text: #f87171;
+  --ba-status-bg: #404040;
+  --ba-success-bg: rgba(16, 185, 129, 0.1);
+  --ba-success-text: #10b981;
+  --ba-warning-bg: rgba(251, 191, 36, 0.1);
+  --ba-warning-text: #fbbf24;
+}
+
+:global(body:not(.dark-mode)) {
+  --ba-bg-primary: #ffffff;
+  --ba-bg-secondary: #f8fafc;
+  --ba-text-primary: #111827;
+  --ba-text-secondary: #6b7280;
+  --ba-border-color: #d1d5db;
+  --ba-accent-color: #800020;
+  --ba-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --ba-hover-bg: #f9fafb;
+  --ba-submit-bg: #7a0420;
+  --ba-submit-hover: #232323;
+  --ba-draft-bg: #ffffff;
+  --ba-draft-hover: #f9fafb;
+  --ba-clear-hover: #f3f4f6;
+  --ba-error-bg: #fef2f2;
+  --ba-error-border: #fecaca;
+  --ba-error-text: #dc2626;
+  --ba-status-bg: #f8fafc;
+  --ba-success-bg: #dcfce7;
+  --ba-success-text: #166534;
+  --ba-warning-bg: #fef3c7;
+  --ba-warning-text: #92400e;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 24px;
-  background: white;
+  background: var(--ba-bg-primary);
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--ba-card-shadow);
+  border: 1px solid var(--ba-border-color);
+  transition: all 0.3s ease;
 }
 
 .submitButton {
@@ -15,8 +66,7 @@
   gap: 8px;
   width: 100%;
   padding: 14px;
-  background: #7a0420;
-
+  background: var(--ba-submit-bg);
   color: white;
   border: none;
   border-radius: 8px;
@@ -27,7 +77,7 @@
 }
 
 .submitButton:hover {
-  background: #232323;
+  background: var(--ba-submit-hover);
 }
 
 .draftButton {
@@ -37,18 +87,18 @@
   gap: 8px;
   width: 100%;
   padding: 14px;
-  background: white;
-  color: #111827;
-  border: 1px solid #d1d5db;
+  background: var(--ba-draft-bg);
+  color: var(--ba-text-primary);
+  border: 1px solid var(--ba-border-color);
   border-radius: 8px;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .draftButton:hover {
-  background: #f9fafb;
+  background: var(--ba-draft-hover);
 }
 
 .clearButton {
@@ -59,17 +109,17 @@
   width: 100%;
   padding: 14px;
   background: transparent;
-  color: #6b7280;
+  color: var(--ba-text-secondary);
   border: none;
   border-radius: 8px;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .clearButton:hover {
-  background: #f3f4f6;
+  background: var(--ba-clear-hover);
 }
 
 .submitIcon,
@@ -94,12 +144,13 @@
 
 .errorMessage {
   padding: 12px;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
+  background: var(--ba-error-bg);
+  border: 1px solid var(--ba-error-border);
   border-radius: 6px;
-  color: #dc2626;
+  color: var(--ba-error-text);
   font-size: 14px;
   margin-bottom: 8px;
+  transition: all 0.3s ease;
 }
 
 .submitButton:disabled,
@@ -110,11 +161,11 @@
 }
 
 .submitButton:disabled:hover {
-  background: #7a0420;
+  background: var(--ba-submit-bg);
 }
 
 .draftButton:disabled:hover {
-  background: white;
+  background: var(--ba-draft-bg);
 }
 
 .clearButton:disabled:hover {
@@ -123,10 +174,11 @@
 
 .statusInfo {
   padding: 16px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: var(--ba-status-bg);
+  border: 1px solid var(--ba-border-color);
   border-radius: 6px;
   margin-bottom: 16px;
+  transition: all 0.3s ease;
 }
 
 .statusItem {
@@ -142,8 +194,9 @@
 
 .statusLabel {
   font-size: 14px;
-  color: #64748b;
+  color: var(--ba-text-secondary);
   font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .statusValue {
@@ -152,32 +205,33 @@
   padding: 4px 8px;
   border-radius: 4px;
   text-transform: uppercase;
+  transition: all 0.3s ease;
 }
 
 .statusValue.confirmed {
-  background: #dcfce7;
-  color: #166534;
+  background: var(--ba-success-bg);
+  color: var(--ba-success-text);
 }
 
 .statusValue.pending {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--ba-warning-bg);
+  color: var(--ba-warning-text);
 }
 
 .statusValue.cancelled {
-  background: #fee2e2;
-  color: #dc2626;
+  background: var(--ba-error-bg);
+  color: var(--ba-error-text);
 }
 
 .statusValue.unpaid {
-  background: #fee2e2;
-  color: #dc2626;
+  background: var(--ba-error-bg);
+  color: var(--ba-error-text);
 }
 
 .statusValue.deposit_paid,
 .statusValue.deposit_pending {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--ba-warning-bg);
+  color: var(--ba-warning-text);
 }
 
 .statusValue.partial {
@@ -185,9 +239,14 @@
   color: #1d4ed8;
 }
 
+:global(.dark-mode) .statusValue.partial {
+  background: rgba(29, 78, 216, 0.2);
+  color: #93c5fd;
+}
+
 .statusValue.paid {
-  background: #dcfce7;
-  color: #166534;
+  background: var(--ba-success-bg);
+  color: var(--ba-success-text);
 }
 
 .unpaidBooking {
@@ -197,4 +256,13 @@
 
 .unpaidBooking:hover {
   background: #b91c1c !important;
+}
+
+:global(.dark-mode) .unpaidBooking {
+  background: #ef4444 !important;
+  border: 2px solid #dc2626;
+}
+
+:global(.dark-mode) .unpaidBooking:hover {
+  background: #dc2626 !important;
 }

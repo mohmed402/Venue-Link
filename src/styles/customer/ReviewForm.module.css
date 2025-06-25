@@ -1,0 +1,217 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap");
+
+.reviewForm {
+  font-family: Montserrat, serif;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.venueInfo {
+  background-color: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  border-left: 4px solid #800200;
+}
+
+.venueInfo h3 {
+  margin: 0 0 8px 0;
+  color: #800200;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.venueInfo p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.formGroup {
+  margin-bottom: 24px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.required {
+  color: #800200;
+}
+
+.starsContainer {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.star {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  color: #ddd;
+}
+
+.star:hover {
+  background-color: #f8f9fa;
+}
+
+.star:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.star.filled {
+  color: #800200;
+}
+
+.star.empty {
+  color: #ddd;
+}
+
+.ratingText {
+  margin: 8px 0 0 0;
+  font-size: 14px;
+  color: #800200;
+  font-weight: 500;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-family: Montserrat, serif;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #800200;
+}
+
+.textarea:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
+
+.textarea.errorInput {
+  border-color: #dc3545;
+}
+
+.charCount {
+  text-align: right;
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.error {
+  display: block;
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 32px;
+}
+
+.cancelButton {
+  padding: 12px 24px;
+  border: 2px solid #e1e5e9;
+  background-color: white;
+  color: #666;
+  border-radius: 8px;
+  font-family: Montserrat, serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelButton:hover:not(:disabled) {
+  border-color: #800200;
+  color: #800200;
+}
+
+.cancelButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.submitButton {
+  padding: 12px 24px;
+  border: none;
+  background-color: #800200;
+  color: white;
+  border-radius: 8px;
+  font-family: Montserrat, serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #660100;
+}
+
+.submitButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .reviewForm {
+    max-width: 100%;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .cancelButton,
+  .submitButton {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .starsContainer {
+    justify-content: center;
+  }
+  
+  .star {
+    padding: 8px;
+  }
+}

@@ -1,8 +1,55 @@
+/* Dark mode variables */
+:global(.dark-mode) {
+  --admin-bg-primary: #1a1a1a;
+  --admin-bg-secondary: #2d2d2d;
+  --admin-bg-tertiary: #404040;
+  --admin-text-primary: #ffffff;
+  --admin-text-secondary: #b3b3b3;
+  --admin-border-color: #404040;
+  --admin-accent-color: #800200;
+  --admin-card-bg: #2d2d2d;
+  --admin-card-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  --admin-input-bg: #404040;
+  --admin-input-border: #555555;
+  --admin-error-bg: #4a1a1a;
+  --admin-error-border: #800200;
+  --admin-error-text: #ff6b6b;
+  --admin-success-bg: #1a3a1a;
+  --admin-success-border: #4a8a4a;
+  --admin-success-text: #6bff6b;
+  --admin-warning-bg: #3a3a1a;
+  --admin-warning-border: #8a8a4a;
+  --admin-warning-text: #ffff6b;
+}
+
+:global(body:not(.dark-mode)) {
+  --admin-bg-primary: #ffffff;
+  --admin-bg-secondary: #f9fafb;
+  --admin-bg-tertiary: #f8fafc;
+  --admin-text-primary: #111827;
+  --admin-text-secondary: #6b7280;
+  --admin-border-color: #e5e7eb;
+  --admin-accent-color: #800200;
+  --admin-card-bg: #ffffff;
+  --admin-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --admin-input-bg: #ffffff;
+  --admin-input-border: #d1d5db;
+  --admin-error-bg: #fef2f2;
+  --admin-error-border: #fecaca;
+  --admin-error-text: #dc2626;
+  --admin-success-bg: #ecfdf5;
+  --admin-success-border: #d1fae5;
+  --admin-success-text: #047857;
+  --admin-warning-bg: #fff3cd;
+  --admin-warning-border: #ffc107;
+  --admin-warning-text: #856404;
+}
+
 .container {
-  background: white;
+  background: var(--admin-card-bg);
   padding: 24px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--admin-card-shadow);
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
@@ -26,14 +73,14 @@
 .title {
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: var(--admin-text-primary);
   margin: 0;
   letter-spacing: -0.025em;
 }
 
 .badge {
-  background: #f3f4f6;
-  color: #4b5563;
+  background: var(--admin-bg-secondary);
+  color: var(--admin-text-secondary);
   padding: 4px 12px;
   border-radius: 16px;
   font-size: 14px;
@@ -44,24 +91,24 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #6b7280;
+  color: var(--admin-text-secondary);
   font-size: 14px;
   margin-bottom: 24px;
 }
 
 .userIcon {
-  color: #6b7280;
+  color: var(--admin-text-secondary);
 }
 
 .managerName {
-  color: #111827;
+  color: var(--admin-text-primary);
   font-weight: 500;
 }
 
 .section {
   margin-bottom: 24px;
   padding-bottom: 24px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--admin-border-color);
 }
 
 .section:last-child {
@@ -73,7 +120,7 @@
 .sectionTitle {
   font-size: 14px;
   font-weight: 600;
-  color: #111827;
+  color: var(--admin-text-primary);
   margin: 0 0 16px 0;
   display: flex;
   align-items: center;
@@ -84,35 +131,35 @@
 .statusButton {
   width: 100%;
   padding: 8px 12px;
-  background: white;
-  border: 1px solid #d1d5db;
+  background: var(--admin-input-bg);
+  border: 1px solid var(--admin-input-border);
   border-radius: 6px;
   font-size: 14px;
-  color: #111827;
+  color: var(--admin-text-primary);
   cursor: pointer;
   font-family: inherit;
 }
 
 .statusButton:hover {
-  border-color: #9ca3af;
+  border-color: var(--admin-text-secondary);
 }
 
 .statusButton:focus {
-  outline: 2px solid #2563eb;
+  outline: 2px solid var(--admin-accent-color);
   outline-offset: 2px;
 }
 
 .statusDot {
   width: 8px;
   height: 8px;
-  background: #9ca3af;
+  background: var(--admin-text-secondary);
   border-radius: 50%;
 }
 
 .dropdownIcon {
   margin-left: auto;
   font-size: 12px;
-  color: #6b7280;
+  color: var(--admin-text-secondary);
 }
 
 .statusRow {
@@ -126,17 +173,17 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #111827;
+  color: var(--admin-text-primary);
   font-size: 16px;
 }
 
 .statusValue {
-  color: #6b7280;
+  color: var(--admin-text-secondary);
   font-size: 16px;
 }
 
 .cardIcon {
-  color: #6b7280;
+  color: var(--admin-text-secondary);
 }
 
 .toggle {
@@ -158,7 +205,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #e5e7eb;
+  background-color: var(--admin-border-color);
   transition: .2s;
   border-radius: 20px;
 }
@@ -196,13 +243,13 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 4px;
-  color: #111827;
+  color: var(--admin-text-primary);
   font-size: 14px;
   font-weight: 500;
 }
 
 .overrideDescription {
-  color: #6b7280;
+  color: var(--admin-text-secondary);
   font-size: 13px;
   margin: 0;
   line-height: 1.5;
@@ -212,27 +259,28 @@
   width: 100%;
   min-height: 100px;
   padding: 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--admin-input-border);
   border-radius: 6px;
   font-size: 14px;
-  color: #111827;
+  color: var(--admin-text-primary);
+  background: var(--admin-input-bg);
   resize: vertical;
   font-family: inherit;
   line-height: 1.5;
 }
 
 .textarea::placeholder {
-  color: #9ca3af;
+  color: var(--admin-text-secondary);
 }
 
 .textarea:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 1px #2563eb;
+  border-color: var(--admin-accent-color);
+  box-shadow: 0 0 0 1px var(--admin-accent-color);
 }
 
 .helperText {
-  color: #6b7280;
+  color: var(--admin-text-secondary);
   font-size: 13px;
   margin: 8px 0 0 0;
   line-height: 1.5;
@@ -242,21 +290,23 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
-  background: white;
-  border: 1px solid #d1d5db;
+  padding: 12px 16px;
+  background: var(--admin-input-bg);
+  border: 1px solid var(--admin-input-border);
   border-radius: 6px;
-  color: #111827;
+  color: var(--admin-text-primary);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
+  min-height: 48px;
 }
 
-.uploadButton:hover {
-  background: #f9fafb;
-  border-color: #9ca3af;
+.uploadButton:hover:not(:disabled) {
+  background: var(--admin-bg-secondary);
+  border-color: var(--admin-text-secondary);
+  transform: translateY(-1px);
 }
 
 .uploadIcon {
@@ -265,6 +315,61 @@
 
 .hiddenInput {
   display: none;
+}
+
+/* Upload Progress Styles */
+.uploadProgress {
+  margin: 12px 0;
+  padding: 16px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progressText {
+  font-size: 14px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.progressPercentage {
+  font-size: 14px;
+  font-weight: 600;
+  color: #800200;
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #800200 0%, #a02a2a 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.currentFile {
+  font-size: 12px;
+  color: #6c757d;
+  font-style: italic;
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Priority level styling */
@@ -307,23 +412,24 @@
 .timeInput label {
   font-size: 13px;
   font-weight: 500;
-  color: #666;
+  color: var(--admin-text-secondary);
   margin: 0;
 }
 
 .numberInput {
   padding: 8px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--admin-input-border);
   border-radius: 6px;
   font-size: 14px;
+  color: var(--admin-text-primary);
   transition: all 0.2s ease;
-  background: white;
+  background: var(--admin-input-bg);
 }
 
 .numberInput:focus {
   outline: none;
-  border-color: #480012;
-  box-shadow: 0 0 0 2px rgba(72, 0, 18, 0.1);
+  border-color: var(--admin-accent-color);
+  box-shadow: 0 0 0 2px rgba(128, 2, 0, 0.1);
 }
 
 .numberInput::-webkit-outer-spin-button,
@@ -377,4 +483,146 @@
 /* Clock icon styling */
 .sectionTitle svg[viewBox="0 0 24 24"] path[d*="11.99 2C6.47"] {
   fill: #007bff;
+}
+
+/* Document Upload Styles */
+.uploadError {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px;
+  background-color: var(--admin-error-bg);
+  border: 1px solid var(--admin-error-border);
+  border-radius: 8px;
+  color: var(--admin-error-text);
+  font-size: 14px;
+}
+
+.uploadSuccess {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #d1fae5;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  color: #065f46;
+  font-size: 14px;
+}
+
+.documentsList {
+  margin-top: 16px;
+  border: 1px solid var(--admin-border-color);
+  border-radius: 8px;
+  background-color: var(--admin-bg-secondary);
+}
+
+.documentsTitle {
+  padding: 12px 16px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--admin-text-secondary);
+  border-bottom: 1px solid var(--admin-border-color);
+  background-color: var(--admin-bg-tertiary);
+}
+
+.documentItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--admin-border-color);
+}
+
+.documentItem:last-child {
+  border-bottom: none;
+}
+
+.documentInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.documentIcon {
+  font-size: 20px;
+  flex-shrink: 0;
+  color: var(--admin-text-secondary);
+}
+
+.documentDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.documentName {
+  display: block;
+  font-weight: 500;
+  color: var(--admin-text-primary);
+  text-decoration: none;
+  margin-bottom: 4px;
+  word-break: break-all;
+}
+
+.documentName:hover {
+  color: var(--admin-accent-color);
+  text-decoration: underline;
+}
+
+.documentMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--admin-text-secondary);
+}
+
+.deleteButton {
+  padding: 6px;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: var(--admin-text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.deleteButton:hover {
+  background-color: var(--admin-error-bg);
+  color: var(--admin-error-text);
+}
+
+.uploadButton[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.uploadButton[disabled]:hover {
+  background-color: var(--admin-border-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .documentItem {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .documentInfo {
+    gap: 8px;
+  }
+  
+  .deleteButton {
+    align-self: flex-end;
+  }
+  
+  .documentName {
+    font-size: 14px;
+  }
 } 

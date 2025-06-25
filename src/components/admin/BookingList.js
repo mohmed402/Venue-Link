@@ -2,7 +2,7 @@ import React from 'react';
 import styles from '@/styles/AdminBookings.module.css';
 import { format } from 'date-fns';
 
-export default function BookingList({ bookings, filters, onViewBooking }) {
+export default function BookingList({ bookings, filters, onViewBooking, onEditBooking }) {
   const calculateDuration = (startTime, endTime) => {
     const start = new Date(`2000-01-01T${startTime}`);
     const end = new Date(`2000-01-01T${endTime}`);
@@ -37,8 +37,8 @@ export default function BookingList({ bookings, filters, onViewBooking }) {
       return false;
     }
     
-    if (filters.searchQuery) {
-      const query = filters.searchQuery.toLowerCase();
+    if (filters.searchTerm) {
+      const query = filters.searchTerm.toLowerCase();
       return (
         booking.customer?.full_name?.toLowerCase().includes(query) ||
         booking.event_type?.toLowerCase().includes(query) ||
@@ -97,7 +97,10 @@ export default function BookingList({ bookings, filters, onViewBooking }) {
                     >
                       View
                     </button>
-                    <button className={styles.editButton}>
+                    <button
+                      className={styles.editButton}
+                      onClick={() => onEditBooking && onEditBooking(booking.id)}
+                    >
                       Edit
                     </button>
                   </div>

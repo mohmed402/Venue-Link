@@ -1,128 +1,26 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminNav from '@/components/adminNav';
 import EmployeeModal from '@/components/EmployeeModal';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import SuccessNotification from '@/components/SuccessNotification';
+import RecentActivity from '@/components/RecentActivity';
+import ConfirmationNotification from '@/components/ConfirmationNotification';
+import { useUnifiedAuth } from '@/contexts/UnifiedAuthContext';
+import { getStaff, updateStaff, deleteStaff } from '@/utils/api';
+import { rolePermissions } from '@/utils/roles';
 import styles from '@/styles/adminEmployees.module.css';
+import { useRouter } from "next/router";
+import { initializeDarkMode } from '../../../utils/darkMode';
 
-// Mock data for demonstration
-const MOCK_EMPLOYEES = [
-  {
-    id: 1,
-    firstName: "John",
-    lastName: "Smith",
-    email: "john.smith@example.com",
-    role: "Admin",
-    status: "Active",
-    lastLogin: "2024-03-20T10:30:00",
-    permissions: {
-      canBook: true,
-      canEditVenue: true,
-      canAddEmployees: true,
-      canViewReports: true
-    }
-  },
-  {
-    id: 2,
-    firstName: "Sarah",
-    lastName: "Wilson",
-    email: "sarah.w@example.com",
-    role: "Manager",
-    status: "Active",
-    lastLogin: "2024-03-19T16:45:00",
-    permissions: {
-      canBook: true,
-      canEditVenue: true,
-      canAddEmployees: false,
-      canViewReports: true
-    }
-  },
-  {
-    id: 3,
-    firstName: "Mike",
-    lastName: "Johnson",
-    email: "mike.j@example.com",
-    role: "Staff",
-    status: "Active",
-    lastLogin: "2024-03-20T09:15:00",
-    permissions: {
-      canBook: true,
-      canEditVenue: false,
-      canAddEmployees: false,
-      canViewReports: false
-    }
-  },
-  {
-    id: 4,
-    firstName: "Emily",
-    lastName: "Brown",
-    email: "emily.b@example.com",
-    role: "Viewer",
-    status: "Pending Invite",
-    lastLogin: null,
-    permissions: {
-      canBook: false,
-      canEditVenue: false,
-      canAddEmployees: false,
-      canViewReports: true
-    }
-  }
-];
-
-const MOCK_ACTIVITY = [
-  {
-    id: 1,
-    employeeId: 1,
-    action: "Created Booking",
-    details: "Wedding Reception for Smith family",
-    timestamp: "2024-03-20T10:35:00"
-  },
-  {
-    id: 2,
-    employeeId: 2,
-    action: "Updated Venue Details",
-    details: "Modified main hall capacity",
-    timestamp: "2024-03-19T16:50:00"
-  },
-  {
-    id: 3,
-    employeeId: 3,
-    action: "Cancelled Booking",
-    details: "Corporate event #1234",
-    timestamp: "2024-03-20T09:20:00"
-  }
-];
-
-const ROLES = {
-  Admin: {
-    canBook: true,
-    canEditVenue: true,
-    canAddEmployees: true,
-    canViewReports: true
-  },
-  Manager: {
-    canBook: true,
-    canEditVenue: true,
-    canAddEmployees: false,
-    canViewReports: true
-  },
-  Staff: {
-    canBook: true,
-    canEditVenue: false,
-    canAddEmployees: false,
-    canViewReports: false
-  },
-  Viewer: {
-    canBook: false,
-    canEditVenue: false,
-    canAddEmployees: false,
-    canViewReports: true
-  }
-};
+// Available roles based on the database constraint (must match exactly)
+const AVAILABLE_ROLES = ['Admin', 'Manager', 'Staff', 'Viewer', 'Employee'];
 
 export default function EmployeeManagement() {
-  const [employees, setEmployees] = useState(MOCK_EMPLOYEES);
+  const { user } = useUnifiedAuth();
+  const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [filters, setFilters] = useState({
     search: '',
@@ -131,17 +29,69 @@ export default function EmployeeManagement() {
     sort: 'lastLogin'
   });
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [notification, setNotification] = useState(null);
+  const [error, setError] = useState(null);
+  const router = useRouter();
+
+  // Confirmation notification state
+  const [confirmationNotification, setConfirmationNotification] = useState({
+    isVisible: false,
+    title: '',
+    message: '',
+    type: 'warning',
+    onConfirm: null
+  });
+
+  // Initialize dark mode on component mount
+  useEffect(() => {
+    initializeDarkMode();
+  }, []);
+
+  // Load staff data on component mount
+  useEffect(() => {
+    loadStaff();
+  }, []);
+
+  const loadStaff = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const staffData = await getStaff(86); // Default venue_id
+
+      // Transform staff data to match the expected format
+      const transformedStaff = staffData.map(staff => ({
+        id: staff.id,
+        firstName: staff.full_name?.split(' ')[0] || '',
+        lastName: staff.full_name?.split(' ').slice(1).join(' ') || '',
+        full_name: staff.full_name,
+        email: staff.email,
+        role: staff.role,
+        status: staff.status,
+        lastLogin: staff.last_login,
+        created_at: staff.created_at,
+        venue_id: staff.venue_id
+      }));
+
+      setEmployees(transformedStaff);
+    } catch (error) {
+      console.error('Error loading staff:', error);
+      setError('Failed to load staff members. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
 
   const filteredEmployees = employees.filter(employee => {
-    const searchMatch = 
-      employee.firstName.toLowerCase().includes(filters.search.toLowerCase()) ||
-      employee.lastName.toLowerCase().includes(filters.search.toLowerCase()) ||
-      employee.email.toLowerCase().includes(filters.search.toLowerCase());
-    
+    const searchMatch =
+      (employee.firstName?.toLowerCase() || '').includes(filters.search.toLowerCase()) ||
+      (employee.lastName?.toLowerCase() || '').includes(filters.search.toLowerCase()) ||
+      (employee.full_name?.toLowerCase() || '').includes(filters.search.toLowerCase()) ||
+      (employee.email?.toLowerCase() || '').includes(filters.search.toLowerCase());
+
     const roleMatch = filters.role === 'all' || employee.role === filters.role;
     const statusMatch = filters.status === 'all' || employee.status === filters.status;
 
@@ -150,12 +100,22 @@ export default function EmployeeManagement() {
     if (filters.sort === 'lastLogin') {
       return new Date(b.lastLogin || 0) - new Date(a.lastLogin || 0);
     }
-    return b.id - a.id; // Sort by recently added
+    return new Date(b.created_at || 0) - new Date(a.created_at || 0); // Sort by recently added
   });
 
-  const handleAddEmployee = (newEmployee) => {
-    setEmployees(prev => [...prev, { id: prev.length + 1, ...newEmployee }]);
-    setShowAddModal(false);
+  const handleAddEmployee = async (newEmployee) => {
+    try {
+      setLoading(true);
+      // This will be handled by the EmployeeModal with createStaffWithAuth
+      await loadStaff(); // Reload the staff list
+      setShowAddModal(false);
+      setNotification('Staff member added successfully!');
+    } catch (error) {
+      console.error('Error adding employee:', error);
+      setError('Failed to add staff member. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEditEmployee = (employeeId) => {
@@ -164,23 +124,87 @@ export default function EmployeeManagement() {
     setShowAddModal(true);
   };
 
-  const handleUpdateEmployee = (updatedEmployee) => {
-    setEmployees(prev => 
-      prev.map(emp => emp.id === updatedEmployee.id ? updatedEmployee : emp)
-    );
-    setShowAddModal(false);
-    setSelectedEmployee(null);
+  const handleUpdateEmployee = async (updatedEmployee) => {
+    try {
+      setLoading(true);
+      await updateStaff(updatedEmployee.id, {
+        full_name: updatedEmployee.full_name || `${updatedEmployee.firstName} ${updatedEmployee.lastName}`,
+        email: updatedEmployee.email,
+        role: updatedEmployee.role,
+        status: updatedEmployee.status
+      });
+
+      await loadStaff(); // Reload the staff list
+      setShowAddModal(false);
+      setSelectedEmployee(null);
+      setNotification('Staff member updated successfully!');
+    } catch (error) {
+      console.error('Error updating employee:', error);
+      setError('Failed to update staff member. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Helper function to show confirmation notifications
+  const showConfirmation = (title, message, onConfirm, type = 'warning') => {
+    setConfirmationNotification({
+      isVisible: true,
+      title,
+      message,
+      type,
+      onConfirm
+    });
+  };
+
+  // Helper function to close confirmation notifications
+  const closeConfirmation = () => {
+    setConfirmationNotification({
+      isVisible: false,
+      title: '',
+      message: '',
+      type: 'warning',
+      onConfirm: null
+    });
   };
 
   const handleRemoveEmployee = (employeeId) => {
-    if (confirm('Are you sure you want to remove this employee?')) {
-      setEmployees(prev => prev.filter(emp => emp.id !== employeeId));
+    const employee = employees.find(emp => emp.id === employeeId);
+    showConfirmation(
+      'Remove Employee',
+      `Are you sure you want to remove ${employee?.full_name || employee?.email || 'this employee'}? This action cannot be undone.`,
+      () => removeEmployee(employeeId),
+      'danger'
+    );
+  };
+
+  const removeEmployee = async (employeeId) => {
+    closeConfirmation();
+    
+    try {
+      setLoading(true);
+      await deleteStaff(employeeId);
+      await loadStaff(); // Reload the staff list
+      setNotification('Staff member removed successfully!');
+    } catch (error) {
+      console.error('Error removing employee:', error);
+      setError('Failed to remove staff member. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleResetPassword = (email) => {
     // TODO: Implement password reset functionality
-    alert(`Password reset link sent to ${email}`);
+    showConfirmation(
+      'Reset Password',
+      `Send password reset link to ${email}?`,
+      () => {
+        closeConfirmation();
+        setNotification(`Password reset link sent to ${email}`);
+      },
+      'info'
+    );
   };
 
   return (
@@ -193,16 +217,39 @@ export default function EmployeeManagement() {
             <h1>Employee Management</h1>
             <p>Manage staff access and permissions</p>
           </div>
-          <button 
+          <button
             className={styles.addButton}
             onClick={() => {
               setSelectedEmployee(null);
               setShowAddModal(true);
             }}
+            disabled={loading}
           >
             + Add Employee
           </button>
         </header>
+
+        {error && (
+          <div style={{
+            background: '#fee2e2',
+            color: '#991b1b',
+            padding: '12px',
+            borderRadius: '6px',
+            marginBottom: '24px'
+          }}>
+            {error}
+          </div>
+        )}
+
+        {loading && (
+          <div style={{
+            textAlign: 'center',
+            padding: '40px',
+            color: '#6b7280'
+          }}>
+            Loading staff members...
+          </div>
+        )}
 
         <div className={styles.filters}>
           <input
@@ -219,8 +266,8 @@ export default function EmployeeManagement() {
             className={styles.select}
           >
             <option value="all">All Roles</option>
-            {Object.keys(ROLES).map(role => (
-              <option key={role} value={role}>{role}</option>
+            {AVAILABLE_ROLES.map(role => (
+              <option key={role} value={role}>{role.charAt(0).toUpperCase() + role.slice(1)}</option>
             ))}
           </select>
 
@@ -230,9 +277,9 @@ export default function EmployeeManagement() {
             className={styles.select}
           >
             <option value="all">All Statuses</option>
-            <option value="Active">Active</option>
-            <option value="Suspended">Suspended</option>
-            <option value="Pending Invite">Pending Invite</option>
+            <option value="active">Active</option>
+            <option value="suspended">Suspended</option>
+            <option value="pending">Pending Invite</option>
           </select>
 
           <select
@@ -258,27 +305,34 @@ export default function EmployeeManagement() {
               </tr>
             </thead>
             <tbody>
-              {filteredEmployees.map(employee => (
-                <tr key={employee.id}>
-                  <td>
-                    {employee.firstName} {employee.lastName}
+              {filteredEmployees.length === 0 && !loading ? (
+                <tr>
+                  <td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: '#6b7280' }}>
+                    No staff members found
                   </td>
-                  <td>{employee.email}</td>
-                  <td>
-                    <span className={`${styles.role} ${styles[employee.role.toLowerCase()]}`}>
-                      {employee.role}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`${styles.status} ${styles[employee.status.toLowerCase().replace(' ', '-')]}`}>
-                      {employee.status}
-                    </span>
-                  </td>
-                  <td>
-                    {employee.lastLogin 
-                      ? new Date(employee.lastLogin).toLocaleString()
-                      : 'Never'}
-                  </td>
+                </tr>
+              ) : (
+                filteredEmployees.map(employee => (
+                  <tr key={employee.id}>
+                    <td>
+                      {employee.full_name || `${employee.firstName || ''} ${employee.lastName || ''}`.trim()}
+                    </td>
+                    <td>{employee.email}</td>
+                    <td>
+                      <span className={`${styles.role} ${styles[employee.role?.toLowerCase()]}`}>
+                        {employee.role}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`${styles.status} ${styles[employee.status?.toLowerCase().replace(' ', '-')]}`}>
+                        {employee.status?.charAt(0).toUpperCase() + employee.status?.slice(1)}
+                      </span>
+                    </td>
+                    <td>
+                      {employee.lastLogin
+                        ? new Date(employee.lastLogin).toLocaleString()
+                        : 'Never'}
+                    </td>
                   <td className={styles.actions}>
                     <button
                       onClick={() => handleEditEmployee(employee.id)}
@@ -307,32 +361,16 @@ export default function EmployeeManagement() {
                         <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/>
                       </svg>
                     </button>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
 
-        <section className={styles.activityLog}>
-          <h2>Recent Activity</h2>
-          <div className={styles.activityList}>
-            {MOCK_ACTIVITY.map(activity => {
-              const employee = employees.find(emp => emp.id === activity.employeeId);
-              return (
-                <div key={activity.id} className={styles.activityItem}>
-                  <div className={styles.activityHeader}>
-                    <strong>{employee?.firstName} {employee?.lastName}</strong>
-                    <span>{new Date(activity.timestamp).toLocaleString()}</span>
-                  </div>
-                  <div className={styles.activityDetails}>
-                    <span className={styles.activityAction}>{activity.action}</span>
-                    <p>{activity.details}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+        <section className={styles.activitySection}>
+          <RecentActivity venueId={86} limit={15} />
         </section>
 
         {showAddModal && (
@@ -343,11 +381,31 @@ export default function EmployeeManagement() {
               setSelectedEmployee(null);
             }}
             onSave={selectedEmployee ? handleUpdateEmployee : handleAddEmployee}
-            roles={ROLES}
+            roles={AVAILABLE_ROLES}
+            onStaffCreated={loadStaff}
           />
         )}
+
+        <SuccessNotification
+          isVisible={!!notification}
+          onClose={() => setNotification(null)}
+          title="Success!"
+          message={notification || "Operation completed successfully!"}
+        />
+
+        {/* Confirmation Notification */}
+        <ConfirmationNotification
+          isVisible={confirmationNotification.isVisible}
+          onConfirm={confirmationNotification.onConfirm}
+          onCancel={closeConfirmation}
+          title={confirmationNotification.title}
+          message={confirmationNotification.message}
+          type={confirmationNotification.type}
+          confirmText="Remove"
+          cancelText="Cancel"
+        />
       </main>
     </div>
     </ProtectedRoute>
   );
-} 
+}

@@ -5,18 +5,31 @@ import { format } from 'date-fns';
 import styles from './BookingCalendar.module.css';
 
 export default function DayView({ date, bookings, timeSlots, spaces, onBookingClick }) {
-  const formatBookingTime = (time) => {
-    return time.split(':')[0];
+  const parseTime = (timeString) => {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return { hours, minutes };
   };
 
   const getBookingStyle = (booking) => {
-    const startHour = parseInt(formatBookingTime(booking.startTime));
-    const endHour = parseInt(formatBookingTime(booking.endTime));
-    const duration = endHour - startHour;
-    
+    const startTime = parseTime(booking.startTime);
+    const endTime = parseTime(booking.endTime);
+
+    // Calculate the position based on hours and minutes
+    // Each hour slot is 60px, so we can position based on minutes too
+    const startPosition = startTime.hours + (startTime.minutes / 60);
+    const endPosition = endTime.hours + (endTime.minutes / 60);
+
+    // Grid rows are 1-indexed, so we add 1 to the hour
+    // For sub-hour positioning, we'll use CSS transforms
+    const startRow = Math.floor(startPosition) + 1;
+    const endRow = Math.ceil(endPosition) + 1;
+    const minuteOffset = (startTime.minutes / 60) * 60; // Convert to pixels
+
     return {
-      gridRow: `time-${startHour} / time-${endHour}`,
-      gridColumn: `space-${spaces.indexOf(booking.space) + 1}`,
+      gridRow: `${startRow} / ${endRow}`,
+      gridColumn: `1`,
+      transform: `translateY(${minuteOffset}px)`,
+      height: `${(endPosition - startPosition) * 60}px`,
     };
   };
 
@@ -72,17 +85,7 @@ export default function DayView({ date, bookings, timeSlots, spaces, onBookingCl
             />
           ))}
 
-          {/* Space grid lines */}
-          {spaces.map((_, index) => (
-            <div
-              key={`space-${index}`}
-              className={styles.spaceGridLine}
-              style={{
-                gridRow: '1 / -1',
-                gridColumn: `space-${index + 1} / space-${index + 2}`
-              }}
-            />
-          ))}
+          {/* No space grid lines needed since we only have one column */}
 
           {/* Bookings */}
           {todayBookings.map(booking => (

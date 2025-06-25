@@ -1,36 +1,27 @@
 import validate from "../utils/validate";
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+import { supabase } from '../lib/supabaseClient';
 
 export default async function authenticateUser(email, password) {
   try {
     const validation = validate(email, password);
     if (!validation.success) return validation;
 
-    // Step 1: Ensure session validity before assuming user is signed in
-    const storedToken = localStorage.getItem("supabase_token");
-    if (storedToken) {
-      // Optionally verify the token with an API call before assuming it's valid
+    // Step 1: Check if user is already signed in
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
       console.log("User already signed in.");
       return { success: true, message: "Already signed in." };
     }
 
     // Step 2: Attempt Sign-in
     console.log("Attempting sign-in...");
-    const signInResponse = await fetch(`${BASE_URL}/auth/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
     });
 
-    const signInData = await signInResponse.json();
-
-    if (signInResponse.ok && signInData?.data?.session?.access_token) {
+    if (!signInError && signInData?.session) {
       console.log("✅ Sign-in successful!");
-      localStorage.setItem(
-        "supabase_token",
-        signInData.data.session.access_token
-      );
-      localStorage.setItem("user_email", email);
       return {
         success: true,
         message: "Sign-in successful!",
@@ -38,43 +29,39 @@ export default async function authenticateUser(email, password) {
       };
     }
 
-    //  Step 3: Handle Login Failure & Attempt Signup
-    if (signInData?.error) {
-      console.log("❌ Sign-in failed:", signInData.error);
+    // Step 3: Handle Login Failure & Attempt Signup
+    if (signInError) {
+      console.log("❌ Sign-in failed:", signInError.message);
 
-      if (signInData.error === "Invalid login credentials") {
+      if (signInError.message === "Invalid login credentials") {
         console.log("🔍 User not found, attempting sign-up...");
 
-        const signUpResponse = await fetch(
-          `${BASE_URL}/auth/signup`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/book`
           }
-        );
+        });
 
-        const signUpData = await signUpResponse.json();
-        console.log("this: ", signUpData);
-        if (signUpResponse.ok && !signUpData?.error) {
+        if (!signUpError) {
           console.log("✅ Signup successful! Verification email sent.");
-
           return {
             success: true,
             message: "Signup successful! Verify your email to continue.",
             data: signUpData,
           };
         } else {
-          console.error("❌ Signup failed:", signUpData.error);
+          console.error("❌ Signup failed:", signUpError.message);
           return {
             success: false,
-            message: signUpData.error || "Signup failed.",
+            message: signUpError.message || "Signup failed.",
           };
         }
       }
     }
 
-    return { success: false, message: signInData.error || "Sign-in failed." };
+    return { success: false, message: signInError?.message || "Sign-in failed." };
   } catch (error) {
     console.error("🚨 Authentication Error:", error.message);
     return {

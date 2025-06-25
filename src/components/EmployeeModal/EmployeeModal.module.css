@@ -1,54 +1,112 @@
+/* Dark mode variables */
+:global(.dark-mode) {
+  --em-bg-primary: #2d2d2d;
+  --em-bg-secondary: #1a1a1a;
+  --em-bg-tertiary: #404040;
+  --em-text-primary: #ffffff;
+  --em-text-secondary: #b3b3b3;
+  --em-text-muted: #9ca3af;
+  --em-border-color: #404040;
+  --em-accent-color: #480012;
+  --em-modal-bg: #2d2d2d;
+  --em-modal-shadow: 0 20px 25px -5px rgba(255, 255, 255, 0.1), 0 10px 10px -5px rgba(255, 255, 255, 0.04);
+  --em-overlay-bg: rgba(0, 0, 0, 0.7);
+  --em-input-bg: #404040;
+  --em-hover-bg: #555555;
+  --em-focus-color: #60a5fa;
+  --em-focus-ring: rgba(96, 165, 250, 0.2);
+  --em-success-color: #10b981;
+  --em-error-color: #f87171;
+  --em-warning-color: #fbbf24;
+  --em-primary-btn-bg: #3b82f6;
+  --em-primary-btn-hover: #2563eb;
+  --em-secondary-btn-bg: #404040;
+  --em-secondary-btn-hover: #555555;
+  --em-checkbox-bg: #404040;
+}
+
+:global(body:not(.dark-mode)) {
+  --em-bg-primary: #ffffff;
+  --em-bg-secondary: #f8fafc;
+  --em-bg-tertiary: #f3f4f6;
+  --em-text-primary: #111827;
+  --em-text-secondary: #6b7280;
+  --em-text-muted: #374151;
+  --em-border-color: #e5e7eb;
+  --em-accent-color: #800020;
+  --em-modal-bg: #ffffff;
+  --em-modal-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --em-overlay-bg: rgba(0, 0, 0, 0.5);
+  --em-input-bg: #ffffff;
+  --em-hover-bg: #f9fafb;
+  --em-focus-color: #2563eb;
+  --em-focus-ring: rgba(37, 99, 235, 0.2);
+  --em-success-color: #059669;
+  --em-error-color: #dc2626;
+  --em-warning-color: #f59e0b;
+  --em-primary-btn-bg: #2563eb;
+  --em-primary-btn-hover: #1d4ed8;
+  --em-secondary-btn-bg: #ffffff;
+  --em-secondary-btn-hover: #f9fafb;
+  --em-checkbox-bg: #ffffff;
+}
+
 .modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--em-overlay-bg);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  transition: background-color 0.3s ease;
 }
 
 .modal {
-  background: white;
+  background: var(--em-modal-bg);
   border-radius: 12px;
   width: 100%;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-              0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--em-modal-shadow);
+  border: 1px solid var(--em-border-color);
+  transition: all 0.3s ease;
 }
 
 .modalHeader {
   padding: 20px 24px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--em-border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: border-color 0.3s ease;
 }
 
 .modalHeader h2 {
   margin: 0;
   font-size: 20px;
   font-weight: 600;
-  color: #111827;
+  color: var(--em-text-primary);
+  transition: color 0.3s ease;
 }
 
 .closeButton {
   background: none;
   border: none;
   font-size: 24px;
-  color: #6b7280;
+  color: var(--em-text-secondary);
   cursor: pointer;
   padding: 4px;
   line-height: 1;
+  transition: color 0.2s;
 }
 
 .closeButton:hover {
-  color: #111827;
+  color: var(--em-text-primary);
 }
 
 .form {
@@ -63,7 +121,8 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: #374151;
+  color: var(--em-text-muted);
+  transition: color 0.3s ease;
 }
 
 .formGroup input,
@@ -71,19 +130,20 @@
 .formGroup textarea {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--em-border-color);
   border-radius: 6px;
   font-size: 14px;
-  color: #111827;
-  background: white;
+  color: var(--em-text-primary);
+  background: var(--em-input-bg);
+  transition: all 0.3s ease;
 }
 
 .formGroup input:focus,
 .formGroup select:focus,
 .formGroup textarea:focus {
   outline: none;
-  border-color: #2563eb;
-  ring: 2px solid rgba(37, 99, 235, 0.2);
+  border-color: var(--em-focus-color);
+  ring: 2px solid var(--em-focus-ring);
 }
 
 .permissions {
@@ -91,8 +151,10 @@
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 12px;
   padding: 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--em-border-color);
   border-radius: 6px;
+  background: var(--em-bg-secondary);
+  transition: all 0.3s ease;
 }
 
 .checkbox {
@@ -100,16 +162,19 @@
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #374151;
+  color: var(--em-text-muted);
   cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 .checkbox input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--em-border-color);
   border-radius: 4px;
   cursor: pointer;
+  background: var(--em-checkbox-bg);
+  transition: all 0.3s ease;
 }
 
 .formActions {
@@ -118,7 +183,8 @@
   gap: 12px;
   margin-top: 24px;
   padding-top: 20px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--em-border-color);
+  transition: border-color 0.3s ease;
 }
 
 .cancelButton,
@@ -132,24 +198,33 @@
 }
 
 .cancelButton {
-  background: white;
-  border: 1px solid #e5e7eb;
-  color: #6b7280;
+  background: var(--em-secondary-btn-bg);
+  border: 1px solid var(--em-border-color);
+  color: var(--em-text-secondary);
 }
 
 .cancelButton:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
+  background: var(--em-secondary-btn-hover);
+  border-color: var(--em-text-secondary);
 }
 
 .saveButton {
-  background: #2563eb;
+  background: var(--em-primary-btn-bg);
   border: none;
   color: white;
 }
 
 .saveButton:hover {
-  background: #1d4ed8;
+  background: var(--em-primary-btn-hover);
+}
+
+.saveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.saveButton:disabled:hover {
+  background: var(--em-primary-btn-bg);
 }
 
 @media (max-width: 640px) {

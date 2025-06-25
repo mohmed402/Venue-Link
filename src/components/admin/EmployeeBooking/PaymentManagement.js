@@ -3,8 +3,11 @@
 import { useState, useEffect } from 'react'
 import styles from '@/styles/EmployeeBooking/PaymentManagement.module.css'
 import { savePriceChangeAfterBooking } from './PricingSummary';
-import { useAuth } from '@/contexts/AuthContext';
+import { useUnifiedAuth } from '@/contexts/UnifiedAuthContext';
 import SuccessNotification from '../../SuccessNotification';
+import AlertNotification from '../../AlertNotification';
+import ConfirmationNotification from '../../ConfirmationNotification';
+import { deleteDraftBooking } from '@/utils/api';
 
 const PAYMENT_METHODS = [
   { id: 'cash', label: 'Cash', icon: 
@@ -65,7 +68,7 @@ const PAYMENT_METHODS = [
 ];
 
 export default function PaymentManagement({ bookingData, setBookingData, onAddPayment }) {
-  const { user } = useAuth();
+  const { user } = useUnifiedAuth();
   const [showAddPayment, setShowAddPayment] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
@@ -75,6 +78,65 @@ export default function PaymentManagement({ bookingData, setBookingData, onAddPa
     reference: '',
     notes: ''
   });
+
+  // Alert notification state
+  const [alertNotification, setAlertNotification] = useState({
+    isVisible: false,
+    title: '',
+    message: '',
+    type: 'warning'
+  });
+
+  // Confirmation notification state
+  const [confirmationNotification, setConfirmationNotification] = useState({
+    isVisible: false,
+    title: '',
+    message: '',
+    type: 'warning',
+    onConfirm: null
+  });
+
+  // Helper function to show alert notifications
+  const showAlert = (title, message, type = 'warning') => {
+    setAlertNotification({
+      isVisible: true,
+      title,
+      message,
+      type
+    });
+  };
+
+  // Helper function to close alert notifications
+  const closeAlert = () => {
+    setAlertNotification({
+      isVisible: false,
+      title: '',
+      message: '',
+      type: 'warning'
+    });
+  };
+
+  // Helper function to show confirmation notifications
+  const showConfirmation = (title, message, onConfirm, type = 'warning') => {
+    setConfirmationNotification({
+      isVisible: true,
+      title,
+      message,
+      type,
+      onConfirm
+    });
+  };
+
+  // Helper function to close confirmation notifications
+  const closeConfirmation = () => {
+    setConfirmationNotification({
+      isVisible: false,
+      title: '',
+      message: '',
+      type: 'warning',
+      onConfirm: null
+    });
+  };
 
   const totalPaid = bookingData.payments?.reduce((sum, payment) => sum + payment.amount, 0) || 0;
   const totalAmount = bookingData.totalAmount || 0;
@@ -91,7 +153,7 @@ export default function PaymentManagement({ bookingData, setBookingData, onAddPa
         date: bookingData.eventDate,
         time_from: bookingData.startTime,
         time_to: bookingData.endTime,
-        people_count: bookingData.guestCount || bookingData.peopleCount,
+        people_count: bookingData.peopleCount,
         event_type: bookingData.eventType,
         amount: bookingData.totalAmount,
         deposit_amount: bookingData.depositAmount,
@@ -140,6 +202,27 @@ export default function PaymentManagement({ bookingData, setBookingData, onAddPa
         id: savedBooking.id,
         status: 'confirmed'
       }));
+
+      // If this booking was created from a draft, delete the draft
+      console.log('PaymentManagement: Checking for draft ID to delete:', bookingData.draftId);
+      console.log('PaymentManagement: Full booking data:', bookingData);
+      if (bookingData.draftId) {
+        try {
+          console.log('PaymentManagement: Deleting draft booking with ID:', bookingData.draftId);
+          await deleteDraftBooking(bookingData.draftId);
+          console.log('PaymentManagement: Draft booking deleted after conversion to real booking.');
+
+          // Clear the draft ID to prevent duplicate deletion attempts
+          setBookingData(prev => ({
+            ...prev,
+            draftId: null
+          }));
+        } catch (err) {
+          console.error('PaymentManagement: Failed to delete draft booking after conversion:', err);
+        }
+      } else {
+        console.log('PaymentManagement: No draft ID found, skipping draft deletion.');
+      }
 
       // Save price change if there was one
       if (bookingData.priceChangeData) {
@@ -245,7 +328,7 @@ export default function PaymentManagement({ bookingData, setBookingData, onAddPa
       } else {
         // Booking already exists - just add the payment
         if (!bookingData.id) {
-          alert('Please save the booking first before adding payments');
+          showAlert('Booking Required', 'Please save the booking first before adding payments', 'warning');
           return;
         }
 
@@ -292,14 +375,23 @@ export default function PaymentManagement({ bookingData, setBookingData, onAddPa
       setShowAddPayment(false);
     } catch (error) {
       console.error('Failed to save payment:', error);
-      alert('Failed to save payment. Please try again.');
+      showAlert('Payment Error', 'Failed to save payment. Please try again.', 'error');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDeletePayment = async (paymentId) => {
-    if (!confirm('Are you sure you want to delete this payment?')) return;
+  const handleDeletePayment = (paymentId) => {
+    showConfirmation(
+      'Delete Payment',
+      'Are you sure you want to delete this payment? This action cannot be undone.',
+      () => deletePayment(paymentId),
+      'danger'
+    );
+  };
+
+  const deletePayment = async (paymentId) => {
+    closeConfirmation();
     
     try {
       setLoading(true);
@@ -337,10 +429,10 @@ export default function PaymentManagement({ bookingData, setBookingData, onAddPa
         payments: updatedPayments
       }));
       
-      alert('Payment deleted successfully!');
+      showAlert('Success', 'Payment deleted successfully!', 'info');
     } catch (error) {
       console.error('Failed to delete payment:', error);
-      alert(`Failed to delete payment: ${error.message}`);
+      showAlert('Delete Error', `Failed to delete payment: ${error.message}`, 'error');
     } finally {
       setLoading(false);
     }
@@ -588,6 +680,29 @@ export default function PaymentManagement({ bookingData, setBookingData, onAddPa
         onClose={() => setShowSuccessNotification(false)}
         title="Booking Confirmed!"
         message="Booking confirmed and deposit payment recorded successfully!"
+      />
+
+      {/* Alert Notification */}
+      <AlertNotification
+        isVisible={alertNotification.isVisible}
+        onClose={closeAlert}
+        title={alertNotification.title}
+        message={alertNotification.message}
+        type={alertNotification.type}
+        autoClose={true}
+        autoCloseDelay={5000}
+      />
+
+      {/* Confirmation Notification */}
+      <ConfirmationNotification
+        isVisible={confirmationNotification.isVisible}
+        onConfirm={confirmationNotification.onConfirm}
+        onCancel={closeConfirmation}
+        title={confirmationNotification.title}
+        message={confirmationNotification.message}
+        type={confirmationNotification.type}
+        confirmText="Delete"
+        cancelText="Cancel"
       />
     </div>
   )

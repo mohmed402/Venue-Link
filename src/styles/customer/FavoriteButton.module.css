@@ -1,0 +1,177 @@
+.favoriteContainer {
+  position: relative;
+  display: inline-block;
+  font-family: Montserrat, serif;
+}
+
+.favoriteButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.favoriteButton:hover {
+  border-color: #800200;
+  color: #800200;
+  box-shadow: 0 2px 8px rgba(128, 2, 0, 0.1);
+}
+
+.favoriteButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.favoriteButton.favorited {
+  background: #800200;
+  border-color: #800200;
+  color: white;
+}
+
+.favoriteButton.favorited:hover {
+  background: #600018;
+  border-color: #600018;
+}
+
+.heartIcon {
+  transition: all 0.2s ease;
+}
+
+.favoriteButton:hover .heartIcon {
+  transform: scale(1.1);
+}
+
+.favoriteButton.favorited .heartIcon {
+  animation: heartBeat 0.6s ease-in-out;
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.buttonText {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Size variants */
+.small {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.small .heartIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.small .buttonText {
+  font-size: 12px;
+}
+
+.medium {
+  padding: 10px 16px;
+  font-size: 14px;
+}
+
+.medium .heartIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.large {
+  padding: 12px 20px;
+  font-size: 16px;
+}
+
+.large .heartIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.large .buttonText {
+  font-size: 16px;
+}
+
+.errorTooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ef4444;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-top: 4px;
+}
+
+.errorTooltip::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid #ef4444;
+}
+
+/* Icon-only variant */
+.favoriteButton:not(:has(.buttonText)) {
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.favoriteButton.small:not(:has(.buttonText)) {
+  width: 32px;
+  height: 32px;
+}
+
+.favoriteButton.large:not(:has(.buttonText)) {
+  width: 48px;
+  height: 48px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .buttonText {
+    display: none;
+  }
+  
+  .favoriteButton {
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    border-radius: 50%;
+    padding: 8px;
+  }
+  
+  .favoriteButton.small {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+  }
+  
+  .favoriteButton.large {
+    width: 48px;
+    height: 48px;
+    padding: 12px;
+  }
+}

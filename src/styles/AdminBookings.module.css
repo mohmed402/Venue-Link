@@ -1,7 +1,39 @@
+/* Dark mode variables */
+:global(.dark-mode) {
+  --booking-bg-primary: #1a1a1a;
+  --booking-bg-secondary: #2d2d2d;
+  --booking-bg-tertiary: #404040;
+  --booking-text-primary: #ffffff;
+  --booking-text-secondary: #b3b3b3;
+  --booking-border-color: #404040;
+  --booking-accent-color: #480012;
+  --booking-card-bg: #2d2d2d;
+  --booking-card-shadow: 0 2px 4px rgba(255, 255, 255, 0.05);
+  --booking-table-header-bg: #404040;
+  --booking-input-bg: #404040;
+  --booking-hover-bg: #555555;
+}
+
+:global(body:not(.dark-mode)) {
+  --booking-bg-primary: #f8f9fa;
+  --booking-bg-secondary: #ffffff;
+  --booking-bg-tertiary: #f9fafb;
+  --booking-text-primary: #333333;
+  --booking-text-secondary: #666666;
+  --booking-border-color: #dddddd;
+  --booking-accent-color: #800020;
+  --booking-card-bg: #ffffff;
+  --booking-card-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --booking-table-header-bg: #f8f9fa;
+  --booking-input-bg: #ffffff;
+  --booking-hover-bg: #e0e0e0;
+}
+
 .adminLayout {
   display: flex;
   max-height: 100vh;
-  background-color: #f8f9fa;
+  background-color: var(--booking-bg-primary);
+  transition: background-color 0.3s ease;
 }
 
 .mainContent {
@@ -20,8 +52,9 @@
 .pageHeader h1 {
   font-family: "Montserrat", serif;
   font-size: 1.8rem;
-  color: #333;
+  color: var(--booking-text-primary);
   margin: 0;
+  transition: color 0.3s ease;
 }
 
 .headerActions {
@@ -30,7 +63,7 @@
 }
 
 .exportButton {
-  background-color: #800020;
+  background-color: var(--booking-accent-color);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -54,13 +87,15 @@
 }
 
 .statCard {
-  background: white;
+  background: var(--booking-card-bg);
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--booking-card-shadow);
   display: flex;
   align-items: center;
   gap: 1rem;
+  border: 1px solid var(--booking-border-color);
+  transition: background-color 0.3s ease;
 }
 
 .statIcon {
@@ -71,35 +106,43 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #800020;
+  color: var(--booking-accent-color);
+}
+
+:global(.dark-mode) .statIcon {
+  background: rgba(72, 0, 18, 0.3);
 }
 
 .statInfo h3 {
   font-family: "Montserrat", serif;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--booking-text-secondary);
   margin: 0 0 0.5rem 0;
+  transition: color 0.3s ease;
 }
 
 .statInfo p {
   font-family: "Montserrat", serif;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #333;
+  color: var(--booking-text-primary);
   margin: 0;
+  transition: color 0.3s ease;
 }
 
 /* Filters Styles */
 .filtersContainer {
-  background: white;
+  background: var(--booking-card-bg);
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--booking-card-shadow);
   margin-bottom: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  border: 1px solid var(--booking-border-color);
+  transition: background-color 0.3s ease;
 }
 
 .filterGroup {
@@ -109,30 +152,41 @@
 
 .searchInput {
   padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--booking-border-color);
   border-radius: 6px;
   font-family: "Montserrat", serif;
   font-size: 0.9rem;
   width: 300px;
+  background: var(--booking-input-bg);
+  color: var(--booking-text-primary);
+  transition: all 0.3s ease;
+}
+
+.searchInput::placeholder {
+  color: var(--booking-text-secondary);
 }
 
 .filterSelect {
   padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--booking-border-color);
   border-radius: 6px;
   font-family: "Montserrat", serif;
   font-size: 0.9rem;
-  background: white;
+  background: var(--booking-input-bg);
+  color: var(--booking-text-primary);
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 /* Booking List Styles */
 .bookingListContainer {
-  background: white;
+  background: var(--booking-card-bg);
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--booking-card-shadow);
   overflow-x: auto;
+  border: 1px solid var(--booking-border-color);
+  transition: background-color 0.3s ease;
 }
 
 .bookingTable {
@@ -144,23 +198,26 @@
 .bookingTable th {
   text-align: left;
   padding: 1rem;
-  background: #f8f9fa;
-  color: #666;
+  background: var(--booking-table-header-bg);
+  color: var(--booking-text-secondary);
   font-weight: 600;
   font-size: 0.9rem;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid var(--booking-border-color);
+  transition: all 0.3s ease;
 }
 
 .bookingTable td {
   padding: 1rem;
-  border-bottom: 1px solid #eee;
-  color: #333;
+  border-bottom: 1px solid var(--booking-border-color);
+  color: var(--booking-text-primary);
   font-size: 0.9rem;
+  transition: all 0.3s ease;
 }
 
 .timeText {
-  color: #666;
+  color: var(--booking-text-secondary);
   font-size: 0.8rem;
+  transition: color 0.3s ease;
 }
 
 .statusBadge {
@@ -175,14 +232,29 @@
   color: #2e7d32;
 }
 
+:global(.dark-mode) .statusConfirmed {
+  background: rgba(46, 125, 50, 0.2);
+  color: #4caf50;
+}
+
 .statusPending {
   background: #fff3e0;
   color: #ef6c00;
 }
 
+:global(.dark-mode) .statusPending {
+  background: rgba(239, 108, 0, 0.2);
+  color: #ff9800;
+}
+
 .statusCancelled {
   background: #ffebee;
   color: #c62828;
+}
+
+:global(.dark-mode) .statusCancelled {
+  background: rgba(198, 40, 40, 0.2);
+  color: #f44336;
 }
 
 .actionButtons {
@@ -201,17 +273,19 @@
 }
 
 .viewButton {
-  background: #f0f0f0;
-  color: #333;
+  background: var(--booking-hover-bg);
+  color: var(--booking-text-primary);
+  border: 1px solid var(--booking-border-color);
+  transition: all 0.3s ease;
 }
 
 .editButton {
-  background: #800020;
+  background: var(--booking-accent-color);
   color: white;
 }
 
 .viewButton:hover {
-  background: #e0e0e0;
+  background: var(--booking-bg-tertiary);
 }
 
 .editButton:hover {
@@ -248,30 +322,35 @@
   align-items: center;
   min-height: 400px;
   font-size: 1.125rem;
-  color: #6b7280;
-  background: white;
+  color: var(--booking-text-primary);
+  background: var(--booking-card-bg);
   border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--booking-border-color);
+  margin: 2rem 0;
+  transition: all 0.3s ease;
 }
 
 .error {
   flex-direction: column;
   gap: 1rem;
-  color: #dc2626;
+  color: #ef4444;
+}
+
+:global(.dark-mode) .error {
+  color: #f87171;
 }
 
 .retryButton {
-  background-color: #800020;
+  background: var(--booking-accent-color);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
   font-family: "Montserrat", serif;
-  font-size: 0.875rem;
   transition: background-color 0.2s;
 }
 
 .retryButton:hover {
-  background-color: #600018;
+  background: #600018;
 } 

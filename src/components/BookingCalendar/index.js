@@ -1,165 +1,58 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './BookingCalendar.module.css';
 import DayView from './DayView';
 import WeekView from './WeekView';
 import MonthView from './MonthView';
-import { format, startOfWeek, addDays } from 'date-fns';
+import { format, startOfWeek, addDays, startOfMonth, endOfMonth } from 'date-fns';
+import { getCalendarBookings } from '../../utils/api';
 
-// Mock data for demonstration
-const MOCK_BOOKINGS = [
-  // Today's bookings
-  {
-    id: 1,
-    customerName: "Team Meeting - Marketing",
-    space: "Room A",
-    date: format(new Date(), 'yyyy-MM-dd'),
-    startTime: "09:00",
-    endTime: "10:30",
-    guests: 8,
-    status: "confirmed",
-    type: "meeting",
-  },
-  {
-    id: 2,
-    customerName: "Johnson Wedding Reception",
-    space: "Main Hall",
-    date: format(new Date(), 'yyyy-MM-dd'),
-    startTime: "11:00",
-    endTime: "16:00",
-    guests: 150,
-    status: "confirmed",
-    type: "wedding",
-  },
-  {
-    id: 3,
-    customerName: "Tech Conference",
-    space: "Main Hall",
-    date: format(new Date(), 'yyyy-MM-dd'),
-    startTime: "17:00",
-    endTime: "21:00",
-    guests: 200,
-    status: "pending",
-    type: "corporate",
-  },
-  {
-    id: 4,
-    customerName: "Venue Maintenance",
-    space: "Room B",
-    date: format(new Date(), 'yyyy-MM-dd'),
-    startTime: "08:00",
-    endTime: "09:00",
-    guests: 0,
-    status: "internal",
-    type: "maintenance",
-  },
+// Data transformation functions
+const transformBookingForCalendar = (booking, availableSpaces) => {
+  return {
+    id: booking.id,
+    customerName: booking.customer?.full_name || 'Unknown Customer',
+    space: getSpaceFromBooking(booking, availableSpaces),
+    date: booking.date,
+    startTime: booking.time_from,
+    endTime: booking.time_to,
+    guests: booking.people_count || 0,
+    status: booking.status,
+    type: booking.event_type || 'event',
+    // Additional fields from the database
+    amount: booking.amount,
+    notes: booking.notes,
+    isOnline: booking.is_online,
+    setupTime: booking.setup_time || 0,
+    breakdownTime: booking.breakdown_time || 0,
+    customerPhone: booking.customer?.phone_number,
+  };
+};
 
-  // Tomorrow's bookings
-  {
-    id: 5,
-    customerName: "Birthday Party - Emma Smith",
-    space: "Main Hall",
-    date: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
-    startTime: "12:00",
-    endTime: "17:00",
-    guests: 50,
-    status: "confirmed",
-    type: "party",
-  },
-  {
-    id: 6,
-    customerName: "Yoga Workshop",
-    space: "Room A",
-    date: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
-    startTime: "07:00",
-    endTime: "09:00",
-    guests: 15,
-    status: "confirmed",
-    type: "fitness",
-  },
-  {
-    id: 7,
-    customerName: "Corporate Training",
-    space: "Room B",
-    date: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
-    startTime: "10:00",
-    endTime: "16:00",
-    guests: 25,
-    status: "cancelled",
-    type: "corporate",
-  },
-
-  // Day after tomorrow
-  {
-    id: 8,
-    customerName: "Photography Exhibition",
-    space: "Main Hall",
-    date: format(addDays(new Date(), 2), 'yyyy-MM-dd'),
-    startTime: "09:00",
-    endTime: "20:00",
-    guests: 100,
-    status: "confirmed",
-    type: "exhibition",
-  },
-  {
-    id: 9,
-    customerName: "Dance Class",
-    space: "Room A",
-    date: format(addDays(new Date(), 2), 'yyyy-MM-dd'),
-    startTime: "18:00",
-    endTime: "20:00",
-    guests: 20,
-    status: "confirmed",
-    type: "fitness",
-  },
-
-  // Later in the week
-  {
-    id: 10,
-    customerName: "Charity Gala Dinner",
-    space: "Main Hall",
-    date: format(addDays(new Date(), 4), 'yyyy-MM-dd'),
-    startTime: "18:00",
-    endTime: "23:00",
-    guests: 180,
-    status: "confirmed",
-    type: "charity",
-  },
-  {
-    id: 11,
-    customerName: "Product Launch - TechCo",
-    space: "Main Hall",
-    date: format(addDays(new Date(), 5), 'yyyy-MM-dd'),
-    startTime: "10:00",
-    endTime: "15:00",
-    guests: 120,
-    status: "pending",
-    type: "corporate",
-  },
-  {
-    id: 12,
-    customerName: "Monthly Staff Meeting",
-    space: "Room B",
-    date: format(addDays(new Date(), 5), 'yyyy-MM-dd'),
-    startTime: "09:00",
-    endTime: "10:00",
-    guests: 12,
-    status: "internal",
-    type: "meeting",
-  },
-];
+// Helper function to determine space/room from booking data
+// Since there's only one hall, all bookings go to "Main Hall"
+const getSpaceFromBooking = (booking, availableSpaces = ["Main Hall"]) => {
+  return "Main Hall";
+};
 
 const TIME_SLOTS = Array.from({ length: 24 }, (_, i) => {
   const hour = i.toString().padStart(2, '0');
   return `${hour}:00`;
 });
 
-const SPACES = ["Main Hall", "Room A", "Room B"];
+// Venue spaces configuration - this could be moved to an API call in the future
+const getVenueSpaces = (venueId) => {
+  // Since there's only one hall to book, we'll return just "Main Hall"
+  return ["Main Hall"];
+};
 
 export default function BookingCalendar() {
   const [view, setView] = useState('month');
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     space: 'all',
     status: 'all',
@@ -167,11 +60,56 @@ export default function BookingCalendar() {
     search: '',
   });
 
+  const venueId = 86; // This could be passed as a prop or from context
+  const spaces = getVenueSpaces(venueId);
+
+  // Fetch bookings based on current view and selected date
+  const fetchBookings = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      let startDate, endDate;
+
+      if (view === 'month') {
+        // For month view, get the entire month plus some padding
+        const monthStart = startOfMonth(selectedDate);
+        const monthEnd = endOfMonth(selectedDate);
+        startDate = format(monthStart, 'yyyy-MM-dd');
+        endDate = format(monthEnd, 'yyyy-MM-dd');
+      } else if (view === 'week') {
+        // For week view, get the week
+        const weekStart = startOfWeek(selectedDate);
+        const weekEnd = addDays(weekStart, 6);
+        startDate = format(weekStart, 'yyyy-MM-dd');
+        endDate = format(weekEnd, 'yyyy-MM-dd');
+      } else {
+        // For day view, just get the selected day
+        startDate = format(selectedDate, 'yyyy-MM-dd');
+        endDate = format(selectedDate, 'yyyy-MM-dd');
+      }
+
+      const response = await getCalendarBookings(venueId, startDate, endDate);
+      const transformedBookings = response.map(booking => transformBookingForCalendar(booking, spaces));
+      setBookings(transformedBookings);
+    } catch (err) {
+      console.error('Error fetching bookings:', err);
+      setError('Failed to load bookings. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch bookings when view, selectedDate, or component mounts
+  useEffect(() => {
+    fetchBookings();
+  }, [view, selectedDate]);
+
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
 
-  const filteredBookings = MOCK_BOOKINGS.filter(booking => {
+  const filteredBookings = bookings.filter(booking => {
     if (filters.space !== 'all' && booking.space !== filters.space) return false;
     if (filters.status !== 'all' && booking.status !== filters.status) return false;
     if (filters.type !== 'all' && booking.type !== filters.type) return false;
@@ -216,13 +154,13 @@ export default function BookingCalendar() {
         <div className={styles.filters}>
           {view !== 'month' && (
             <>
-              <select 
+              <select
                 value={filters.space}
                 onChange={(e) => handleFilterChange('space', e.target.value)}
                 className={styles.select}
               >
                 <option value="all">All Spaces</option>
-                {SPACES.map(space => (
+                {spaces.map(space => (
                   <option key={space} value={space}>{space}</option>
                 ))}
               </select>
@@ -271,13 +209,47 @@ export default function BookingCalendar() {
             className={styles.datePicker}
           />
         </div>
+
+        {/* Status Legend */}
+        {view !== 'month' && (
+          <div className={styles.statusLegend}>
+            <span className={styles.legendTitle}>Status:</span>
+            <div className={styles.legendItem}>
+              <div className={`${styles.legendDot} ${styles.confirmed}`}></div>
+              <span>Confirmed</span>
+            </div>
+            <div className={styles.legendItem}>
+              <div className={`${styles.legendDot} ${styles.pending}`}></div>
+              <span>Pending</span>
+            </div>
+            <div className={styles.legendItem}>
+              <div className={`${styles.legendDot} ${styles.cancelled}`}></div>
+              <span>Cancelled</span>
+            </div>
+            <div className={styles.legendItem}>
+              <div className={`${styles.legendDot} ${styles.internal}`}></div>
+              <span>Internal</span>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className={styles.calendar}>
-        {view === 'month' ? (
+        {loading ? (
+          <div className={styles.loading}>
+            <p>Loading bookings...</p>
+          </div>
+        ) : error ? (
+          <div className={styles.error}>
+            <p>{error}</p>
+            <button onClick={fetchBookings} className={styles.retryButton}>
+              Retry
+            </button>
+          </div>
+        ) : view === 'month' ? (
           <MonthView
             date={selectedDate}
-            bookings={MOCK_BOOKINGS}
+            bookings={bookings}
             onDateClick={handleDateClick}
           />
         ) : view === 'day' ? (
@@ -285,7 +257,7 @@ export default function BookingCalendar() {
             date={selectedDate}
             bookings={filteredBookings}
             timeSlots={TIME_SLOTS}
-            spaces={SPACES}
+            spaces={spaces}
             onBookingClick={handleBookingClick}
           />
         ) : (
@@ -293,7 +265,7 @@ export default function BookingCalendar() {
             startDate={startOfWeek(selectedDate)}
             bookings={filteredBookings}
             timeSlots={TIME_SLOTS}
-            spaces={SPACES}
+            spaces={spaces}
             onBookingClick={handleBookingClick}
           />
         )}

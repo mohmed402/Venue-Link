@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import AdminNav from '@/components/adminNav';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import EditBookingModal from '@/components/admin/EditBookingModal';
 import { getBookingById } from '@/utils/api';
 import { format } from 'date-fns';
 import styles from '@/styles/BookingDetail.module.css';
+import { initializeDarkMode } from '../../../utils/darkMode';
 
 export default function BookingDetail() {
   const router = useRouter();
@@ -12,6 +14,12 @@ export default function BookingDetail() {
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  // Initialize dark mode on component mount
+  useEffect(() => {
+    initializeDarkMode();
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -31,6 +39,13 @@ export default function BookingDetail() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleBookingUpdated = (updatedBooking) => {
+    setBooking(updatedBooking);
+    setShowEditModal(false);
+    // Optionally refresh the booking data
+    fetchBooking();
   };
 
   const calculateDuration = (startTime, endTime) => {
@@ -146,7 +161,10 @@ export default function BookingDetail() {
               </span>
             </div>
             <div className={styles.headerActions}>
-              <button className={styles.editButton}>
+              <button
+                className={styles.editButton}
+                onClick={() => setShowEditModal(true)}
+              >
                 Edit Booking
               </button>
               <button className={styles.printButton}>
@@ -310,6 +328,13 @@ export default function BookingDetail() {
           </div>
         </main>
       </div>
+
+      <EditBookingModal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        booking={booking}
+        onBookingUpdated={handleBookingUpdated}
+      />
     </ProtectedRoute>
   );
-} 
+}

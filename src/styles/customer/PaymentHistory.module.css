@@ -1,0 +1,276 @@
+.paymentHistory {
+  padding: 32px;
+  font-family: Montserrat, serif;
+}
+
+.historyHeader {
+  margin-bottom: 32px;
+}
+
+.historyHeader h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.historyHeader p {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.searchGroup,
+.filterGroup {
+  flex: 1;
+  min-width: 200px;
+}
+
+.searchInput,
+.filterSelect {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.searchInput:focus,
+.filterSelect:focus {
+  outline: none;
+  border-color: #800200;
+  box-shadow: 0 0 0 3px rgba(128, 2, 0, 0.1);
+}
+
+.summary {
+  display: flex;
+  gap: 24px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summaryLabel {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.summaryValue {
+  font-size: 20px;
+  color: #111827;
+  font-weight: 700;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.emptyIcon {
+  width: 80px;
+  height: 80px;
+  background: #f3f4f6;
+  color: #800200;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+}
+
+.emptyState h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 12px 0;
+}
+
+.emptyState p {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.paymentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.paymentCard {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.paymentCard:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.paymentInfo h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #800200;
+  margin: 0 0 4px 0;
+}
+
+.venue {
+  font-size: 16px;
+  color: #111827;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.reference {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.paymentMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.method {
+  background: #e5e7eb;
+  color: #374151;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.date {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.notes {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.cardActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.downloadButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #800200;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.downloadButton:hover {
+  background: #600018;
+}
+
+.downloadButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.downloadButton:disabled:hover {
+  background: #9ca3af;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .paymentHistory {
+    padding: 24px 20px;
+  }
+  
+  .filters {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .searchGroup,
+  .filterGroup {
+    min-width: auto;
+  }
+  
+  .summary {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .cardHeader {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .paymentMeta {
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .emptyState {
+    padding: 60px 20px;
+  }
+  
+  .emptyIcon {
+    width: 64px;
+    height: 64px;
+  }
+}

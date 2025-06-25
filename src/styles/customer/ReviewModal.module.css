@@ -1,0 +1,190 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap");
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  font-family: Montserrat, serif;
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 24px 0 24px;
+  border-bottom: 1px solid #e1e5e9;
+  margin-bottom: 24px;
+}
+
+.header h2 {
+  margin: 0;
+  color: #800200;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover:not(:disabled) {
+  background-color: #f8f9fa;
+  color: #800200;
+}
+
+.closeButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.content {
+  padding: 0 24px 24px 24px;
+}
+
+.loading,
+.success,
+.error,
+.notEligible {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #800200;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+
+.loading p {
+  color: #666;
+  margin: 0;
+}
+
+.successIcon,
+.errorIcon,
+.infoIcon {
+  margin: 0 auto 16px;
+  color: #800200;
+}
+
+.errorIcon {
+  color: #dc3545;
+}
+
+.infoIcon {
+  color: #6c757d;
+}
+
+.success h3,
+.error h3,
+.notEligible h3 {
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.success h3 {
+  color: #800200;
+}
+
+.error h3 {
+  color: #dc3545;
+}
+
+.notEligible h3 {
+  color: #6c757d;
+}
+
+.success p,
+.error p,
+.notEligible p {
+  margin: 0 0 20px 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.retryButton {
+  padding: 12px 24px;
+  border: none;
+  background-color: #800200;
+  color: white;
+  border-radius: 8px;
+  font-family: Montserrat, serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retryButton:hover {
+  background-color: #660100;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .overlay {
+    padding: 10px;
+  }
+  
+  .modal {
+    max-height: 95vh;
+  }
+  
+  .header {
+    padding: 20px 20px 0 20px;
+  }
+  
+  .header h2 {
+    font-size: 20px;
+  }
+  
+  .content {
+    padding: 0 20px 20px 20px;
+  }
+  
+  .loading,
+  .success,
+  .error,
+  .notEligible {
+    padding: 30px 15px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .modal {
+    max-width: 500px;
+  }
+}

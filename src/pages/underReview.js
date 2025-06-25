@@ -12,11 +12,17 @@ import Chart from "../components/chart";
 import InquirieInfo from "../components/inquirieInfo";
 import AdminNav from "@/components/adminNav";
 import ViewVenue from "@/components/viewVenue";
+import { initializeDarkMode } from "../utils/darkMode";
 
 export default function UnderReview() {
   const [isReview, setIsReview] = useState(false);
   const [inquirId, setInquirId] = useState(null);
   const [dataHolder, setDataHolder] = useState(null);
+
+  // Initialize dark mode on component mount
+  useEffect(() => {
+    initializeDarkMode();
+  }, []);
 
   useEffect(() => {
     console.log("from main: ", inquirId);

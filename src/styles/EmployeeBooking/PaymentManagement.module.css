@@ -1,18 +1,58 @@
+/* Dark mode variables */
+:global(.dark-mode) {
+  --pm-bg-primary: #1a1a1a;
+  --pm-bg-secondary: #2d2d2d;
+  --pm-bg-tertiary: #404040;
+  --pm-text-primary: #ffffff;
+  --pm-text-secondary: #b3b3b3;
+  --pm-border-color: #404040;
+  --pm-accent-color: #480012;
+  --pm-card-bg: #2d2d2d;
+  --pm-card-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  --pm-input-bg: #404040;
+  --pm-hover-bg: #555555;
+  --pm-success-color: #10b981;
+  --pm-error-color: #f87171;
+  --pm-modal-bg: #2d2d2d;
+  --pm-modal-overlay: rgba(0, 0, 0, 0.7);
+}
+
+:global(body:not(.dark-mode)) {
+  --pm-bg-primary: #ffffff;
+  --pm-bg-secondary: #f9fafb;
+  --pm-bg-tertiary: #f3f4f6;
+  --pm-text-primary: #111827;
+  --pm-text-secondary: #6b7280;
+  --pm-border-color: #e5e7eb;
+  --pm-accent-color: #750923;
+  --pm-card-bg: #ffffff;
+  --pm-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --pm-input-bg: #ffffff;
+  --pm-hover-bg: #f3f4f6;
+  --pm-success-color: #059669;
+  --pm-error-color: #ef4444;
+  --pm-modal-bg: #ffffff;
+  --pm-modal-overlay: rgba(0, 0, 0, 0.5);
+}
+
 .container {
-  background: white;
+  background: var(--pm-card-bg);
   padding: 24px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--pm-card-shadow);
+  border: 1px solid var(--pm-border-color);
+  transition: all 0.3s ease;
 }
 
 .title {
   font-size: 24px;
   font-weight: 600;
-  color: #111827;
+  color: var(--pm-text-primary);
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 24px;
+  transition: color 0.3s ease;
 }
 
 .summary {
@@ -30,26 +70,31 @@
 
 .amount {
   font-weight: 600;
-  color: #111827;
+  color: var(--pm-text-primary);
+  transition: color 0.3s ease;
 }
 
 .paid {
-  color: #059669;
+  color: var(--pm-success-color);
+  transition: color 0.3s ease;
 }
 
 .paidAmount {
   font-weight: 600;
-  color: #059669;
+  color: var(--pm-success-color);
+  transition: color 0.3s ease;
 }
 
 .remaining {
-  color: #750923;
+  color: var(--pm-accent-color);
   font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .remainingAmount {
   font-weight: 600;
-  color: #750923;
+  color: var(--pm-accent-color);
+  transition: color 0.3s ease;
 }
 
 .progressSection {
@@ -59,29 +104,32 @@
 .progressLabel {
   display: flex;
   justify-content: space-between;
-  color: #6b7280;
+  color: var(--pm-text-secondary);
   font-size: 14px;
   margin-bottom: 8px;
+  transition: color 0.3s ease;
 }
 
 .progressBar {
   height: 8px;
-  background: #e5e7eb;
+  background: var(--pm-border-color);
   border-radius: 4px;
   overflow: hidden;
+  transition: background-color 0.3s ease;
 }
 
 .progressFill {
   height: 100%;
-  background: #750923;
+  background: var(--pm-accent-color);
   border-radius: 4px;
-  transition: width 0.3s ease;
+  transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 .recordSection {
   margin-top: 32px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--pm-border-color);
   padding-top: 24px;
+  transition: border-color 0.3s ease;
 }
 
 .recordHeader {
@@ -94,41 +142,46 @@
 .recordHeader h3 {
   font-size: 18px;
   font-weight: 500;
-  color: #111827;
+  color: var(--pm-text-primary);
+  transition: color 0.3s ease;
 }
 
 .addButton {
   padding: 8px 16px;
-  background: #363636;
-  color: white;
-  border: none;
+  background: var(--pm-bg-tertiary);
+  color: var(--pm-text-primary);
+  border: 1px solid var(--pm-border-color);
   border-radius: 6px;
   font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 4px;
+  transition: all 0.3s ease;
 }
 
 .addButton:hover {
-  background: #750923;
+  background: var(--pm-accent-color);
+  color: white;
 }
 
 .addButton:disabled {
-  background: #9ca3af;
+  background: var(--pm-text-secondary);
   cursor: not-allowed;
   opacity: 0.6;
 }
 
 .addButton:disabled:hover {
-  background: #9ca3af;
+  background: var(--pm-text-secondary);
+  color: var(--pm-text-primary);
 }
 
 .addPaymentForm {
-  background: #f9fafb;
+  background: var(--pm-bg-secondary);
   padding: 16px;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--pm-border-color);
+  transition: all 0.3s ease;
 }
 
 .formRow {
@@ -140,17 +193,26 @@
 .input {
   flex: 1;
   padding: 8px 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--pm-border-color);
   border-radius: 6px;
   font-size: 14px;
+  background: var(--pm-input-bg);
+  color: var(--pm-text-primary);
+  transition: all 0.3s ease;
+}
+
+.input::placeholder {
+  color: var(--pm-text-secondary);
 }
 
 .select {
   padding: 8px 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--pm-border-color);
   border-radius: 6px;
   font-size: 14px;
-  background: white;
+  background: var(--pm-input-bg);
+  color: var(--pm-text-primary);
+  transition: all 0.3s ease;
 }
 
 .formActions {
@@ -162,35 +224,47 @@
 
 .cancelButton {
   padding: 8px 16px;
-  background: white;
-  border: 1px solid #d1d5db;
+  background: var(--pm-card-bg);
+  border: 1px solid var(--pm-border-color);
   border-radius: 6px;
   font-size: 14px;
-  color: #4b5563;
+  color: var(--pm-text-secondary);
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancelButton:hover {
+  background: var(--pm-hover-bg);
 }
 
 .saveButton {
   padding: 8px 16px;
-  background: #750923;
+  background: var(--pm-accent-color);
   color: white;
   border: none;
   border-radius: 6px;
   font-size: 14px;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.saveButton:hover {
+  background: #600018;
 }
 
 .historySection {
   margin-top: 32px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--pm-border-color);
   padding-top: 24px;
+  transition: border-color 0.3s ease;
 }
 
 .historySection h3 {
   font-size: 18px;
   font-weight: 500;
-  color: #111827;
+  color: var(--pm-text-primary);
   margin-bottom: 16px;
+  transition: color 0.3s ease;
 }
 
 .paymentList {
@@ -200,10 +274,11 @@
 }
 
 .paymentItem {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: var(--pm-bg-secondary);
+  border: 1px solid var(--pm-border-color);
   border-radius: 8px;
   padding: 16px;
+  transition: all 0.3s ease;
 }
 
 .paymentHeader {
@@ -219,7 +294,8 @@
   gap: 8px;
   font-size: 18px;
   font-weight: 500;
-  color: #111827;
+  color: var(--pm-text-primary);
+  transition: color 0.3s ease;
 }
 
 .currencyIcon {
@@ -228,11 +304,12 @@
 
 .paymentMethod {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--pm-text-secondary);
   padding: 2px 8px;
-  background: #f3f4f6;
+  background: var(--pm-bg-tertiary);
   border-radius: 12px;
   margin-left: 8px;
+  transition: all 0.3s ease;
 }
 
 .deleteButton {
@@ -240,46 +317,49 @@
   border: none;
   cursor: pointer;
   font-size: 16px;
-  color: #ef4444;
+  color: var(--pm-error-color);
   padding: 4px;
   border-radius: 4px;
+  transition: all 0.3s ease;
 }
 
 .deleteButton:hover {
-  background: #fee2e2;
+  background: var(--pm-hover-bg);
+}
+
+:global(.dark-mode) .deleteButton:hover {
+  background: rgba(248, 113, 113, 0.1);
 }
 
 .paymentInfo {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .paymentMeta {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--pm-text-secondary);
   display: flex;
-  align-items: center;
-  gap: 4px;
+  gap: 16px;
+  transition: color 0.3s ease;
 }
 
 .emptyHistory {
-  text-align: center;
   padding: 32px;
-  color: #6b7280;
-  background: #f9fafb;
-  border-radius: 8px;
-  border: 1px dashed #e5e7eb;
+  text-align: center;
+  color: var(--pm-text-secondary);
+  transition: color 0.3s ease;
 }
 
 .emptyHistory span {
-  font-size: 24px;
-  margin-bottom: 8px;
+  font-size: 48px;
   display: block;
+  margin-bottom: 16px;
 }
 
 .emptyHistory p {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .modalOverlay {
@@ -288,225 +368,275 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--pm-modal-overlay);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   z-index: 1000;
+  transition: background-color 0.3s ease;
 }
 
 .modal {
-  background: white;
+  background: var(--pm-modal-bg);
   border-radius: 12px;
-  width: 100%;
+  padding: 24px;
   max-width: 500px;
-  max-height: 90vh;
+  width: 90%;
+  max-height: 80vh;
   overflow-y: auto;
-  position: relative;
+  border: 1px solid var(--pm-border-color);
+  transition: all 0.3s ease;
 }
 
 .modalHeader {
-  padding: 20px 24px;
-  border-bottom: 1px solid #e5e7eb;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 24px;
 }
 
 .modalHeader h3 {
   font-size: 20px;
   font-weight: 600;
-  color: #111827;
+  color: var(--pm-text-primary);
   margin: 0;
+  transition: color 0.3s ease;
 }
 
 .closeButton {
   background: none;
   border: none;
-  font-size: 20px;
-  color: #6b7280;
+  font-size: 24px;
   cursor: pointer;
+  color: var(--pm-text-secondary);
   padding: 4px;
   border-radius: 4px;
+  transition: all 0.3s ease;
 }
 
 .closeButton:hover {
-  background: #f3f4f6;
+  background: var(--pm-hover-bg);
+  color: var(--pm-text-primary);
 }
 
 .modalContent {
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .formGroup {
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .formGroup label {
-  display: block;
-  font-size: 14px;
+  margin-bottom: 4px;
   font-weight: 500;
-  color: #374151;
-  margin-bottom: 8px;
+  color: var(--pm-text-primary);
+  font-size: 14px;
+  transition: color 0.3s ease;
 }
 
 .input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  padding: 12px;
+  border: 1px solid var(--pm-border-color);
+  border-radius: 8px;
   font-size: 16px;
-  color: #111827;
+  background: var(--pm-input-bg);
+  color: var(--pm-text-primary);
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--pm-accent-color);
 }
 
 .input::placeholder {
-  color: #9ca3af;
+  color: var(--pm-text-secondary);
 }
 
 .textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 14px;
-  min-height: 80px;
   resize: vertical;
+  min-height: 80px;
+  padding: 12px;
+  border: 1px solid var(--pm-border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  background: var(--pm-input-bg);
+  color: var(--pm-text-primary);
+  transition: all 0.3s ease;
 }
 
 .methodGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 8px;
-  margin-top: 8px;
 }
 
 .methodButton {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px;
-  background: white;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 14px;
-  color: #374151;
+  padding: 12px 8px;
+  border: 1px solid var(--pm-border-color);
+  border-radius: 8px;
+  background: var(--pm-card-bg);
+  color: var(--pm-text-primary);
   cursor: pointer;
-  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  transition: all 0.3s ease;
 }
 
 .methodButton:hover {
-  border-color: #3b82f6;
-  background: #f8fafc;
+  background: var(--pm-hover-bg);
+  border-color: var(--pm-accent-color);
 }
 
 .methodButton span {
-  font-size: 16px;
+  font-weight: 500;
 }
 
 .methodSelected {
-  background: #65030324;
-  border-color: #750923;
-  color: #750923;
+  background: var(--pm-accent-color);
+  color: white;
+  border-color: var(--pm-accent-color);
 }
 
 .modalActions {
-  margin-top: 24px;
   display: flex;
   justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
 }
 
 .saveButton {
-  padding: 10px 20px;
-  background: #750923;
+  padding: 12px 24px;
+  background: var(--pm-accent-color);
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: 8px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .saveButton:disabled {
-  background: #9ca3af;
+  background: var(--pm-text-secondary);
   cursor: not-allowed;
 }
 
 .saveButton:not(:disabled):hover {
-  background: #750923;
+  background: #600018;
 }
 
 .depositInfo {
-  background: #750923;
-  border: 1px solid #750923;
-  border-radius: 6px;
-  padding: 12px;
-  margin-top: 8px;
+  background: var(--pm-bg-secondary);
+  border: 1px solid var(--pm-border-color);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
 }
 
 .depositInfo p {
   margin: 0;
-  color: #ffffff;
+  color: var(--pm-text-primary);
   font-size: 14px;
   display: flex;
   align-items: center;
   gap: 8px;
+  transition: color 0.3s ease;
 }
 
 .depositInfo svg {
-  color: #ffffff;
+  color: var(--pm-accent-color);
   flex-shrink: 0;
 }
 
 .depositNotice {
-  background: #750923;
-  border: 1px solid #0ea5e9;
-  border-radius: 6px;
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid #eab308;
+  border-radius: 8px;
   padding: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+}
+
+:global(.dark-mode) .depositNotice {
+  background: rgba(234, 179, 8, 0.2);
+  border-color: rgba(234, 179, 8, 0.4);
 }
 
 .depositNotice p {
   margin: 0;
-  color: #ffffff;
+  color: #eab308;
   font-size: 14px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
+:global(.dark-mode) .depositNotice p {
+  color: #fbbf24;
+}
+
 .depositNotice svg {
-  color: #ffffff;
+  color: #eab308;
   flex-shrink: 0;
 }
 
+:global(.dark-mode) .depositNotice svg {
+  color: #fbbf24;
+}
+
 .requirementsInfo {
-  background: #f2f2f1;
-  border: 1px solid #000000;
-  border-radius: 6px;
-  padding: 12px;
-  margin-top: 8px;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid #3b82f6;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+:global(.dark-mode) .requirementsInfo {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
 }
 
 .requirementsInfo p {
   margin: 0 0 8px 0;
-  color: #750923;
+  color: #3b82f6;
   font-size: 14px;
+  font-weight: 500;
   display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: 500;
+}
+
+:global(.dark-mode) .requirementsInfo p {
+  color: #60a5fa;
 }
 
 .requirementsInfo svg {
-  color: #750923;
+  color: #3b82f6;
   flex-shrink: 0;
+}
+
+:global(.dark-mode) .requirementsInfo svg {
+  color: #60a5fa;
 }
 
 .requirementsInfo ul {
   margin: 0;
   padding-left: 24px;
-  color: #750923;  
+  color: #3b82f6;
   font-size: 14px;
+}
+
+:global(.dark-mode) .requirementsInfo ul {
+  color: #60a5fa;
 }
 
 .requirementsInfo li {

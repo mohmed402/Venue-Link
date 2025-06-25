@@ -1,15 +1,62 @@
+/* Dark mode variables */
+:global(.dark-mode) {
+  --pricing-bg-primary: #1a1a1a;
+  --pricing-bg-secondary: #2d2d2d;
+  --pricing-bg-tertiary: #404040;
+  --pricing-text-primary: #ffffff;
+  --pricing-text-secondary: #b3b3b3;
+  --pricing-border-color: #404040;
+  --pricing-accent-color: #800200;
+  --pricing-card-bg: #2d2d2d;
+  --pricing-card-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  --pricing-input-bg: #404040;
+  --pricing-input-border: #555555;
+  --pricing-error-bg: #4a1a1a;
+  --pricing-error-border: #800200;
+  --pricing-error-text: #ff6b6b;
+  --pricing-success-bg: #1a3a1a;
+  --pricing-success-border: #4a8a4a;
+  --pricing-success-text: #6bff6b;
+  --pricing-warning-bg: #3a3a1a;
+  --pricing-warning-border: #8a8a4a;
+  --pricing-warning-text: #ffff6b;
+}
+
+:global(body:not(.dark-mode)) {
+  --pricing-bg-primary: #ffffff;
+  --pricing-bg-secondary: #f9fafb;
+  --pricing-bg-tertiary: #f8fafc;
+  --pricing-text-primary: #111827;
+  --pricing-text-secondary: #6b7280;
+  --pricing-border-color: #e5e7eb;
+  --pricing-accent-color: #800200;
+  --pricing-card-bg: #ffffff;
+  --pricing-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --pricing-input-bg: #ffffff;
+  --pricing-input-border: #e5e7eb;
+  --pricing-error-bg: #fef2f2;
+  --pricing-error-border: #fecaca;
+  --pricing-error-text: #dc2626;
+  --pricing-success-bg: #ecfdf5;
+  --pricing-success-border: #d1fae5;
+  --pricing-success-text: #047857;
+  --pricing-warning-bg: #fff3cd;
+  --pricing-warning-border: #ffc107;
+  --pricing-warning-text: #856404;
+}
+
 .container {
-  background: white;
+  background: var(--pricing-card-bg);
   padding: 24px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--pricing-card-shadow);
   margin-bottom: 24px;
 }
 
 .title {
   font-size: 20px;
   font-weight: 600;
-  color: #111827;
+  color: var(--pricing-text-primary);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -28,12 +75,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  color: #4b5563;
+  color: var(--pricing-text-secondary);
   font-size: 16px;
 }
 
 .totalSection {
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--pricing-border-color);
   padding-top: 16px;
   margin-top: 16px;
 }
@@ -44,7 +91,7 @@
   align-items: center;
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: var(--pricing-text-primary);
 }
 
 .totalAmount {
@@ -57,8 +104,8 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: var(--pricing-input-bg);
+  border: 1px solid var(--pricing-input-border);
   border-radius: 6px;
   padding: 4px 8px;
 }
@@ -69,7 +116,7 @@
   background: transparent;
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: var(--pricing-text-primary);
   text-align: right;
 }
 
@@ -117,8 +164,8 @@
 .reasonSection {
   margin-top: 16px;
   padding: 16px;
-  background: #fff1f2;
-  border: 1px solid #fecdd3;
+  background: var(--pricing-error-bg);
+  border: 1px solid var(--pricing-error-border);
   border-radius: 8px;
 }
 
@@ -126,7 +173,7 @@
   display: block;
   font-size: 14px;
   font-weight: 500;
-  color: #be123c;
+  color: var(--pricing-accent-color);
   margin-bottom: 8px;
 }
 
@@ -134,49 +181,49 @@
   width: 100%;
   min-height: 80px;
   padding: 8px;
-  border: 1px solid #fecdd3;
+  border: 1px solid var(--pricing-error-border);
   border-radius: 4px;
-  background: white;
+  background: var(--pricing-card-bg);
   font-size: 14px;
-  color: #111827;
+  color: var(--pricing-text-primary);
   margin-top: 4px;
   resize: vertical;
 }
 
 .reasonInput.error {
-  border-color: #ef4444;
+  border-color: var(--pricing-error-text);
 }
 
 .errorMessage {
-  color: #ef4444;
+  color: var(--pricing-error-text);
   font-size: 14px;
   margin: 4px 0;
 }
 
 .priceChange {
   font-size: 14px;
-  color: #be123c;
+  color: var(--pricing-accent-color);
   margin: 8px 0 0 0;
 }
 
 .priceHistory {
   margin-top: 16px;
   padding: 16px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: var(--pricing-bg-tertiary);
+  border: 1px solid var(--pricing-border-color);
   border-radius: 8px;
 }
 
 .priceHistory h4 {
   font-size: 14px;
   font-weight: 600;
-  color: #475569;
+  color: var(--pricing-text-secondary);
   margin: 0 0 12px 0;
 }
 
 .historyItem {
   padding: 8px 0;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--pricing-border-color);
 }
 
 .historyItem:last-child {
@@ -186,13 +233,13 @@
 
 .historyReason {
   font-size: 14px;
-  color: #475569;
+  color: var(--pricing-text-secondary);
   margin: 0 0 4px 0;
 }
 
 .historyDetails {
   font-size: 14px;
-  color: #64748b;
+  color: var(--pricing-text-secondary);
   margin: 0;
   display: flex;
   justify-content: space-between;
@@ -201,18 +248,18 @@
 
 .historyMeta {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--pricing-text-secondary);
 }
 
 .depositSection {
   padding-top: 24px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--pricing-border-color);
 }
 
 .depositTitle {
   font-size: 16px;
   font-weight: 600;
-  color: #111827;
+  color: var(--pricing-text-primary);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -220,7 +267,7 @@
 }
 
 .depositContent {
-  background: #f9fafb;
+  background: var(--pricing-bg-secondary);
   border-radius: 8px;
   padding: 16px;
 }
@@ -230,7 +277,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 4px 0;
-  color: #4b5563;
+  color: var(--pricing-text-secondary);
   font-size: 14px;
 }
 
@@ -238,25 +285,25 @@
 .noPricing {
   text-align: center;
   padding: 20px;
-  color: #6b7280;
+  color: var(--pricing-text-secondary);
   font-style: italic;
 }
 
 .loadingState {
-  background: #f9fafb;
+  background: var(--pricing-bg-secondary);
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--pricing-border-color);
 }
 
 .noPricing {
-  background: #fefce8;
+  background: var(--pricing-warning-bg);
   border-radius: 8px;
-  border: 1px solid #fde68a;
+  border: 1px solid var(--pricing-warning-border);
 }
 
 .minimumHoursNotice {
-  background: #fef3c7;
-  border: 1px solid #f59e0b;
+  background: var(--pricing-warning-bg);
+  border: 1px solid var(--pricing-warning-border);
   border-radius: 6px;
   padding: 8px;
   margin-top: 8px;
@@ -265,12 +312,12 @@
 .minimumHoursNotice p {
   margin: 0;
   font-size: 14px;
-  color: #92400e;
+  color: var(--pricing-warning-text);
 }
 
 .pricingModeSelector {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: var(--pricing-bg-tertiary);
+  border: 1px solid var(--pricing-border-color);
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 16px;
@@ -280,7 +327,7 @@
   margin: 0 0 12px 0;
   font-size: 14px;
   font-weight: 600;
-  color: #475569;
+  color: var(--pricing-text-secondary);
 }
 
 .modeButtons {
@@ -290,8 +337,8 @@
 }
 
 .modeButton {
-  background: white;
-  border: 2px solid #e2e8f0;
+  background: var(--pricing-card-bg);
+  border: 2px solid var(--pricing-border-color);
   border-radius: 8px;
   padding: 12px;
   cursor: pointer;
@@ -300,36 +347,36 @@
 }
 
 .modeButton:hover {
-  border-color: #cbd5e1;
-  background: #f8fafc;
+  border-color: var(--pricing-text-secondary);
+  background: var(--pricing-bg-tertiary);
 }
 
 .modeButton.modeSelected {
-  border-color: #3b82f6;
-  background: #eff6ff;
+  border-color: var(--pricing-accent-color);
+  background: var(--pricing-bg-secondary);
 }
 
 .modeTitle {
   font-weight: 600;
-  color: #1e293b;
+  color: var(--pricing-text-primary);
   margin-bottom: 4px;
 }
 
 .modePrice {
   font-size: 18px;
   font-weight: 700;
-  color: #059669;
+  color: var(--pricing-success-text);
   margin-bottom: 4px;
 }
 
 .modeTotal {
   font-size: 12px;
-  color: #64748b;
+  color: var(--pricing-text-secondary);
 }
 
 .comparisonNote {
-  background: #fef3c7;
-  border: 1px solid #f59e0b;
+  background: var(--pricing-warning-bg);
+  border: 1px solid var(--pricing-warning-border);
   border-radius: 6px;
   padding: 8px;
   margin-top: 8px;
@@ -338,12 +385,12 @@
 .comparisonNote p {
   margin: 0;
   font-size: 13px;
-  color: #92400e;
+  color: var(--pricing-warning-text);
 }
 
 .depositRule {
-  background: #750923;
-  border: 1px solid #000000;
+  background: var(--pricing-accent-color);
+  border: 1px solid var(--pricing-text-primary);
   border-radius: 6px;
   padding: 12px;
   margin-bottom: 12px;
@@ -357,4 +404,4 @@
   align-items: center;
   gap: 8px;
   font-weight: 500;
-} 
+}

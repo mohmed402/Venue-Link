@@ -1,23 +1,49 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import AdminNav from '@/components/adminNav';
 import BookingList from '@/components/admin/BookingList';
 import BookingFilters from '@/components/admin/BookingFilters';
 import BookingStats from '@/components/admin/BookingStats';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { getAllBookings } from '@/utils/api';
+import EditBookingModal from '@/components/admin/EditBookingModal';
+import AddNoteModal from '@/components/admin/AddNoteModal';
+import SuccessNotification from '@/components/SuccessNotification';
+import { useUnifiedAuth } from '@/contexts/UnifiedAuthContext';
+import { getAllBookings, updateBooking, deleteBooking, getBookingStats } from '@/utils/api';
 import styles from '@/styles/AdminBookings.module.css';
+import { initializeDarkMode } from '../../utils/darkMode';
 
 export default function AdminBookings() {
   const router = useRouter();
+  const { user } = useUnifiedAuth();
+  const [bookings, setBookings] = useState([]);
+  const [filteredBookings, setFilteredBookings] = useState([]);
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAddNoteModalOpen, setIsAddNoteModalOpen] = useState(false);
+  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState({
+    title: "Success!",
+    message: "Operation completed successfully."
+  });
+  
   const [filters, setFilters] = useState({
     status: 'all',
     dateRange: 'all',
-    searchQuery: '',
+    searchTerm: '',
+    sortBy: 'date',
+    sortOrder: 'desc'
   });
-  const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
+  // Initialize dark mode on component mount
+  useEffect(() => {
+    initializeDarkMode();
+  }, []);
 
   // Fetch bookings from API
   const fetchBookings = async () => {
@@ -27,8 +53,8 @@ export default function AdminBookings() {
       
       const apiFilters = {
         venue_id: 86,
-        status: filters.status,
-        search: filters.searchQuery,
+        status: filters.status === 'all' ? '' : filters.status,
+        search: filters.searchTerm,
         limit: 100
       };
 
@@ -76,6 +102,10 @@ export default function AdminBookings() {
   };
 
   const handleViewBooking = (bookingId) => {
+    router.push(`/admin/bookings/${bookingId}`);
+  };
+
+  const handleEditBooking = (bookingId) => {
     router.push(`/admin/bookings/${bookingId}`);
   };
 
@@ -131,10 +161,11 @@ export default function AdminBookings() {
               filters={filters} 
               onFilterChange={handleFilterChange} 
             />
-            <BookingList 
-              bookings={bookings} 
+            <BookingList
+              bookings={bookings}
               filters={filters}
               onViewBooking={handleViewBooking}
+              onEditBooking={handleEditBooking}
             />
           </section>
         </main>

@@ -1,9 +1,10 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import AdminNav from '@/components/adminNav';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import SuccessNotification from '@/components/SuccessNotification';
-import { useAuth } from '@/contexts/AuthContext';
+import { useUnifiedAuth } from '@/contexts/UnifiedAuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
   getClients,
@@ -14,8 +15,11 @@ import {
   saveDraftBooking,
   addPayment,
   getPayments,
-  updateBooking
+  updateBooking,
+  getBookingById,
+  deleteDraftBooking
 } from '@/utils/api';
+import { initializeDarkMode } from '../../utils/darkMode';
 
 // import { getVenuePricing, createBooking, isVenueAvailable } from '@/mockData/bookingData';
 
@@ -29,19 +33,21 @@ import PricingSummary from '@/components/admin/EmployeeBooking/PricingSummary';
 import PaymentManagement from '@/components/admin/EmployeeBooking/PaymentManagement';
 import AdminControls from '@/components/admin/EmployeeBooking/AdminControls';
 import BookingActions from '@/components/admin/EmployeeBooking/BookingActions';
+import { useBooking } from '@/hooks/useBooking';
 
 export default function EmployeeBooking() {
   const venueId = 86;
-  const { user, userRole } = useAuth();
+  const router = useRouter();
+  const { user, userRole } = useUnifiedAuth();
   const { t, isRTL } = useLanguage();
   
   const [bookingData, setBookingData] = useState({
     id: null, // Track booking ID
     client: null,
     eventDate: '2025-11-20',
-    startTime: '08:00',
-    endTime: '10:00',
-    duration: 2,
+    startTime: '',
+    endTime: '',
+    duration: '', // Empty by default to show "Select duration"
     peopleCount: 80,
     eventType: '',
     totalAmount: 0,
@@ -55,7 +61,7 @@ export default function EmployeeBooking() {
   // Track current booking ID after creation
   const [currentBookingId, setCurrentBookingId] = useState(null);
   const [isEditingExistingBooking, setIsEditingExistingBooking] = useState(false);
-
+  
   // Administrative controls state
   const [adminControls, setAdminControls] = useState({
     setupTime: 0,
@@ -91,10 +97,143 @@ export default function EmployeeBooking() {
     message: ''
   });
 
+  // Refresh trigger for BookingDetails component
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const {
+    selectedDate,
+    selectedTimeSlot,
+    selectedEndTime,
+    clientData,
+    bookingDetails,
+    pricingDetails,
+    paymentDetails,
+    availableSlots,
+    bookedSlots,
+    isLoading,
+    error,
+    setSelectedDate,
+    setSelectedTimeSlot,
+    setSelectedEndTime,
+    setClientData,
+    setBookingDetails,
+    updatePricingDetails,
+    setPaymentDetails,
+    fetchAvailableSlots,
+    submitBooking,
+    resetBooking
+  } = useBooking();
+
+  // Initialize dark mode on component mount
+  useEffect(() => {
+    initializeDarkMode();
+  }, []);
+
   // Load clients on component mount
   useEffect(() => {
     loadClients();
   }, []);
+
+  // Helper function to calculate duration from start and end times
+  const calculateDuration = (startTime, endTime) => {
+    if (!startTime || !endTime) return '';
+
+    const start = new Date(`2000-01-01T${startTime}`);
+    const end = new Date(`2000-01-01T${endTime}`);
+    const diffMs = end - start;
+    const diffHours = diffMs / (1000 * 60 * 60);
+
+    return diffHours.toString();
+  };
+
+  // Fetch complete booking data from database
+  const fetchBookingData = async (bookingId) => {
+    try {
+      const bookingData = await getBookingById(bookingId);
+      return bookingData;
+    } catch (error) {
+      console.error('Error fetching booking data:', error);
+      throw error;
+    }
+  };
+
+  // Handle URL parameters for booking modification
+  useEffect(() => {
+    if (router.isReady && router.query.modify === 'true' && clients.length > 0) {
+      const { bookingId } = router.query;
+
+      if (bookingId) {
+        // Fetch complete booking data from database
+        fetchBookingData(bookingId)
+          .then(booking => {
+            // Find the full client object from the clients array
+            const fullClient = clients.find(client => client.id === booking.customer_id);
+
+            // Calculate duration from start and end times
+            const calculatedDuration = calculateDuration(booking.time_from, booking.time_to);
+
+            console.log('Modifying booking:', {
+              bookingId,
+              booking,
+              fullClient,
+              calculatedDuration
+            });
+
+            // Pre-fill form with complete booking data
+            setBookingData(prev => ({
+              ...prev,
+              id: bookingId,
+              client: fullClient,
+              eventDate: booking.date,
+              startTime: booking.time_from,
+              endTime: booking.time_to,
+              duration: calculatedDuration,
+              peopleCount: booking.people_count || 80,
+              eventType: booking.event_type || '',
+              totalAmount: booking.amount || 0,
+              depositAmount: booking.deposit_amount || 0,
+              status: booking.status,
+              payment_status: booking.payment_status || 'unpaid'
+            }));
+
+            // Pre-fill admin controls with booking data
+            setAdminControls(prev => ({
+              ...prev,
+              setupTime: booking.setup_time || 0,
+              breakdownTime: booking.breakdown_time || 0,
+              priority: booking.priority || 'standard',
+              revenueCategory: booking.revenue_category || '',
+              riskLevel: booking.risk_level || 'low',
+              cancellationPolicy: booking.cancellation_policy || 'standard',
+              notes: booking.notes || '',
+              overrides: {
+                availability: booking.override_availability || false,
+                deposit: booking.override_deposit || false,
+                capacity: booking.override_capacity || false,
+                customPricing: booking.override_custom_pricing || false
+              },
+              pricingReason: booking.pricing_reason || '',
+              managedBy: booking.managed_by || null
+            }));
+
+            setCurrentBookingId(bookingId);
+            setIsEditingExistingBooking(true);
+
+            showNotification(
+              'Booking Loaded',
+              `Booking #${bookingId} has been loaded for modification.`
+            );
+          })
+          .catch(error => {
+            console.error('Failed to load booking data:', error);
+            showNotification(
+              'Error',
+              'Failed to load booking data. Please try again.'
+            );
+          });
+      }
+    }
+  }, [router.isReady, router.query, clients]);
 
   // Helper function to show success notifications
   const showNotification = (title, message) => {
@@ -151,7 +290,8 @@ export default function EmployeeBooking() {
         bookingData.endTime,
         adminControls.setupTime,
         adminControls.breakdownTime,
-        bookingIdToExclude
+        bookingIdToExclude,
+        adminControls.overrides.availability
       );
 
       if (!availability.available) {
@@ -185,8 +325,11 @@ export default function EmployeeBooking() {
     const bookingIdToUse = bookingData.id || currentBookingId;
 
     // Check availability first with setup/breakdown times (exclude current booking if updating)
-    const isAvailable = await checkVenueAvailability();
-    if (!isAvailable) return;
+    // Skip availability check if override is enabled
+    if (!adminControls.overrides.availability) {
+      const isAvailable = await checkVenueAvailability();
+      if (!isAvailable) return;
+    }
 
     setLoading(prev => ({ ...prev, booking: true }));
     setErrors(prev => ({ ...prev, booking: null })); // Clear previous errors
@@ -207,8 +350,19 @@ export default function EmployeeBooking() {
         setup_time: parseFloat(adminControls.setupTime) || 0,
         breakdown_time: parseFloat(adminControls.breakdownTime) || 0,
         notes: adminControls.notes || '',
-        status: bookingData.status || 'confirmed',
-        created_by: user?.id || null
+        status: adminControls.status || bookingData.status || 'confirmed',
+        created_by: user?.id || null,
+        // Admin control fields
+        priority: adminControls.priority || 'standard',
+        revenue_category: adminControls.revenueCategory || '',
+        risk_level: adminControls.riskLevel || 'low',
+        cancellation_policy: adminControls.cancellationPolicy || 'standard',
+        override_availability: adminControls.overrides.availability || false,
+        override_deposit: adminControls.overrides.deposit || false,
+        override_capacity: adminControls.overrides.capacity || false,
+        override_custom_pricing: adminControls.overrides.customPricing || false,
+        pricing_reason: adminControls.pricingReason || '',
+        managed_by: user?.id || null // Set current user as manager
       };
 
       let result;
@@ -227,16 +381,22 @@ export default function EmployeeBooking() {
         setBookingData(prev => ({
           ...prev,
           id: resultBooking.id || bookingIdToUse,
-          status: resultBooking.status || 'confirmed',
+          status: resultBooking.status || adminControls.status || 'confirmed',
           payment_status: resultBooking.payment_status || prev.payment_status || 'unpaid'
         }));
         setCurrentBookingId(resultBooking.id || bookingIdToUse);
         setIsEditingExistingBooking(true);
 
+        const priorityText = adminControls.priority === 'vip' ? ' (VIP)' :
+                           adminControls.priority === 'urgent' ? ' (URGENT)' : '';
+
         showNotification(
-          'Booking Updated Successfully!', 
-          `Booking ID ${resultBooking.id || bookingIdToUse} has been updated for ${bookingData.client?.full_name || 'customer'}.`
+          'Booking Updated Successfully!',
+          `Booking ID ${resultBooking.id || bookingIdToUse}${priorityText} has been updated for ${bookingData.client?.full_name || 'customer'}.`
         );
+
+        // Trigger refresh of bookings list
+        setRefreshTrigger(prev => prev + 1);
       } else {
         // Create new booking
         console.log('Creating new booking');
@@ -250,16 +410,63 @@ export default function EmployeeBooking() {
         setBookingData(prev => ({
           ...prev,
           id: resultBooking.id,
-          status: resultBooking.status || 'confirmed',
+          status: resultBooking.status || adminControls.status || 'confirmed',
           payment_status: resultBooking.payment_status || 'unpaid'
         }));
         setCurrentBookingId(resultBooking.id);
         setIsEditingExistingBooking(true);
 
+        const priorityText = adminControls.priority === 'vip' ? ' (VIP)' :
+                           adminControls.priority === 'urgent' ? ' (URGENT)' : '';
+
         showNotification(
-          'Booking Created Successfully!', 
-          `New booking ID ${resultBooking.id} has been created for ${bookingData.client?.full_name || 'customer'}.`
+          'Booking Created Successfully!',
+          `New booking ID ${resultBooking.id}${priorityText} has been created for ${bookingData.client?.full_name || 'customer'}.`
         );
+
+        // Trigger refresh of bookings list
+        setRefreshTrigger(prev => prev + 1);
+
+        // If this booking was created from a draft, delete the draft
+        console.log('Main booking: Checking for draft ID to delete:', bookingData.draftId);
+        console.log('Main booking: Full booking data:', bookingData);
+        if (bookingData.draftId && bookingData.draftId !== null && bookingData.draftId !== undefined) {
+          try {
+            console.log('Main booking: Deleting draft booking with ID:', bookingData.draftId);
+            await deleteDraftBooking(bookingData.draftId);
+            console.log('Main booking: Draft booking deleted after conversion to real booking.');
+
+            // Clear the draftId from booking data
+            setBookingData(prev => ({
+              ...prev,
+              draftId: null
+            }));
+          } catch (err) {
+            console.error('Main booking: Failed to delete draft booking after conversion:', err);
+            // Don't fail the whole operation if draft deletion fails
+          }
+        } else {
+          console.log('Main booking: No valid draft ID found, skipping draft deletion.');
+        }
+      }
+
+      // For both create and update operations, if there was a draft, delete it
+      // Check again in case it wasn't deleted above (e.g., booking without payment)
+      if (!isUpdate && bookingData.draftId) {
+        try {
+          console.log('Secondary check: Deleting draft booking with ID:', bookingData.draftId);
+          await deleteDraftBooking(bookingData.draftId);
+          console.log('Secondary check: Draft booking deleted after booking completion.');
+
+          // Clear the draftId from booking data
+          setBookingData(prev => ({
+            ...prev,
+            draftId: null
+          }));
+        } catch (err) {
+          console.error('Secondary check: Failed to delete draft booking after completion:', err);
+          // Don't fail the whole operation if draft deletion fails
+        }
       }
     } catch (error) {
       console.error('Booking submission error:', error);
@@ -280,14 +487,28 @@ export default function EmployeeBooking() {
         time_to: bookingData.endTime,
         guests: bookingData.peopleCount,
         event_type: bookingData.eventType,
-        amount: bookingData.totalAmount
+        amount: bookingData.totalAmount,
+        deposit_amount: bookingData.depositAmount,
+        notes: adminControls.notes || '',
+        setup_time: parseFloat(adminControls.setupTime) || 0,
+        breakdown_time: parseFloat(adminControls.breakdownTime) || 0,
+        status: 'draft',
+        override_availability: adminControls.overrides?.availability || false,
+        staff_id: user?.id || null,
+        deposit_percentage: bookingData.depositAmount && bookingData.totalAmount 
+          ? Math.round((bookingData.depositAmount / bookingData.totalAmount) * 100) 
+          : 0,
+        system_fee_percentage: 1
       });
       
       console.log('Draft saved successfully:', draft);
       showNotification(
-        'Draft Saved Successfully!', 
+        'Draft Saved Successfully!',
         'Your booking draft has been saved and can be completed later.'
       );
+
+      // Trigger refresh of bookings and drafts list
+      setRefreshTrigger(prev => prev + 1);
     } catch (error) {
       setErrors(prev => ({ ...prev, draft: error.message }));
     } finally {
@@ -296,13 +517,14 @@ export default function EmployeeBooking() {
   };
 
   const handleClearForm = () => {
+    // Reset booking data to default values
     setBookingData({
       id: null,
       client: null,
-      eventDate: '2025-11-16',
-      startTime: '08:00',
-      endTime: '10:00',
-      duration: 2,
+      eventDate: new Date().toISOString().split('T')[0], // Today's date
+      startTime: '',
+      endTime: '',
+      duration: '', // Empty to show "Select duration"
       peopleCount: 80,
       eventType: '',
       totalAmount: 0,
@@ -310,13 +532,47 @@ export default function EmployeeBooking() {
       remainingBalance: 0,
       payments: [],
       status: null,
-      payment_status: 'unpaid'
+      payment_status: 'unpaid',
+      draftId: null // Clear draft ID when clearing form
+    });
+
+    // Reset admin controls to default values
+    setAdminControls({
+      setupTime: 0,
+      breakdownTime: 0,
+      priority: 'standard',
+      revenueCategory: '',
+      riskLevel: 'low',
+      cancellationPolicy: 'standard',
+      overrides: {
+        availability: false,
+        deposit: false,
+        capacity: false,
+        customPricing: false
+      },
+      pricingReason: '',
+      managedBy: null
     });
 
     // Reset booking tracking state
     setCurrentBookingId(null);
     setIsEditingExistingBooking(false);
     setErrors({});
+
+    // Clear URL parameters to remove any booking/client IDs
+    router.replace('/admin/employee-booking', undefined, { shallow: true });
+
+    // Show confirmation notification
+    setNotification({
+      isVisible: true,
+      title: 'New Booking Started',
+      message: 'Form cleared and ready for a new booking'
+    });
+
+    // Hide notification after 3 seconds
+    setTimeout(() => {
+      setNotification(prev => ({ ...prev, isVisible: false }));
+    }, 3000);
   };
 
   const handleAddPayment = async (paymentData) => {
@@ -339,6 +595,9 @@ export default function EmployeeBooking() {
           payment_status: paymentData.booking.payment_status || 'deposit_paid',
           payments: [...prev.payments, paymentData.payment]
         }));
+
+        // Trigger refresh of bookings list when payment creates a booking
+        setRefreshTrigger(prev => prev + 1);
 
         return paymentData.payment;
       } else {
@@ -368,13 +627,25 @@ export default function EmployeeBooking() {
         <main className={styles.main}>
           <header className={styles.header}>
             <div className={styles.headerTop}>
-              <div>
+              <div className={styles.headerLeft}>
                 <h1 className={styles.title}>{t('booking.title')}</h1>
                 <p className={styles.subtitle}>{t('booking.subtitle')}</p>
               </div>
-              <div className={styles.userInfo}>
-                {t('booking.logged_in_as')} <span className={styles.userName}>{user?.user_metadata?.full_name || 'User'}</span> 
-                <span className={styles.userRole}>({userRole || 'staff'})</span>
+              <div className={styles.headerActions}>
+                <button
+                  className={styles.newBookingButton}
+                  onClick={handleClearForm}
+                  title="Start a new booking"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 5v14M5 12h14"/>
+                  </svg>
+                  New Booking
+                </button>
+                <div className={styles.userInfo}>
+                  {t('booking.logged_in_as')} <span className={styles.userName}>{user?.user_metadata?.full_name || 'User'}</span>
+                  <span className={styles.userRole}>({userRole || 'staff'})</span>
+                </div>
               </div>
             </div>
           </header>
@@ -391,7 +662,7 @@ export default function EmployeeBooking() {
                 error={errors.clients || errors.createClient}
               />
               
-              <BookingDetails 
+              <BookingDetails
                 isActive={true}
                 bookingData={bookingData}
                 setBookingData={setBookingData}
@@ -400,6 +671,8 @@ export default function EmployeeBooking() {
                 setupTime={adminControls.setupTime}
                 breakdownTime={adminControls.breakdownTime}
                 currentBookingId={currentBookingId}
+                adminControls={adminControls}
+                refreshTrigger={refreshTrigger}
               />
             </div>
 
@@ -418,6 +691,9 @@ export default function EmployeeBooking() {
               <AdminControls 
                 adminControls={adminControls}
                 setAdminControls={setAdminControls}
+                bookingId={currentBookingId}
+                userId={user?.id}
+                venueId={86} // Pass venue_id for document uploads
               />
               <BookingActions
                 onSubmit={handleSubmitBooking}

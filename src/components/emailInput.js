@@ -4,6 +4,7 @@ import signOutUser from "@/context/signOutUser";
 import verifyUser from "@/context/verifyUser";
 import Input from "@/components/input";
 import Button from "@/components/button";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function EmailInput({ setIsToken, setIsLoading }) {
   const [email, setEmail] = useState("");
@@ -17,13 +18,16 @@ export default function EmailInput({ setIsToken, setIsLoading }) {
 
   // ✅ Check if user is already logged in
   useEffect(() => {
-    setIsLoading(true);
-    const storedEmail = localStorage.getItem("user_email");
-    if (storedEmail) {
-      setUserEmail(storedEmail);
-      setIsToken(true);
-    }
-    setIsLoading(false);
+    const checkSession = async () => {
+      setIsLoading(true);
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUserEmail(session.user.email);
+        setIsToken(true);
+      }
+      setIsLoading(false);
+    };
+    checkSession();
   }, [setIsLoading, setIsToken]);
 
   useEffect(() => {

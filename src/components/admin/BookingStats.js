@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from '@/styles/AdminBookings.module.css';
-import { useAuth } from "../../contexts/AuthContext";
+import { useUnifiedAuth } from "../../contexts/UnifiedAuthContext";
 import { checkPermission } from "../../utils/roles";
 export default function BookingStats({ bookings }) {
-  const { userRole } = useAuth();
+  const { userRole } = useUnifiedAuth();
 
   const stats = {
     total: bookings.length,

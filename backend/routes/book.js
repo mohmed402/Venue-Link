@@ -87,12 +87,14 @@ router.post('/check-availability', async (req, res) => {
     const checkEndTime = bufferEndTime || time_to;
 
     // Check for conflicts with other bookings (including their buffers)
+    // Only consider non-overridden bookings as real conflicts
     let query = supabase
       .from('bookings')
-      .select('id, time_from, time_to, setup_time, breakdown_time')
+      .select('id, time_from, time_to, setup_time, breakdown_time, override_availability')
       .eq('venue_id', venue_id)
       .eq('date', date)
-      .neq('status', 'cancelled');
+      .neq('status', 'cancelled')
+      .eq('override_availability', false); // Only check against non-overridden bookings
 
     // Exclude the current booking if editing
     if (exclude_booking_id) {
@@ -161,7 +163,18 @@ router.post('/create-booking', async (req, res) => {
     breakdown_time = 0,
     created_by,
     status = 'confirmed',
-    notes
+    notes,
+    // New admin control fields
+    priority = 'standard',
+    revenue_category = '',
+    risk_level = 'low',
+    cancellation_policy = 'standard',
+    override_availability = false,
+    override_deposit = false,
+    override_capacity = false,
+    override_custom_pricing = false,
+    pricing_reason = '',
+    managed_by = null
   } = req.body;
 
   if (!venue_id || !customer_id || !date || !time_from || !time_to) {
@@ -169,20 +182,22 @@ router.post('/create-booking', async (req, res) => {
   }
 
   try {
-    // First check availability
-    const availabilityCheck = await fetch(`${req.protocol}://${req.get('host')}/api/check-availability`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ venue_id, date, time_from, time_to, setup_time, breakdown_time })
-    });
-    
-    const availability = await availabilityCheck.json();
-    
-    if (!availability.available) {
-      return res.status(409).json({ error: 'Time slot not available with buffer times' });
+    // Check availability unless override is enabled
+    if (!override_availability) {
+      const availabilityCheck = await fetch(`${req.protocol}://${req.get('host')}/api/check-availability`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ venue_id, date, time_from, time_to, setup_time, breakdown_time })
+      });
+      
+      const availability = await availabilityCheck.json();
+      
+      if (!availability.available) {
+        return res.status(409).json({ error: 'Time slot not available with buffer times' });
+      }
     }
 
-    // Create the booking
+    // Create the booking with all admin control fields
     const { data: booking, error } = await supabase
       .from('bookings')
       .insert([{
@@ -199,6 +214,17 @@ router.post('/create-booking', async (req, res) => {
         created_by,
         status,
         notes,
+        // Admin control fields
+        priority,
+        revenue_category,
+        risk_level,
+        cancellation_policy,
+        override_availability,
+        override_deposit,
+        override_capacity,
+        override_custom_pricing,
+        pricing_reason,
+        managed_by,
         created_at: new Date().toISOString()
       }])
       .select()
@@ -212,11 +238,9 @@ router.post('/create-booking', async (req, res) => {
     res.status(201).json({
       success: true,
       booking,
-      buffer_info: {
-        setup_time: availability.setup_time,
-        breakdown_time: availability.breakdown_time,
-        buffer_start_time: availability.buffer_start_time,
-        buffer_end_time: availability.buffer_end_time
+      buffer_info: override_availability ? null : {
+        setup_time: parseFloat(setup_time) || 0,
+        breakdown_time: parseFloat(breakdown_time) || 0
       }
     });
   } catch (err) {
@@ -239,7 +263,18 @@ router.put('/update-booking/:id', async (req, res) => {
     amount,
     setup_time = 0,
     breakdown_time = 0,
-    notes
+    notes,
+    // New admin control fields
+    priority = 'standard',
+    revenue_category = '',
+    risk_level = 'low',
+    cancellation_policy = 'standard',
+    override_availability = false,
+    override_deposit = false,
+    override_capacity = false,
+    override_custom_pricing = false,
+    pricing_reason = '',
+    managed_by = null
   } = req.body;
 
   if (!venue_id || !customer_id || !date || !time_from || !time_to) {
@@ -247,28 +282,30 @@ router.put('/update-booking/:id', async (req, res) => {
   }
 
   try {
-    // First check availability (excluding the current booking)
-    const availabilityCheck = await fetch(`${req.protocol}://${req.get('host')}/api/check-availability`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        venue_id, 
-        date, 
-        time_from, 
-        time_to, 
-        setup_time, 
-        breakdown_time,
-        exclude_booking_id: id
-      })
-    });
-    
-    const availability = await availabilityCheck.json();
-    
-    if (!availability.available) {
-      return res.status(409).json({ error: 'Time slot not available with buffer times' });
+    // Check availability unless override is enabled (excluding the current booking)
+    if (!override_availability) {
+      const availabilityCheck = await fetch(`${req.protocol}://${req.get('host')}/api/check-availability`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          venue_id, 
+          date, 
+          time_from, 
+          time_to, 
+          setup_time, 
+          breakdown_time,
+          exclude_booking_id: id
+        })
+      });
+      
+      const availability = await availabilityCheck.json();
+      
+      if (!availability.available) {
+        return res.status(409).json({ error: 'Time slot not available with buffer times' });
+      }
     }
 
-    // Update the booking
+    // Update the booking with all admin control fields
     const { data: booking, error } = await supabase
       .from('bookings')
       .update({
@@ -283,6 +320,17 @@ router.put('/update-booking/:id', async (req, res) => {
         setup_time: parseFloat(setup_time) || 0,
         breakdown_time: parseFloat(breakdown_time) || 0,
         notes,
+        // Admin control fields
+        priority,
+        revenue_category,
+        risk_level,
+        cancellation_policy,
+        override_availability,
+        override_deposit,
+        override_capacity,
+        override_custom_pricing,
+        pricing_reason,
+        managed_by,
         updated_at: new Date().toISOString()
       })
       .eq('id', id)
@@ -297,11 +345,9 @@ router.put('/update-booking/:id', async (req, res) => {
     res.json({
       success: true,
       booking,
-      buffer_info: {
-        setup_time: availability.setup_time,
-        breakdown_time: availability.breakdown_time,
-        buffer_start_time: availability.buffer_start_time,
-        buffer_end_time: availability.buffer_end_time
+      buffer_info: override_availability ? null : {
+        setup_time: parseFloat(setup_time) || 0,
+        breakdown_time: parseFloat(breakdown_time) || 0
       }
     });
   } catch (err) {

@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import AdminNav from '@/components/adminNav';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { useAuth } from '@/contexts/AuthContext';
+import ConfirmationNotification from '@/components/ConfirmationNotification';
+import { useUnifiedAuth } from '@/contexts/UnifiedAuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/adminSettings.module.css';
 
@@ -49,19 +50,54 @@ const INITIAL_SETTINGS = {
 };
 
 export default function AdminSettings() {
-  const { user } = useAuth();
+  const { user } = useUnifiedAuth();
   const { t, isRTL, currentLanguage, changeLanguage } = useLanguage();
   const [settings, setSettings] = useState(INITIAL_SETTINGS);
   const [activeTab, setActiveTab] = useState('policies');
   const [hasChanges, setHasChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Confirmation notification state
+  const [confirmationNotification, setConfirmationNotification] = useState({
+    isVisible: false,
+    title: '',
+    message: '',
+    type: 'warning',
+    onConfirm: null
+  });
 
   useEffect(() => {
     const savedSettings = localStorage.getItem('adminSettings');
     if (savedSettings) {
       setSettings(JSON.parse(savedSettings));
     }
+
+    // Load dark mode preference
+    const savedDarkMode = localStorage.getItem('adminDarkMode');
+    if (savedDarkMode) {
+      const darkMode = JSON.parse(savedDarkMode);
+      setIsDarkMode(darkMode);
+      // Apply immediately
+      if (darkMode) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
   }, []);
+
+  // Apply dark mode to body when it changes
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+    
+    // Store the preference
+    localStorage.setItem('adminDarkMode', JSON.stringify(isDarkMode));
+  }, [isDarkMode]);
 
   const updateNestedSetting = (section, subsection, key, value) => {
     setSettings(prev => ({
@@ -77,29 +113,73 @@ export default function AdminSettings() {
     setHasChanges(true);
   };
 
+  const toggleDarkMode = () => {
+    const newDarkMode = !isDarkMode;
+    setIsDarkMode(newDarkMode);
+  };
+
+  // Helper function to show confirmation notifications
+  const showConfirmation = (title, message, onConfirm, type = 'warning') => {
+    setConfirmationNotification({
+      isVisible: true,
+      title,
+      message,
+      type,
+      onConfirm
+    });
+  };
+
+  // Helper function to close confirmation notifications
+  const closeConfirmation = () => {
+    setConfirmationNotification({
+      isVisible: false,
+      title: '',
+      message: '',
+      type: 'warning',
+      onConfirm: null
+    });
+  };
+
   const saveSettings = async () => {
     setIsSaving(true);
     try {
       localStorage.setItem('adminSettings', JSON.stringify(settings));
       setHasChanges(false);
-      alert(t('message.settings_saved'));
+      // Show success message instead of alert
+      showConfirmation(
+        'Settings Saved',
+        t('message.settings_saved') || 'Settings have been saved successfully!',
+        () => closeConfirmation(),
+        'info'
+      );
     } catch (error) {
-      alert(t('message.settings_error'));
+      showConfirmation(
+        'Error',
+        t('message.settings_error') || 'Failed to save settings. Please try again.',
+        () => closeConfirmation(),
+        'danger'
+      );
     } finally {
       setIsSaving(false);
     }
   };
 
   const resetSettings = () => {
-    if (confirm(t('message.confirm_reset'))) {
-      setSettings(INITIAL_SETTINGS);
-      setHasChanges(true);
-    }
+    showConfirmation(
+      'Reset Settings',
+      t('message.confirm_reset') || 'Are you sure you want to reset all settings to default values? This action cannot be undone.',
+      () => {
+        setSettings(INITIAL_SETTINGS);
+        setHasChanges(true);
+        closeConfirmation();
+      },
+      'warning'
+    );
   };
 
   return (
     <ProtectedRoute requiredPermission="canEditVenue">
-      <div className={`${styles.pageContainer} ${isRTL ? styles.rtl : ''}`}>
+      <div className={`${styles.pageContainer} ${isRTL ? styles.rtl : ''} ${isDarkMode ? styles.darkMode : ''}`}>
         <AdminNav />
         <main className={styles.main}>
           <header className={styles.header}>
@@ -154,6 +234,15 @@ export default function AdminSettings() {
                   )
                 },
                 { 
+                  id: 'appearance', 
+                  label: 'Appearance', 
+                  icon: (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6 0 1.66.67 3.16 1.76 4.24l8.48-8.48C14.16 6.67 13.16 6 12 6z" fill="currentColor"/>
+                    </svg>
+                  )
+                },
+                { 
                   id: 'language', 
                   label: t('settings.language'), 
                   icon: (
@@ -199,6 +288,14 @@ export default function AdminSettings() {
                 />
               )}
               
+              {activeTab === 'appearance' && (
+                <AppearanceTab 
+                  isDarkMode={isDarkMode}
+                  onToggleDarkMode={toggleDarkMode}
+                  isRTL={isRTL}
+                />
+              )}
+              
               {activeTab === 'language' && (
                 <LanguageTab 
                   currentLanguage={currentLanguage}
@@ -209,6 +306,18 @@ export default function AdminSettings() {
             </div>
           </div>
         </main>
+
+        {/* Confirmation Notification */}
+        <ConfirmationNotification
+          isVisible={confirmationNotification.isVisible}
+          onConfirm={confirmationNotification.onConfirm}
+          onCancel={closeConfirmation}
+          title={confirmationNotification.title}
+          message={confirmationNotification.message}
+          type={confirmationNotification.type}
+          confirmText={confirmationNotification.type === 'info' ? 'OK' : 'Confirm'}
+          cancelText="Cancel"
+        />
       </div>
     </ProtectedRoute>
   );
@@ -331,6 +440,63 @@ function VenueTab({ settings, updateSetting, isRTL }) {
             onChange={(e) => updateSetting('address', e.target.value)}
             className={styles.input}
           />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AppearanceTab({ isDarkMode, onToggleDarkMode, isRTL }) {
+  return (
+    <div className={styles.section}>
+      <h2>{isRTL ? 'إعدادات المظهر' : 'Appearance Settings'}</h2>
+      
+      <div className={styles.formGroup}>
+        <h3>{isRTL ? 'المظهر' : 'Theme'}</h3>
+        <p>{isRTL ? 'اختر المظهر المفضل لديك' : 'Choose your preferred theme'}</p>
+        
+        <div className={styles.themeToggle}>
+          <div className={styles.themeOptions}>
+            <div className={`${styles.themeOption} ${!isDarkMode ? styles.active : ''}`}>
+              <div className={styles.themePreview}>
+                <div className={styles.lightPreview}>
+                  <div className={styles.previewHeader}></div>
+                  <div className={styles.previewContent}>
+                    <div className={styles.previewSidebar}></div>
+                    <div className={styles.previewMain}></div>
+                  </div>
+                </div>
+              </div>
+              <span>{isRTL ? 'فاتح' : 'Light'}</span>
+            </div>
+            
+            <div className={`${styles.themeOption} ${isDarkMode ? styles.active : ''}`}>
+              <div className={styles.themePreview}>
+                <div className={styles.darkPreview}>
+                  <div className={styles.previewHeader}></div>
+                  <div className={styles.previewContent}>
+                    <div className={styles.previewSidebar}></div>
+                    <div className={styles.previewMain}></div>
+                  </div>
+                </div>
+              </div>
+              <span>{isRTL ? 'داكن' : 'Dark'}</span>
+            </div>
+          </div>
+          
+          <div className={styles.toggleContainer}>
+            <label className={styles.switch}>
+              <input 
+                type="checkbox" 
+                checked={isDarkMode} 
+                onChange={onToggleDarkMode}
+              />
+              <span className={styles.slider}></span>
+            </label>
+            <span className={styles.toggleLabel}>
+              {isDarkMode ? (isRTL ? 'الوضع الداكن مفعل' : 'Dark mode enabled') : (isRTL ? 'الوضع الفاتح مفعل' : 'Light mode enabled')}
+            </span>
+          </div>
         </div>
       </div>
     </div>

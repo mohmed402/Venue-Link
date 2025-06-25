@@ -3,6 +3,7 @@ import Logo from "@/components/logo";
 import Input from "@/components/input";
 import Button from "@/components/button";
 import Image from "next/image";
+import { supabase } from "@/lib/supabaseClient";
 
 // import "../styles/venue.css";
 
@@ -30,14 +31,20 @@ export default function Book() {
   const [paymentType, setPaymentType] = useState("");
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem("user_email");
-    const storedPhone = localStorage.getItem("user_phone");
-
-    if (storedPhone) {
-      setIsEmail(false);
-    } else if (storedEmail) {
-      setIsEmail(true);
-    }
+    const checkUserPreference = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        // Determine preference based on what the user signed up with
+        if (session.user.email) {
+          setIsEmail(true);
+        } else if (session.user.phone) {
+          setIsEmail(false);
+        }
+      }
+      // You could also check localStorage for user preference if needed
+      // but avoid storing authentication tokens there
+    };
+    checkUserPreference();
   }, []);
 
   useEffect(() => {

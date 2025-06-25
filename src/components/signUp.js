@@ -4,6 +4,7 @@ import signOutUser from "@/context/signOutUser";
 import verifyUser from "@/context/verifyUser";
 import Input from "@/components/input";
 import Button from "@/components/button";
+import { supabase } from "@/lib/supabaseClient";
 
 import "@/styles/signUp.css";
 
@@ -18,12 +19,14 @@ export default function SignUp({ handleClick, setUserId }) {
 
   // ✅ Check if user is already logged in
   useEffect(() => {
-    // setIsLoading(true);
-    const storedEmail = localStorage.getItem("user_email");
-    if (storedEmail) {
-      setUserEmail(storedEmail);
-      handleClick(storedEmail);
-    }
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUserEmail(session.user.email);
+        handleClick(session.user.email);
+      }
+    };
+    checkSession();
   }, []);
 
   async function handleAuth(e) {

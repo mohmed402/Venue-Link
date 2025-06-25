@@ -1,0 +1,66 @@
+/* Global styles for customer area to match admin area font */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap");
+
+/* Apply Montserrat font to all customer area elements */
+.customer-area,
+.customer-area *,
+[class*="customer"],
+[class*="Customer"] {
+  font-family: Montserrat, serif !important;
+}
+
+/* Specific overrides for customer components */
+.customer-layout,
+.customer-sidebar,
+.customer-header,
+.customer-dashboard,
+.customer-bookings,
+.customer-payments,
+.customer-favorites,
+.customer-profile,
+.customer-auth,
+.customer-mobile {
+  font-family: Montserrat, serif !important;
+}
+
+/* Form elements in customer area */
+.customer-area input,
+.customer-area textarea,
+.customer-area select,
+.customer-area button {
+  font-family: Montserrat, serif !important;
+}
+
+/* Typography consistency */
+.customer-area h1,
+.customer-area h2,
+.customer-area h3,
+.customer-area h4,
+.customer-area h5,
+.customer-area h6 {
+  font-family: Montserrat, serif !important;
+  font-weight: 600;
+}
+
+.customer-area p,
+.customer-area span,
+.customer-area div,
+.customer-area label {
+  font-family: Montserrat, serif !important;
+}
+
+/* Ensure consistent font weights */
+.customer-area .font-light { font-weight: 300; }
+.customer-area .font-normal { font-weight: 400; }
+.customer-area .font-medium { font-weight: 500; }
+.customer-area .font-semibold { font-weight: 600; }
+.customer-area .font-bold { font-weight: 700; }
+.customer-area .font-extrabold { font-weight: 800; }
+
+/* Mobile navigation font consistency */
+@media (max-width: 768px) {
+  .mobile-nav,
+  .mobile-nav * {
+    font-family: Montserrat, serif !important;
+  }
+}
